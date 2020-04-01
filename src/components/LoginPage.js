@@ -18,7 +18,11 @@ class LoginPage extends React.Component {
         _ie_clr_btn_style: {height: 0, width: 0, opacity: 0},
 
         _ip_underlineColor  : '#EFEFEF',
-        _ip_placeHolderText : 'Password'
+        _ip_placeHolderText : 'Password',
+        _ip_lbl_style: {display:'none'},
+        _ip_shp_o_btn_style: {height: 0, width: 0, opacity: 0},
+        _ip_shp_c_btn_style: {height: 0, width: 0, opacity: 0}
+
     }; 
 
     _onInputEmailFocus = () => {
@@ -88,7 +92,7 @@ class LoginPage extends React.Component {
                            value={this.state.password}
                            onChangeText={( password ) => this.setState({ password })}
                            onFocus={this._onInputPasswordFocusChange}
-                           placeholder={'Password'}
+                           placeholder={this.state._ip_placeHolderText}
                            placeholderTextColor="#8F8EA0"
                            underlineColorAndroid={this.state._ip_underlineColor}
                            
