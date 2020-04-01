@@ -1,5 +1,5 @@
 import React from 'react';
-import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView } from 'react-native';
+import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView,SafeAreaView,Dimensions ,ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import ForgetPage from './ForgetPage';
 import RegisterPage from './RegisterPage';
@@ -7,18 +7,15 @@ import HelpPage from './HelpPage';
 
 class LoginPage extends React.Component {
    
-    // use in Stack navigator only
-    static navigationOptions = {
-        title: 'Login Page',
-    };
-
-    // constructor(props){
-    //     super(props);
-    //     console.log(this.props.navigation)
-    // }
+   
     state = {
         email:'',
         password:'',
+
+        _form_HasError: false,
+        _form_errorMessage: 'Email atau password salah.',
+        _form_err_msg_style:{ display:'none'},
+
         _ie_Focused: false,
         _ip_Focused: false,
         _ip_Secured: true,
@@ -151,7 +148,8 @@ class LoginPage extends React.Component {
                         <Text style={styles.headerTitle}>PERUMDAM TKR</Text>
                 </View> 
                 
-                <View style={styles.content}>
+                <SafeAreaView style={styles.content}>
+                <ScrollView >
                     <Text style={[styles.welcomeText,{paddingHorizontal:5}]}>Selamat datang,</Text>
                     <Text style={[styles.defaultText,{paddingHorizontal:5}]}>Silahkan Login</Text>
 
@@ -208,6 +206,13 @@ class LoginPage extends React.Component {
                         </View>
 
                         <View  style={styles.formGroup}>
+                        <View  style={[styles.errorMessage,this.state._form_err_msg_style]}>
+                            <Text style={{color:'#ffffff',padding:4}}>{this.state._form_errorMessage}</Text>
+
+                        </View>
+                        </View>
+
+                        <View  style={styles.formGroup}>
                         <TouchableHighlight style={styles.btnLogin} onPress={this._onSubmitForm}>
                             <Text style={styles.btnLoginText}> Login </Text>
                         </TouchableHighlight>
@@ -230,7 +235,8 @@ class LoginPage extends React.Component {
                     
 
                     </View>
-                </View>
+                </ScrollView>    
+                </SafeAreaView>
                 
             </KeyboardAvoidingView>
         );
@@ -266,7 +272,8 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         borderTopLeftRadius:25,
         borderTopRightRadius: 25,
-        padding:20
+        padding:20,
+        paddingBottom:0
     },
     defaultText:{
         // fontSize:12,
@@ -301,7 +308,7 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     help:{
-        paddingVertical:10,
+        // paddingVertical:8,
         flexDirection:'row',
         justifyContent:'center'
     },
@@ -362,6 +369,14 @@ const styles = StyleSheet.create({
         height:40,
         padding:10
 
+    },
+    errorMessage:{
+        backgroundColor:'#e22134',
+        marginVertical:15,
+        alignItems:'center',
+        padding:10,
+        borderRadius:5,
+        marginBottom:10
     }      
 });
 
