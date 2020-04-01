@@ -20,7 +20,7 @@ class LoginPage extends React.Component {
         _ip_underlineColor  : '#EFEFEF',
         _ip_placeHolderText : 'Password',
         _ip_lbl_style: {display:'none'},
-        _ip_shp_o_btn_style: {height: 0, width: 0, opacity: 0},
+        _ip_shp_o_btn_style: {},
         _ip_shp_c_btn_style: {height: 0, width: 0, opacity: 0}
 
     }; 
@@ -31,28 +31,82 @@ class LoginPage extends React.Component {
             _ie_underlineColor: '#009EEE',
             _ie_placeHolderText: '',
             _ie_lbl_style: {display:'flex',color:'#009EEE',marginTop:4},
-             _ie_clr_btn_style: {marginTop:45}
+            _ie_clr_btn_style: {marginTop:30}
 
         });
     };
     _onInputEmailBlur = () => {
         this.setState({ 
-            _ie_Focused: true,
+            _ie_Focused: false,
             _ie_underlineColor: '#EFEFEF',
             _ie_placeHolderText : 'Email',
             _ie_lbl_style: {display:'none'},
-             _ie_clr_btn_style: {height: 0, width: 0, opacity: 0},
+            _ie_clr_btn_style: {height: 0, width: 0, opacity: 0}
+        });
+    };
+
+    _onInputPasswordFocus = () => {
+       this.setState({ 
+            _ip_Focused: true,
+            _ip_underlineColor: '#009EEE',
+            _ip_placeHolderText: '',
+            _ip_lbl_style: {display:'flex',color:'#009EEE',marginTop:4}
+        });
+
+       if(this.state._ip_Secured){  // jika password hidden
+            this.setState({ 
+                _ip_shp_o_btn_style: {marginTop:30}, // show eye-open
+            });
+       }else{
+            this.setState({ 
+                _ip_shp_c_btn_style: {marginTop:30,padding:10,width:40,height:40}, // show eye-close
+            });
+       }
+    };
+    _onInputPasswordBlur = () => {
+       this.setState({ 
+            _ip_Focused: false,
+            _ip_underlineColor: '#EFEFEF',
+            _ip_placeHolderText : 'Password',
+            _ip_lbl_style: {display:'none'},
+            
+        });
+       if(this.state._ip_Secured){  // jika password hidden
+            this.setState({ 
+                _ip_shp_o_btn_style: {marginTop:0}, // show eye-open
+            });
+       }else{
+            this.setState({ 
+                _ip_shp_c_btn_style: {marginTop:0,padding:10,width:40,height:40}, // show eye-close
+            });
+       }
+    };
+
+    _ie_clear = () => {
+        this.setState({ email: '' });
+    };
+
+    _ip_viewPass = () => {
+        console.log('please view password');
+        this.setState({ 
+            _ip_Secured : false,
+            _ip_shp_o_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-open btn
+            _ip_shp_c_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 ,padding:10,width:40,height:40}, // show eye-close
+        });
+    };
+
+    _ip_hidePass = () => {
+        console.log('please hide password');
+
+        this.setState({ 
+            _ip_Secured : true ,
+            _ip_shp_c_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-close
+            _ip_shp_o_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 } // show eye-open
 
 
         });
     };
-
-    _onInputPasswordFocusChange = () => {
-       
-    };
-    _ie_clear = () => {
-        this.setState({ email: '' });
-    };
+    
     render() {
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
@@ -88,23 +142,32 @@ class LoginPage extends React.Component {
 
                         </View>
                         <View style={styles.formGroup}>
+                        <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._ip_lbl_style]}>Password</Text>
+
                         <TextInput style={styles.textInput}
                            value={this.state.password}
                            onChangeText={( password ) => this.setState({ password })}
-                           onFocus={this._onInputPasswordFocusChange}
+                           onFocus={this._onInputPasswordFocus}
+                           onBlur={this._onInputPasswordBlur}
                            placeholder={this.state._ip_placeHolderText}
                            placeholderTextColor="#8F8EA0"
                            underlineColorAndroid={this.state._ip_underlineColor}
-                           
                            secureTextEntry={this.state._ip_Secured}
                             />
-                        <Image style={styles.formIconViewPass} source={ require('../../assets/icon/eye-open.png') }/>
-                        <Image style={styles.formIconHidePass} source={ require('../../assets/icon/eye-close.png') }/>
+                        <TouchableHighlight onPress={this._ip_viewPass} style={[styles.formIconViewPass,this.state._ip_shp_o_btn_style]}>
+                            <Image source={ require('../../assets/icon/eye-open.png') }/>
+                        </TouchableHighlight>
+
+                        <TouchableHighlight onPress={this._ip_hidePass} style={[styles.formIconClose,this.state._ip_shp_c_btn_style]}>
+                            <Image  source={ require('../../assets/icon/eye-close.png') }/>
+                        </TouchableHighlight>
 
                         </View>
+
                         <View style={styles.formGroup}>
                             <Text style={styles.anchorRight}>Lupa Password</Text>
                         </View>
+
                         <View  style={styles.formGroup}>
                         <TouchableHighlight style={styles.btnLogin} onPress={()=> alert('')}>
                             <Text style={styles.btnLoginText}> Login </Text>
@@ -222,20 +285,32 @@ const styles = StyleSheet.create({
     },
     formIconClose:{
         position:'absolute',
-        marginTop:18,
-        right:0
+        marginTop:0,
+        right:0,
+        
+        width:40,
+        height:40,
+        padding:10
 
     },
     formIconViewPass:{
         position:'absolute',
-        marginTop:20,
-        right:0
+        marginTop:0,
+        right:0,
+        
+        width:40,
+        height:40,
+        padding:10
     },
     formIconHidePass:{
         position:'absolute',
-        marginTop:20,
+        marginTop:0,
         right:1,
-        height: 0, width: 0, opacity: 0
+     
+        width:40,
+        height:40,
+        padding:10
+
     }      
 });
 
