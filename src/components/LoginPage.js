@@ -9,6 +9,7 @@ class LoginPage extends React.Component {
         password:'',
         _ie_Focused: false,
         _ip_Focused: false,
+        _ip_Secured: true,
 
 
         _ie_underlineColor  : '#EFEFEF',
@@ -43,10 +44,10 @@ class LoginPage extends React.Component {
     };
 
     _onInputPasswordFocusChange = () => {
-        this.setState({ email: '' });
-    }
+       
+    };
     _ie_clear = () => {
-
+        this.setState({ email: '' });
     };
     render() {
         return (
@@ -74,9 +75,12 @@ class LoginPage extends React.Component {
                            placeholderTextColor="#8F8EA0"
                            underlineColorAndroid={this.state._ie_underlineColor}
                             />
-                        <Image style={[styles.formIconClose,this.state._ie_clr_btn_style]} source={ require('../../assets/icon/close.png') }
-                            onPress={this._ie_clear()}
-                        />
+                        <TouchableHighlight onPress={this._ie_clear} style={[styles.formIconClose,this.state._ie_clr_btn_style]}>
+                            <Image  source={ require('../../assets/icon/close.png') }
+                                
+                            />
+                        </TouchableHighlight>       
+                        
 
                         </View>
                         <View style={styles.formGroup}>
@@ -86,8 +90,9 @@ class LoginPage extends React.Component {
                            onFocus={this._onInputPasswordFocusChange}
                            placeholder={'Password'}
                            placeholderTextColor="#8F8EA0"
-                           underlineColorAndroid='#EFEFEF'
-                           secureTextEntry={true}
+                           underlineColorAndroid={this.state._ip_underlineColor}
+                           
+                           secureTextEntry={this.state._ip_Secured}
                             />
                         <Image style={styles.formIconViewPass} source={ require('../../assets/icon/eye-open.png') }/>
                         <Image style={styles.formIconHidePass} source={ require('../../assets/icon/eye-close.png') }/>
