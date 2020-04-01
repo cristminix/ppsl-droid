@@ -1,6 +1,5 @@
 import React from 'react';
-import PPSLApp from './src/components/PPSLApp';
-
+import PPSLApp from './src/components/PPSLApp'; 
 
 function App() {
   return (

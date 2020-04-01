@@ -1,9 +1,21 @@
 import React from 'react';
 import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView } from 'react-native';
 import Constants from 'expo-constants';
-import { Right } from 'native-base';
+import ForgetPage from './ForgetPage';
+import RegisterPage from './RegisterPage';
+import HelpPage from './HelpPage';
 
 class LoginPage extends React.Component {
+   
+    // use in Stack navigator only
+    static navigationOptions = {
+        title: 'Login Page',
+    };
+
+    // constructor(props){
+    //     super(props);
+    //     console.log(this.props.navigation)
+    // }
     state = {
         email:'',
         password:'',
@@ -107,6 +119,30 @@ class LoginPage extends React.Component {
         });
     };
     
+
+    _onForgetPassword = () => {
+        console.log('please navigate to Forget Password Page');
+        this.props.navigation.navigate('ForgetPage')
+
+    };
+
+    _onRegister = () => {
+        console.log('please navigate to Register Page');
+        this.props.navigation.navigate('RegisterPage')
+
+    };
+
+    _onHelp = () => {
+        console.log('please navigate to Help Page');
+        this.props.navigation.navigate('HelpPage')
+        // console.log(this.props.navigation)
+    };
+
+    _onSubmitForm = () => {
+        console.log('Prosess Submit Form');
+
+    };
+
     render() {
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
@@ -165,21 +201,34 @@ class LoginPage extends React.Component {
                         </View>
 
                         <View style={styles.formGroup}>
-                            <Text style={styles.anchorRight}>Lupa Password</Text>
+                        <TouchableHighlight onPress={this._onForgetPassword}>
+                            <Text style={styles.anchorRight}>Lupa Password ?</Text>
+                        </TouchableHighlight>
+
                         </View>
 
                         <View  style={styles.formGroup}>
-                        <TouchableHighlight style={styles.btnLogin} onPress={()=> alert('')}>
+                        <TouchableHighlight style={styles.btnLogin} onPress={this._onSubmitForm}>
                             <Text style={styles.btnLoginText}> Login </Text>
                         </TouchableHighlight>
                         </View>
                     </View>
                     <View style={styles.info}>
-                        <Text style={{textAlign:'center'}}>Belum punya akun ? <Text style={styles.anchorBold}>Registrasi</Text></Text>
+                        <Text style={{textAlign:'center'}}>Belum punya akun ? </Text> 
+                        <TouchableHighlight onPress={this._onRegister}>
+                            <Text style={styles.anchorBold}>Registrasi</Text>
+                        </TouchableHighlight>
                     </View>
                     <View style={styles.help}>
+                    <TouchableHighlight onPress={this._onHelp}>
                         <Text style={styles.anchorCenter}>Butuh Bantuan</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight onPress={this._onHelp}>
+
                         <Image style={styles.inlineIcon} source={ require('../../assets/icon/help.png') }/>
+                    </TouchableHighlight>
+                    
+
                     </View>
                 </View>
                 
@@ -248,6 +297,8 @@ const styles = StyleSheet.create({
     },  
     info:{
         paddingVertical:20,
+        flexDirection:'row',
+        justifyContent:'center'
     },
     help:{
         paddingVertical:10,
@@ -305,7 +356,7 @@ const styles = StyleSheet.create({
     formIconHidePass:{
         position:'absolute',
         marginTop:0,
-        right:1,
+        right:0,
      
         width:40,
         height:40,
