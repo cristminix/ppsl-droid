@@ -1,0 +1,1 @@
+"%JAVA_HOME%\bin\java" -jar droidAtScreen-1.2.jar

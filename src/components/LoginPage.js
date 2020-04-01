@@ -1,10 +1,52 @@
 import React from 'react';
 import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView } from 'react-native';
 import Constants from 'expo-constants';
+import { Right } from 'native-base';
 
 class LoginPage extends React.Component {
     state = {
-        email:''
+        email:'',
+        password:'',
+        _ie_Focused: false,
+        _ip_Focused: false,
+
+
+        _ie_underlineColor  : '#EFEFEF',
+        _ie_placeHolderText : 'Email',
+        _ie_lbl_style: {display:'none'},
+        _ie_clr_btn_style: {height: 0, width: 0, opacity: 0},
+
+        _ip_underlineColor  : '#EFEFEF',
+        _ip_placeHolderText : 'Password'
+    }; 
+
+    _onInputEmailFocus = () => {
+        this.setState({ 
+            _ie_Focused: true,
+            _ie_underlineColor: '#009EEE',
+            _ie_placeHolderText: '',
+            _ie_lbl_style: {display:'flex',color:'#009EEE',marginTop:4},
+             _ie_clr_btn_style: {marginTop:45}
+
+        });
+    };
+    _onInputEmailBlur = () => {
+        this.setState({ 
+            _ie_Focused: true,
+            _ie_underlineColor: '#EFEFEF',
+            _ie_placeHolderText : 'Email',
+            _ie_lbl_style: {display:'none'},
+             _ie_clr_btn_style: {height: 0, width: 0, opacity: 0},
+
+
+        });
+    };
+
+    _onInputPasswordFocusChange = () => {
+        this.setState({ email: '' });
+    }
+    _ie_clear = () => {
+
     };
     render() {
         return (
@@ -15,26 +57,41 @@ class LoginPage extends React.Component {
                 </View> 
                 
                 <View style={styles.content}>
-                    <Text style={styles.welcomeText}>Selamat datang,</Text>
-                    <Text style={styles.defaultText}>Silahkan Login</Text>
+                    <Text style={[styles.welcomeText,{paddingHorizontal:5}]}>Selamat datang,</Text>
+                    <Text style={[styles.defaultText,{paddingHorizontal:5}]}>Silahkan Login</Text>
+
+
                     <View style={styles.form}>
                         <View style={styles.formGroup}>
+                        <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._ie_lbl_style]}>Email</Text>
+
                         <TextInput style={styles.textInput}
                            value={this.state.email}
                            onChangeText={( email ) => this.setState({ email })}
-                           placeholder={'Email'}
+                           placeholder={this.state._ie_placeHolderText}
+                           onFocus={this._onInputEmailFocus}
+                           onBlur={this._onInputEmailBlur}
                            placeholderTextColor="#8F8EA0"
-                           underlineColorAndroid='#EFEFEF'
+                           underlineColorAndroid={this.state._ie_underlineColor}
                             />
+                        <Image style={[styles.formIconClose,this.state._ie_clr_btn_style]} source={ require('../../assets/icon/close.png') }
+                            onPress={this._ie_clear()}
+                        />
+
                         </View>
                         <View style={styles.formGroup}>
                         <TextInput style={styles.textInput}
                            value={this.state.password}
                            onChangeText={( password ) => this.setState({ password })}
+                           onFocus={this._onInputPasswordFocusChange}
                            placeholder={'Password'}
                            placeholderTextColor="#8F8EA0"
                            underlineColorAndroid='#EFEFEF'
+                           secureTextEntry={true}
                             />
+                        <Image style={styles.formIconViewPass} source={ require('../../assets/icon/eye-open.png') }/>
+                        <Image style={styles.formIconHidePass} source={ require('../../assets/icon/eye-close.png') }/>
+
                         </View>
                         <View style={styles.formGroup}>
                             <Text style={styles.anchorRight}>Lupa Password</Text>
@@ -59,7 +116,7 @@ class LoginPage extends React.Component {
     }
 }
 
-export default LoginPage;
+
 
 const styles = StyleSheet.create({
     wrapper:{
@@ -126,7 +183,7 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     formGroup:{
-        paddingVertical:4
+        paddingVertical:2
     },
     btnLogin:{
         backgroundColor:'#CACACC',
@@ -142,10 +199,35 @@ const styles = StyleSheet.create({
     },
     textInput:{
         paddingVertical:10,
+        paddingHorizontal:5,
         fontSize:14
     },
     inlineIcon:{
         position:'relative',
         margin:4
-    }   
+    },
+    formIcon:{
+        position:'absolute',
+        marginTop:20,
+        right:0
+    },
+    formIconClose:{
+        position:'absolute',
+        marginTop:18,
+        right:0
+
+    },
+    formIconViewPass:{
+        position:'absolute',
+        marginTop:20,
+        right:0
+    },
+    formIconHidePass:{
+        position:'absolute',
+        marginTop:20,
+        right:1,
+        height: 0, width: 0, opacity: 0
+    }      
 });
+
+export default LoginPage;
