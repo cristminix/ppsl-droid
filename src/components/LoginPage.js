@@ -4,6 +4,10 @@ import Constants from 'expo-constants';
 import ForgetPage from './ForgetPage';
 import RegisterPage from './RegisterPage';
 import HelpPage from './HelpPage';
+// import BlockUi from 'react-block-ui';
+// import 'react-block-ui/style.css';
+import Spinner from 'react-native-loading-spinner-overlay';
+import axios from 'axios';
 
 class LoginPage extends React.Component {
    
@@ -32,8 +36,18 @@ class LoginPage extends React.Component {
         _ip_shp_o_btn_style: {},
         _ip_shp_c_btn_style: {height: 0, width: 0, opacity: 0}
 
-    }; 
 
+
+        , spinner:false
+
+    }; 
+    componentDidMount() {
+    // setInterval(() => {
+    //   this.setState({
+    //     spinner: !this.state.spinner
+    //   });
+    // }, 3000);
+  }
     _onInputEmailFocus = () => {
         this.setState({ 
             _ie_Focused: true,
@@ -137,12 +151,55 @@ class LoginPage extends React.Component {
 
     _onSubmitForm = () => {
         console.log('Prosess Submit Form');
+        // show spinner
+        this.setState({spinner:true});
+        // 
+        // X-API-KEY = 9c05c647d185d704fa3b5add357dd08777d05b99
+        // X-APP-ID. = ppsl-droid
+        // let config = {};
+        // axios.get(`http://192.168.1.45:8080/ppsl_api/loginService`,{headers: config})
+        //     .then(res => {
+        // const categories = res.data;
+        // console.log(categories);
+        // this.setState({ categories });
 
+        var formData = new FormData();
+        formData.append('username', this.state.email);
+        formData.append('password', this.state.password);
+
+        fetch('http://192.168.1.234:8080/ppsl_api/loginService', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json',
+                'X-API-KEY' : '9c05c647d185d704fa3b5add357dd08777d05b99', 
+                'X-APP-ID' : 'ppsl-droid'
+            },
+            body: formData
+        })
+        .then(response => 
+            response.json().then((jsonObj) => {
+                console.log(jsonObj);
+
+            this.setState({ spinner:false });
+
+            })
+        )
+        .catch((error) => {
+            console.log(error)
+            this.setState({ spinner:false });
+        })
+        .done();
     };
 
     render() {
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+                <Spinner
+          visible={this.state.spinner}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
                 <View style={styles.header}>
                         <Image style={styles.logo} source={ require('../../assets/logo.png') }/>
                         <Text style={styles.headerTitle}>PERUMDAM TKR</Text>
