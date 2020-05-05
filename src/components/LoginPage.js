@@ -15,7 +15,7 @@ class LoginPage extends React.Component {
     state = {
         email:'',
         password:'',
-
+        _btLoginDisabled: true,
         _form_HasError: false,
         _form_errorMessage: 'Email atau password salah.',
         _form_err_msg_style:{ display:'none'},
@@ -66,6 +66,7 @@ class LoginPage extends React.Component {
             _ie_lbl_style: {display:'none'},
             _ie_clr_btn_style: {height: 0, width: 0, opacity: 0}
         });
+        this._validateInput();
     };
 
     _onInputPasswordFocus = () => {
@@ -103,6 +104,8 @@ class LoginPage extends React.Component {
                 _ip_shp_c_btn_style: {marginTop:0,padding:10,width:40,height:40}, // show eye-close
             });
        }
+       this._validateInput();
+
     };
 
     _ie_clear = () => {
@@ -149,8 +152,16 @@ class LoginPage extends React.Component {
         // console.log(this.props.navigation)
     };
 
+    _validateInput = ()=>{
+        if(this.state.email.length >= 4 && this.state.password.length>= 4){
+            this.setState({_btLoginDisabled:false});
+        }else{
+            this.setState({_btLoginDisabled:true});
+        }
+    };
     _onSubmitForm = () => {
-        console.log('Prosess Submit Form');
+        // console.log('Prosess Submit Form');
+        this._loginError(false);
         // show spinner
         this.setState({spinner:true});
         // 
@@ -178,8 +189,15 @@ class LoginPage extends React.Component {
             body: formData
         })
         .then(response => 
-            response.json().then((jsonObj) => {
-                console.log(jsonObj);
+            response.json().then((res) => {
+                if(res.data !== null){
+                    // SAVE LOGIN INFO TO ASYNC STORAGE
+                    console.log(res.data.msg);
+                    // Redirect to home page
+                }else{
+                    // Disalay login error message
+                    this._loginError(true);
+                }
 
             this.setState({ spinner:false });
 
@@ -191,7 +209,14 @@ class LoginPage extends React.Component {
         })
         .done();
     };
+    _loginError = (state) => {
+        if(state){
+            this.setState({_form_err_msg_style:{display:'flex'}});
+        }else{
+            this.setState({_form_err_msg_style:{display:'none'}});
 
+        }
+    };
     render() {
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
@@ -206,8 +231,8 @@ class LoginPage extends React.Component {
                 </View> 
                 
                 <SafeAreaView style={styles.content}>
-                <ScrollView >
-                    <Text style={[styles.welcomeText,{paddingHorizontal:5}]}>Selamat datang,</Text>
+                <ScrollView style={{padding:20}}>
+                    <Text style={[styles.welcomeText,{padding:5}]}>Selamat datang,</Text>
                     <Text style={[styles.defaultText,{paddingHorizontal:5}]}>Silahkan Login</Text>
 
 
@@ -218,10 +243,12 @@ class LoginPage extends React.Component {
                         <TextInput style={styles.textInput}
                            value={this.state.email}
                            onChangeText={( email ) => this.setState({ email })}
+                           onKeyPress={this._validateInput}
                            placeholder={this.state._ie_placeHolderText}
                            onFocus={this._onInputEmailFocus}
                            onBlur={this._onInputEmailBlur}
                            placeholderTextColor="#8F8EA0"
+                           autoCapitalize = 'none'
                            underlineColorAndroid={this.state._ie_underlineColor}
                             />
                         <TouchableHighlight onPress={this._ie_clear} style={[styles.formIconClose,this.state._ie_clr_btn_style]}>
@@ -240,25 +267,24 @@ class LoginPage extends React.Component {
                            onChangeText={( password ) => this.setState({ password })}
                            onFocus={this._onInputPasswordFocus}
                            onBlur={this._onInputPasswordBlur}
+                           onKeyPress={this._validateInput}
                            placeholder={this.state._ip_placeHolderText}
                            placeholderTextColor="#8F8EA0"
                            underlineColorAndroid={this.state._ip_underlineColor}
                            secureTextEntry={this.state._ip_Secured}
                             />
                         <TouchableHighlight onPress={this._ip_viewPass} style={[styles.formIconViewPass,this.state._ip_shp_o_btn_style]}>
-                            <Image source={ require('../../assets/icon/eye-open.png') }/>
+                            <Image source={ require('../../assets/icon/eye-close.png') }/>
                         </TouchableHighlight>
 
                         <TouchableHighlight onPress={this._ip_hidePass} style={[styles.formIconClose,this.state._ip_shp_c_btn_style]}>
-                            <Image  source={ require('../../assets/icon/eye-close.png') }/>
+                            <Image  source={ require('../../assets/icon/eye-open.png') }/>
                         </TouchableHighlight>
 
                         </View>
 
                         <View style={styles.formGroup}>
-                        <TouchableHighlight onPress={this._onForgetPassword}>
-                            <Text style={styles.anchorRight}>Lupa Password ?</Text>
-                        </TouchableHighlight>
+                            <Text style={styles.anchorRight} onPress={this._onForgetPassword}>Lupa Password ?</Text>
 
                         </View>
 
@@ -270,7 +296,7 @@ class LoginPage extends React.Component {
                         </View>
 
                         <View  style={styles.formGroup}>
-                        <TouchableHighlight style={styles.btnLogin} onPress={this._onSubmitForm}>
+                        <TouchableHighlight style={styles.btnLogin} onPress={this._onSubmitForm} disabled={this.state._btLoginDisabled}>
                             <Text style={styles.btnLoginText}> Login </Text>
                         </TouchableHighlight>
                         </View>

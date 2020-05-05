@@ -14,7 +14,7 @@ class LoginPageNavigator extends React.Component {
     
     return (
     	<NavigationContainer>
-	      <Stack.Navigator initialRouteName="LoginPage" headerMode="none">
+	      <Stack.Navigator initialRouteName="RegisterPage" headerMode="none">
 	        <Stack.Screen name="LoginPage" component={LoginPage}/>
 	        <Stack.Screen name="RegisterPage" component={RegisterPage} />
 	        <Stack.Screen name="ForgetPage" component={ForgetPage} />
