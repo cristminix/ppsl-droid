@@ -4,9 +4,9 @@ import Constants from 'expo-constants';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DashboardPage from './DashboardPage';
-// import TransaksiPage from './TransaksiPage';
-// import LaporanPage from './LaporanPage';
-// import ProfilePage from './ProfilePage';
+import TransaksiPage from './TransaksiPage';
+import LaporanPage from './LaporanPage';
+import ProfilePage from './ProfilePage';
 
 
 class HomePageNavigator extends React.Component {

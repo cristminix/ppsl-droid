@@ -5,7 +5,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 class LaporanPage extends React.Component {
     goBack=()=>{
-        this.props.navigation.navigate('LoginPage');
+        this.props.navigation.navigate('DashboardPage');
     };
     state = {
         spinner:false
