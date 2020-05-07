@@ -3,16 +3,16 @@ import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAv
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-class ForgetPage extends React.Component {
+class DashboardPage extends React.Component {
     goBack=()=>{
         this.props.navigation.navigate('LoginPage');
     };
     state = {
         spinner:false
     };
-	render(){
-		return (
-			<KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+    render(){
+        return (
+            <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
                 
                 <Spinner
           visible={this.state.spinner}
@@ -27,21 +27,21 @@ class ForgetPage extends React.Component {
                         </TouchableHighlight>
                         </View>
                         <View style={{flex:1,textAlign:'left',paddingLeft:120,paddingVertical:20}}>
-                            <Text style={{color:'#ffffff',fontSize:14}}>Lupa Sandi</Text>
+                            <Text style={{color:'#ffffff',fontSize:14}}>Dashboard</Text>
                         </View>
                     </View>
                     <SafeAreaView style={styles.content}>
                     <ScrollView style={{padding:20}}>
                     
-                        <Text style={{fontWeight:'bold',fontSize:16}}>Lupa Kata Sandi ?</Text>
-                        <Text style={{marginVertical:10}}>Silahkan masukkan alamat Email Anda</Text>
+                        <Text style={{fontWeight:'bold',fontSize:16}}>Dashboard</Text>
+                        <Text style={{marginVertical:10}}>-</Text>
                         
                     </ScrollView>
                     </SafeAreaView>
 
                     </KeyboardAvoidingView>    
-		);
-	}
+        );
+    }
 }
 const styles = StyleSheet.create({
     imagePreview:{
@@ -230,4 +230,4 @@ const styles = StyleSheet.create({
     }    
 });
 
-export default ForgetPage;
+export default DashboardPage;

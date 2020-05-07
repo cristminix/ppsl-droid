@@ -484,7 +484,10 @@ _pickImageKtpSelfie = async () => {
         />
 					<View style={styles.header}>
                         <View style={{paddingHorizontal:10,paddingVertical:20}}>
-                        <Image onPress={()=>{this.goBack()}} style={styles.logo} source={ require('../../assets/icon/chevron-left.png') }/>
+                        <TouchableHighlight onPress={()=>{this.goBack()}} >
+                        <Image style={{width:22}} source={ require('../../assets/icon/chevron-left.png') }/>
+                            
+                        </TouchableHighlight>
                         </View>
 						<View style={{flex:1,textAlign:'left',paddingLeft:120,paddingVertical:20}}>
                             <Text style={{color:'#ffffff',fontSize:14}}>Registrasi</Text>
