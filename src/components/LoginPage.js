@@ -178,7 +178,7 @@ class LoginPage extends React.Component {
         formData.append('username', this.state.email);
         formData.append('password', this.state.password);
 
-        fetch('http://192.168.1.234:8080/ppsl_api/loginService', {
+        fetch('https://api-ppsl.perumdamtkr.com/loginService', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -238,49 +238,46 @@ class LoginPage extends React.Component {
 
                     <View style={styles.form}>
                         <View style={styles.formGroup}>
-                        <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._ie_lbl_style]}>Email</Text>
+                            <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._ie_lbl_style]}>Email</Text>
 
-                        <TextInput style={styles.textInput}
-                           value={this.state.email}
-                           onChangeText={( email ) => this.setState({ email })}
-                           onKeyPress={this._validateInput}
-                           placeholder={this.state._ie_placeHolderText}
-                           onFocus={this._onInputEmailFocus}
-                           onBlur={this._onInputEmailBlur}
-                           placeholderTextColor="#8F8EA0"
-                           autoCapitalize = 'none'
-                           underlineColorAndroid={this.state._ie_underlineColor}
-                            />
-                        <TouchableHighlight onPress={this._ie_clear} style={[styles.formIconClose,this.state._ie_clr_btn_style]}>
-                            <Image  source={ require('../../assets/icon/close.png') }
-                                
-                            />
-                        </TouchableHighlight>       
-                        
-
+                            <TextInput style={styles.textInput}
+                            value={this.state.email}
+                            onChangeText={( email ) => this.setState({ email })}
+                            onKeyPress={this._validateInput}
+                            placeholder={this.state._ie_placeHolderText}
+                            onFocus={this._onInputEmailFocus}
+                            onBlur={this._onInputEmailBlur}
+                            placeholderTextColor="#8F8EA0"
+                            autoCapitalize = 'none'
+                            underlineColorAndroid={this.state._ie_underlineColor}
+                                />
+                            <TouchableHighlight onPress={this._ie_clear} style={[styles.formIconClose,this.state._ie_clr_btn_style]}>
+                                <Image  source={ require('../../assets/icon/close.png') }
+                                    
+                                />
+                            </TouchableHighlight>       
                         </View>
                         <View style={styles.formGroup}>
-                        <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._ip_lbl_style]}>Password</Text>
+                            <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._ip_lbl_style]}>Password</Text>
 
-                        <TextInput style={styles.textInput}
-                           value={this.state.password}
-                           onChangeText={( password ) => this.setState({ password })}
-                           onFocus={this._onInputPasswordFocus}
-                           onBlur={this._onInputPasswordBlur}
-                           onKeyPress={this._validateInput}
-                           placeholder={this.state._ip_placeHolderText}
-                           placeholderTextColor="#8F8EA0"
-                           underlineColorAndroid={this.state._ip_underlineColor}
-                           secureTextEntry={this.state._ip_Secured}
-                            />
-                        <TouchableHighlight onPress={this._ip_viewPass} style={[styles.formIconViewPass,this.state._ip_shp_o_btn_style]}>
-                            <Image source={ require('../../assets/icon/eye-close.png') }/>
-                        </TouchableHighlight>
+                            <TextInput style={styles.textInput}
+                            value={this.state.password}
+                            onChangeText={( password ) => this.setState({ password })}
+                            onFocus={this._onInputPasswordFocus}
+                            onBlur={this._onInputPasswordBlur}
+                            onKeyPress={this._validateInput}
+                            placeholder={this.state._ip_placeHolderText}
+                            placeholderTextColor="#8F8EA0"
+                            underlineColorAndroid={this.state._ip_underlineColor}
+                            secureTextEntry={this.state._ip_Secured}
+                                />
+                            <TouchableHighlight onPress={this._ip_viewPass} style={[styles.formIconViewPass,this.state._ip_shp_o_btn_style]}>
+                                <Image source={ require('../../assets/icon/eye-close.png') }/>
+                            </TouchableHighlight>
 
-                        <TouchableHighlight onPress={this._ip_hidePass} style={[styles.formIconClose,this.state._ip_shp_c_btn_style]}>
-                            <Image  source={ require('../../assets/icon/eye-open.png') }/>
-                        </TouchableHighlight>
-
+                            <TouchableHighlight onPress={this._ip_hidePass} style={[styles.formIconClose,this.state._ip_shp_c_btn_style]}>
+                                <Image  source={ require('../../assets/icon/eye-open.png') }/>
+                            </TouchableHighlight>
                         </View>
 
                         <View style={styles.formGroup}>
@@ -289,10 +286,9 @@ class LoginPage extends React.Component {
                         </View>
 
                         <View  style={styles.formGroup}>
-                        <View  style={[styles.errorMessage,this.state._form_err_msg_style]}>
-                            <Text style={{color:'#ffffff',padding:4}}>{this.state._form_errorMessage}</Text>
-
-                        </View>
+                            <View  style={[styles.errorMessage,this.state._form_err_msg_style]}>
+                                <Text style={{color:'#ffffff',padding:4}}>{this.state._form_errorMessage}</Text>
+                            </View>
                         </View>
 
                         <View  style={styles.formGroup}>
