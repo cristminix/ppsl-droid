@@ -10,6 +10,7 @@ class DashboardPage extends React.Component {
     };
     state = {
         tabItemTextStyle:{color:'#CACACC'},
+        tabItemTextStyleActive:{color:'#009EEE'},
         spinner:false,
         user_display_name:'Hari Nugraha',
         user_email:'nugrahahari@gmail.com',
@@ -112,7 +113,7 @@ class DashboardPage extends React.Component {
                             <View style={[styles.boxItem,{flexDirection:'row',margin:10}]}>
                                   <LinearGradient
                                       colors={['#FFC583', '#FAA871']}
-                                      style={[{ padding: 15, borderRadius: 10 ,flex:1},this.state._boxStyle]}>
+                                      style={[{ padding: 15, borderRadius: 10 ,flex:1,justifyContent:'flex-end'},this.state._boxStyle]}>
                                       <Text
                                         style={{
                                           backgroundColor: 'transparent',
@@ -134,7 +135,7 @@ class DashboardPage extends React.Component {
                                     </LinearGradient>
                                     <LinearGradient
                                       colors={['#ACB4FF', '#778BFE']}
-                                      style={[{ padding: 15, borderRadius: 10 ,flex:1},this.state._boxStyle]}>
+                                      style={[{ padding: 15, borderRadius: 10 ,flex:1,justifyContent:'flex-end'},this.state._boxStyle]}>
                                       <Text
                                         style={{
                                           backgroundColor: 'transparent',
@@ -158,7 +159,7 @@ class DashboardPage extends React.Component {
                             <View style={[styles.boxItem,{flexDirection:'row',margin:10}]}>
                                   <LinearGradient
                                       colors={['#7EDC84', '#5DC759']}
-                                      style={[{ padding: 15, borderRadius: 10 ,flex:1},this.state._boxStyle]}>
+                                      style={[{ padding: 15, borderRadius: 10 ,flex:1,justifyContent:'flex-end'},this.state._boxStyle]}>
                                       <Text
                                         style={{
                                           backgroundColor: 'transparent',
@@ -180,7 +181,7 @@ class DashboardPage extends React.Component {
                                     </LinearGradient>
                                     <LinearGradient
                                       colors={['#FE9797', '#FF7070']}
-                                      style={[{ padding: 15, borderRadius: 10 ,flex:1},this.state._boxStyle]}>
+                                      style={[{ padding: 15, borderRadius: 10 ,flex:1,justifyContent:'flex-end'},this.state._boxStyle]}>
                                       <Text
                                         style={{
                                           backgroundColor: 'transparent',
@@ -209,8 +210,8 @@ class DashboardPage extends React.Component {
                             <View style={styles.tabItem}>
                                 <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
                                     <View style={styles.tabWrp}>
-                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-home-gray.png') }/>
-                                        <Text style={this.state.tabItemTextStyle}>Beranda</Text>
+                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-home-blue.png') }/>
+                                        <Text style={this.state.tabItemTextStyleActive}>Beranda</Text>
                                     </View>
                                 </TouchableHighlight>
                             </View>
@@ -250,17 +251,19 @@ const styles = StyleSheet.create({
         flex:1
     },
     boxItem:{
-        flex:1
+        flex:1,
     },
     tabItem:{
 
     },
     tabWrp:{
+        marginHorizontal:10,
+
         alignItems:'center'
     },
     tabIcon:{
-        width:25,
-        height:25
+        width:18,
+        height:18
     },
     tabContainer:{
         flexDirection:'row',
