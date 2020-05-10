@@ -9,11 +9,14 @@ class DashboardPage extends React.Component {
         // this.props.navigation.navigate('LoginPage');
     };
     state = {
+        tabItemTextStyle:{color:'#CACACC'},
         spinner:false,
         user_display_name:'Hari Nugraha',
         user_email:'nugrahahari@gmail.com',
         date:new Date(1598051730000),
-        mode:''
+        mode:'',
+        loaderWidth:0,
+        _boxStyle:{height:300}
     };
 
   onChange = (event, selectedDate) => {
@@ -22,7 +25,7 @@ class DashboardPage extends React.Component {
     setDate(currentDate);
   };
 
-  showMode = currentMode => {
+  showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
   };
@@ -34,6 +37,18 @@ class DashboardPage extends React.Component {
   showTimepicker = () => {
     showMode('time');
   };
+  measureSize = (nativeEvent) => {
+    // this.setState({ loaderWidth: nativeEvent.layout.width });
+  };
+  find_dimesions(layout){
+    const {x, y, width, height} = layout;
+    // console.warn(x);
+    // console.warn(y);
+    // console.warn(width);
+    // console.warn(height);
+
+    this.setState({_boxStyle:{marginHorizontal:5,height:height/2.2}})
+  }
     render(){
         let show=false;
         return (
@@ -91,13 +106,13 @@ class DashboardPage extends React.Component {
                     />
                     )}
                     </View>
-                <SafeAreaView style={styles.content}>
-                    <ScrollView style={{padding:5}}>
-                        <View style={styles.statistic}>
-                            <View style={{flexDirection:'row',marginBottom:10}}>
+                <SafeAreaView style={[styles.content,{flex:1}]} onLayout={(event) => { this.find_dimesions(event.nativeEvent.layout) }}>
+                    <ScrollView>
+                        <View style={[styles.statistic,{flex:1,flexDirection:'column'}]}>
+                            <View style={[styles.boxItem,{flexDirection:'row',margin:10}]}>
                                   <LinearGradient
                                       colors={['#FFC583', '#FAA871']}
-                                      style={{ padding: 15, borderRadius: 10 ,flex:1,marginHorizontal:5}}>
+                                      style={[{ padding: 15, borderRadius: 10 ,flex:1},this.state._boxStyle]}>
                                       <Text
                                         style={{
                                           backgroundColor: 'transparent',
@@ -119,7 +134,7 @@ class DashboardPage extends React.Component {
                                     </LinearGradient>
                                     <LinearGradient
                                       colors={['#ACB4FF', '#778BFE']}
-                                      style={{ padding: 15, borderRadius: 10 ,flex:1,marginHorizontal:5}}>
+                                      style={[{ padding: 15, borderRadius: 10 ,flex:1},this.state._boxStyle]}>
                                       <Text
                                         style={{
                                           backgroundColor: 'transparent',
@@ -140,10 +155,10 @@ class DashboardPage extends React.Component {
                                       </Text>
                                     </LinearGradient>
                             </View>
-                            <View style={{flexDirection:'row'}}>
+                            <View style={[styles.boxItem,{flexDirection:'row',margin:10}]}>
                                   <LinearGradient
                                       colors={['#7EDC84', '#5DC759']}
-                                      style={{ padding: 15, borderRadius: 10 ,flex:1,marginHorizontal:5}}>
+                                      style={[{ padding: 15, borderRadius: 10 ,flex:1},this.state._boxStyle]}>
                                       <Text
                                         style={{
                                           backgroundColor: 'transparent',
@@ -165,7 +180,7 @@ class DashboardPage extends React.Component {
                                     </LinearGradient>
                                     <LinearGradient
                                       colors={['#FE9797', '#FF7070']}
-                                      style={{ padding: 15, borderRadius: 10 ,flex:1,marginHorizontal:5}}>
+                                      style={[{ padding: 15, borderRadius: 10 ,flex:1},this.state._boxStyle]}>
                                       <Text
                                         style={{
                                           backgroundColor: 'transparent',
@@ -187,12 +202,15 @@ class DashboardPage extends React.Component {
                                     </LinearGradient>
                             </View>
                         </View>
-                        <View style={styles.tabContainer}>
+                        
+                    </ScrollView>
+                </SafeAreaView>
+                <View style={styles.tabContainer}>
                             <View style={styles.tabItem}>
                                 <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
                                     <View style={styles.tabWrp}>
                                         <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-home-gray.png') }/>
-                                        <Text>Beranda</Text>
+                                        <Text style={this.state.tabItemTextStyle}>Beranda</Text>
                                     </View>
                                 </TouchableHighlight>
                             </View>
@@ -200,7 +218,7 @@ class DashboardPage extends React.Component {
                                 <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
                                     <View style={styles.tabWrp}>
                                         <Image Transaks={styles.tabIcon} source={ require('../../assets/icon/icon-transaksi-gray.png') }/>
-                                        <Text>Transaksi</Text>
+                                        <Text style={this.state.tabItemTextStyle}>Transaksi</Text>
                                     </View>
                                 </TouchableHighlight>
                             </View>
@@ -208,7 +226,7 @@ class DashboardPage extends React.Component {
                                 <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
                                     <View style={styles.tabWrp}>
                                         <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-laporan-gray.png') }/>
-                                        <Text>Laporan</Text>
+                                        <Text style={this.state.tabItemTextStyle}>Laporan</Text>
                                     </View>
                                 </TouchableHighlight>
                             </View>
@@ -216,25 +234,41 @@ class DashboardPage extends React.Component {
                                 <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
                                     <View style={styles.tabWrp}>
                                         <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-profile-gray.png') }/>
-                                        <Text>Profile</Text>
+                                        <Text style={this.state.tabItemTextStyle}>Profile</Text>
+
                                     </View>
                                 </TouchableHighlight>
                             </View>
-                        </View> 
-                    </ScrollView>
-                </SafeAreaView>
+                </View> 
 
             </KeyboardAvoidingView>    
         );
     }
 }
 const styles = StyleSheet.create({
+    statistic:{
+        flex:1
+    },
+    boxItem:{
+        flex:1
+    },
+    tabItem:{
+
+    },
+    tabWrp:{
+        alignItems:'center'
+    },
     tabIcon:{
         width:25,
         height:25
     },
     tabContainer:{
-        flexDirection:'row'
+        flexDirection:'row',
+        justifyContent:'center',
+        // position:'absolute',
+        alignItems:'center',
+
+        bottom:0
     },
     tabItem:{
 
@@ -266,7 +300,7 @@ const styles = StyleSheet.create({
     content:{
         flex:1,
         backgroundColor:'white',
-        padding:5
+        padding:0
     },
     periodes:{
         alignItems:'center',
