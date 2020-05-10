@@ -92,7 +92,7 @@ class DashboardPage extends React.Component {
                     )}
                     </View>
                 <SafeAreaView style={styles.content}>
-                    <ScrollView style={{padding:20}}>
+                    <ScrollView style={{padding:5}}>
                         <View style={styles.statistic}>
                             <View style={{flexDirection:'row',marginBottom:10}}>
                                   <LinearGradient
@@ -187,7 +187,40 @@ class DashboardPage extends React.Component {
                                     </LinearGradient>
                             </View>
                         </View>
-                        
+                        <View style={styles.tabContainer}>
+                            <View style={styles.tabItem}>
+                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
+                                    <View style={styles.tabWrp}>
+                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-home-gray.png') }/>
+                                        <Text>Beranda</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+                            <View style={styles.tabItem}>
+                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
+                                    <View style={styles.tabWrp}>
+                                        <Image Transaks={styles.tabIcon} source={ require('../../assets/icon/icon-transaksi-gray.png') }/>
+                                        <Text>Transaksi</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+                            <View style={styles.tabItem}>
+                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
+                                    <View style={styles.tabWrp}>
+                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-laporan-gray.png') }/>
+                                        <Text>Laporan</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+                            <View style={styles.tabItem}>
+                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
+                                    <View style={styles.tabWrp}>
+                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-profile-gray.png') }/>
+                                        <Text>Profile</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+                        </View> 
                     </ScrollView>
                 </SafeAreaView>
 
@@ -196,6 +229,16 @@ class DashboardPage extends React.Component {
     }
 }
 const styles = StyleSheet.create({
+    tabIcon:{
+        width:25,
+        height:25
+    },
+    tabContainer:{
+        flexDirection:'row'
+    },
+    tabItem:{
+
+    },
     iconCalendar:{
         width:20,
         height:20,
@@ -223,7 +266,7 @@ const styles = StyleSheet.create({
     content:{
         flex:1,
         backgroundColor:'white',
-        padding:20
+        padding:5
     },
     periodes:{
         alignItems:'center',
@@ -231,15 +274,15 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'center',
         borderRadius:10,
-        paddingVertical:10,
+        paddingVertical:5,
         paddingHorizontal:5,
-        marginHorizontal:60,
+        marginHorizontal:35,
         marginBottom:-10
     },
    
     photoProfile:{
-        width:100,
-        height:100,
+        width:80,
+        height:80,
         marginBottom:5,
         borderRadius:100
     },
