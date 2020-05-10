@@ -1,72 +1,250 @@
 import React from 'react';
-import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
+import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView,Button} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { LinearGradient } from 'expo-linear-gradient';
 class DashboardPage extends React.Component {
     goBack=()=>{
         // this.props.navigation.navigate('LoginPage');
     };
     state = {
-        spinner:false
+        spinner:false,
+        user_display_name:'Hari Nugraha',
+        user_email:'nugrahahari@gmail.com',
+        date:new Date(1598051730000),
+        mode:''
     };
+
+  onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  showMode = currentMode => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  showDatepicker = () => {
+    showMode('date');
+  };
+
+  showTimepicker = () => {
+    showMode('time');
+  };
     render(){
+        let show=false;
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+                <LinearGradient
+                  colors={['#009EEE', '#98D2FF']}
+                  start={[0.0,0.122]}
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: 400,
+                  }}
+                />
+                <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} /> 
                 
-                <Spinner
-          visible={this.state.spinner}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        />
-                    <View style={styles.header}>
-                        <View style={{paddingHorizontal:10,paddingVertical:20}}>
-                        <TouchableHighlight onPress={()=>{this.goBack()}} >
-                        <Image style={{width:22}} source={ require('../../assets/icon/chevron-left.png') }/>
-                            
+                <View style={[styles.header,{paddingVertical:10,paddingHorizontal:10}]}>
+                        <Text style={{color:'#ffffff',fontSize:20,fontWeight:'bold'}}>{'Selamat Datang,'}</Text>
+
+                        <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]} onPress={()=>{this.goBack()}} >
+                            <Image style={styles.photoProfile} source={ require('../../assets/icon/profile_user.png') }/>
                         </TouchableHighlight>
+                        <Text style={{color:'#ffffff',fontSize:14,fontWeight:'bold'}}>{this.state.user_display_name}</Text>
+                        <Text style={{color:'#ffffff',fontSize:14}}>{this.state.user_email}</Text>
+
+
+                </View>
+                <View style={[styles.periodes,{}]}>
+
+                        <View style={{backgroundColor:'#F8F7FC',borderRadius:5, flexDirection:'row'}}>
+                            <Image style={styles.iconCalendar} source={ require('../../assets/icon/icon-calendar.png') }/>
+                            <Text  style={[{paddingHorizontal:10,paddingVertical:10}]}>08/06/2020</Text>
                         </View>
-                        <View style={{flex:1,textAlign:'left',paddingLeft:120,paddingVertical:20}}>
-                            <Text style={{color:'#ffffff',fontSize:14}}>Dashboard</Text>
+                        <View style={{backgroundColor:'transparent', flexDirection:'row'}}>
+                            <Image style={styles.iconSd} source={ require('../../assets/icon/icon-dash.png') }/>
+
                         </View>
-                    </View>
-                    <SafeAreaView style={styles.content}>
-                    <ScrollView style={{padding:20}}>
+
+                        <View style={{backgroundColor:'#F8F7FC',borderRadius:5, flexDirection:'row'}}>
+                            <Image style={styles.iconCalendar } source={ require('../../assets/icon/icon-calendar.png') }/>
+                            <Text style={[{paddingHorizontal:10,paddingVertical:10}]}>08/06/2020</Text>
+                        </View>
                     
-                        <Text style={{fontWeight:'bold',fontSize:16}}>Dashboard</Text>
-                        <Text style={{marginVertical:10}}>-</Text>
+
+                    {show && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      timeZoneOffsetInMinutes={0}
+                      value={this.state.date}
+                      mode={this.state.mode}
+                      is24Hour={true}
+                      display="default"
+                      onChange={this.onChange}
+                    />
+                    )}
+                    </View>
+                <SafeAreaView style={styles.content}>
+                    <ScrollView style={{padding:20}}>
+                        <View style={styles.statistic}>
+                            <View style={{flexDirection:'row',marginBottom:10}}>
+                                  <LinearGradient
+                                      colors={['#FFC583', '#FAA871']}
+                                      style={{ padding: 15, borderRadius: 10 ,flex:1,marginHorizontal:5}}>
+                                      <Text
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          fontSize: 40,
+                                          fontWeight:'bold',
+                                          paddingTop:30,
+                                          color: '#fff',
+                                        }}>
+                                        30
+                                      </Text>
+                                      <Text
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          fontSize: 15,
+                                          color: '#fff',
+                                        }}>
+                                        Prospek
+                                      </Text>
+                                    </LinearGradient>
+                                    <LinearGradient
+                                      colors={['#ACB4FF', '#778BFE']}
+                                      style={{ padding: 15, borderRadius: 10 ,flex:1,marginHorizontal:5}}>
+                                      <Text
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          fontSize: 40,
+                                          fontWeight:'bold',
+                                          paddingTop:30,
+                                          color: '#fff',
+                                        }}>
+                                       10
+                                      </Text>
+                                       <Text
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          fontSize: 15,
+                                          color: '#fff',
+                                        }}>
+                                        Survey
+                                      </Text>
+                                    </LinearGradient>
+                            </View>
+                            <View style={{flexDirection:'row'}}>
+                                  <LinearGradient
+                                      colors={['#7EDC84', '#5DC759']}
+                                      style={{ padding: 15, borderRadius: 10 ,flex:1,marginHorizontal:5}}>
+                                      <Text
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          fontSize: 40,
+                                          fontWeight:'bold',
+                                          paddingTop:30,
+                                          color: '#fff',
+                                        }}>
+                                        30
+                                      </Text>
+                                      <Text
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          fontSize: 15,
+                                          color: '#fff',
+                                        }}>
+                                        Prospek
+                                      </Text>
+                                    </LinearGradient>
+                                    <LinearGradient
+                                      colors={['#FE9797', '#FF7070']}
+                                      style={{ padding: 15, borderRadius: 10 ,flex:1,marginHorizontal:5}}>
+                                      <Text
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          fontSize: 40,
+                                          fontWeight:'bold',
+                                          paddingTop:30,
+                                          color: '#fff',
+                                        }}>
+                                       10
+                                      </Text>
+                                       <Text
+                                        style={{
+                                          backgroundColor: 'transparent',
+                                          fontSize: 15,
+                                          color: '#fff',
+                                        }}>
+                                        Survey
+                                      </Text>
+                                    </LinearGradient>
+                            </View>
+                        </View>
                         
                     </ScrollView>
-                    </SafeAreaView>
+                </SafeAreaView>
 
-                    </KeyboardAvoidingView>    
+            </KeyboardAvoidingView>    
         );
     }
 }
 const styles = StyleSheet.create({
-    imagePreview:{
-        width:100,
-        height:100,
-        marginBottom:5
+    iconCalendar:{
+        width:20,
+        height:20,
+        marginTop:8,
+        marginLeft:5
+    },
+    iconSd:{
+        width:20,
+        height:20,
+        marginTop:8,
+        marginLeft:5,
+        marginRight:5
     },
     wrapper:{
-        paddingTop:Constants.statusBarHeight,
         flex:1,
-        backgroundColor:'#F8F7FC' 
+        paddingTop:Constants.statusBarHeight,
+        backgroundColor:'transparent' 
     },
     header:{
-        // flex:1,
-        flexDirection:'row',
-        backgroundColor:'#00A4F6',
-        // color:'#FFF'
+        alignItems:'center'
+    },
+    box:{
+
     },
     content:{
-        flex:2,
+        flex:1,
         backgroundColor:'white',
-        borderTopLeftRadius:25,
-        borderTopRightRadius: 25,
         padding:20
     },
+    periodes:{
+        alignItems:'center',
+        backgroundColor:'#fff',
+        flexDirection:'row',
+        justifyContent:'center',
+        borderRadius:10,
+        paddingVertical:10,
+        paddingHorizontal:5,
+        marginHorizontal:60,
+        marginBottom:-10
+    },
+   
+    photoProfile:{
+        width:100,
+        height:100,
+        marginBottom:5,
+        borderRadius:100
+    },
+    
+    
     photoUploadWrp:{
         backgroundColor:'white',
         borderRadius:5,
@@ -80,18 +258,18 @@ const styles = StyleSheet.create({
         flex:1
     },
     headerTitle:{
-        flex:1,
+        // flex:1,
         color:'#36227C',
         fontWeight:'bold',
         fontSize:20
     },
     logo:{
-        flex:2,
+        // flex:2,
         resizeMode:'contain',
         marginTop:10
     },
     content:{
-        flex:2,
+        // flex:2,
         backgroundColor:'white',
         borderTopLeftRadius:25,
         borderTopRightRadius: 25,
