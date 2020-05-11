@@ -14,7 +14,7 @@ class LoginPage extends React.Component {
    
     state = {
         account:null,
-        email:'yaskds@gmail.com',
+        email:'sanusi2',
         password:'1234',
         _btLoginDisabled: false,
         _form_HasError: false,

@@ -87,7 +87,7 @@ class DashboardPage extends React.Component {
             formData.append('user_id', account.user_id);
 
            ///////////////
-            fetch('https://api-ppsl.perumdamtkr.com/loginService/getFullProfile/'+'1', {
+            fetch('https://api-ppsl.perumdamtkr.com/loginService/getFullProfile/'+account.user_id, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -104,13 +104,14 @@ class DashboardPage extends React.Component {
 
                     if(res.data !== null){
                         // SAVE LOGIN INFO TO ASYNC STORAGE
-                        console.log(res.data.foto);
+                        console.log(res.data);
                         this.setState({
                             prospek: res.data.am.prospek,
                             survey: res.data.am.survey,
                             pelanggan: res.data.am.pelanggan,
                             batal: res.data.am.batal,
-                            photoUrl:res.data.foto
+                            photoUrl:res.data.foto,
+                            user_email:res.data.am.email=='n/a'?res.data.am.nip_nik:res.data.email
                         });
 
                         // Redirect to home page
