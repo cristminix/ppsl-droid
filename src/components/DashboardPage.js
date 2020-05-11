@@ -298,11 +298,7 @@ class DashboardPage extends React.Component {
                                       </Text>
                                     </LinearGradient>
                             </View>
-                            <RefreshControl
-              //refresh control used for the Pull to Refresh
-              refreshing={this.state.refreshing}
-              onRefresh={this.onRefresh.bind(this)}
-            />
+                           
                         </View>
                         
                     </ScrollView>

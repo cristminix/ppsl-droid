@@ -1,5 +1,5 @@
 import React from 'react';
-import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
+import { AsyncStorage,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -35,15 +35,102 @@ class ProfilePage extends React.Component {
                     
                         <Text style={{fontWeight:'bold',fontSize:16}}>Profile</Text>
                         <Text style={{marginVertical:10}}>-</Text>
+
+                        <TouchableHighlight onPress={()=>{this.logout()}} >
+                        <View>
+                        <Image style={{width:22}} source={ require('../../assets/icon/chevron-left.png') }/>
+                        <Text style={{marginVertical:10}}>Logout</Text>
+                            </View>
+                        </TouchableHighlight>
                         
                     </ScrollView>
                     </SafeAreaView>
+                    <View style={styles.tabContainer}>
+                            <View style={styles.tabItem}>
+                                <TouchableHighlight  onPress={this.onHome} style={[{marginHorizontal:10,marginVertical:10}]}>
+                                    <View style={styles.tabWrp}>
+                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-home-gray.png') }/>
+                                        <Text style={this.state.tabItemTextStyleActive}>Beranda</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+                            <View style={styles.tabItem}>
+                                <TouchableHighlight onPress={this.onTransaksi} style={[{marginHorizontal:10,marginVertical:10}]}>
+                                    <View style={styles.tabWrp}>
+                                        <Image Transaks={styles.tabIcon} source={ require('../../assets/icon/icon-transaksi-gray.png') }/>
+                                        <Text style={this.state.tabItemTextStyle}>Transaksi</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+                            <View style={styles.tabItem}>
+                                <TouchableHighlight onPress={this.onLaporan} style={[{marginHorizontal:10,marginVertical:10}]}>
+                                    <View style={styles.tabWrp}>
+                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-laporan-gray.png') }/>
+                                        <Text style={this.state.tabItemTextStyle}>Laporan</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+                            <View style={styles.tabItem}>
+                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
+                                    <View style={styles.tabWrp}>
+                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-profile-blue.png') }/>
+                                        <Text style={this.state.tabItemTextStyle}>Profile</Text>
 
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+                </View> 
                     </KeyboardAvoidingView>    
         );
+
+
+    }
+    onHome= ()=>{
+        this.props.navigation.navigate('DashboardPage')
+        
+    }
+    logout= ()=>{
+        AsyncStorage.setItem('account', 'null');
+        this.props.navigation.navigate('EntryPoint');
+
+        
+    }
+    onRefresh = ()=>{
+        // this.setState({refreshing:true})
+        this.refreshData();
+        console.log('refreshing')
+    }
+    onLaporan(){
+        console.log('onLaporan')
+    }
+    onTransaksi(){
+        console.log('onTransaksi')
     }
 }
 const styles = StyleSheet.create({
+    tabItem:{
+
+    },
+    tabWrp:{
+        marginHorizontal:10,
+
+        alignItems:'center'
+    },
+    tabIcon:{
+        width:18,
+        height:18
+    },
+    tabContainer:{
+        flexDirection:'row',
+        justifyContent:'center',
+        // position:'absolute',
+        alignItems:'center',
+
+        bottom:0
+    },
+    tabItem:{
+
+    },
     imagePreview:{
         width:100,
         height:100,
