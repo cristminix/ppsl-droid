@@ -81,7 +81,7 @@ class DashboardPage extends React.Component {
                 formData.append('user_id', account.user_id);
 
                ///////////////
-                fetch('http://192.168.1.234:8080/ppsl_api/loginService/getFullProfile/'+'1', {
+                fetch('https://api-ppsl.perumdamtkr.com/loginService/getFullProfile/'+'1', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -91,13 +91,21 @@ class DashboardPage extends React.Component {
                     },
                     body: formData
                 })
+
                 .then((response) =>{ 
                     // console.log(response)
                     response.json().then((res) => {
+
                         if(res.data !== null){
                             // SAVE LOGIN INFO TO ASYNC STORAGE
-                            console.log(res);
-
+                            console.log(res.data.foto);
+                            this.setState({
+                                prospek: res.data.am.prospek,
+                                survey: res.data.am.survey,
+                                pelanggan: res.data.am.pelanggan,
+                                batal: res.data.am.batal,
+                                photoUrl:res.data.foto
+                            });
 
                             // Redirect to home page
                         }else{
@@ -121,7 +129,7 @@ class DashboardPage extends React.Component {
   }
     render(){
         let show=false;
-        let photoUrl='../../assets/icon/profile_user.png';
+        // let haveFoto = '../../assets/icon/profile_user.png';
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
                 <LinearGradient
@@ -141,7 +149,7 @@ class DashboardPage extends React.Component {
                         <Text style={{color:'#ffffff',fontSize:20,fontWeight:'bold'}}>{'Selamat Datang,'}</Text>
 
                         <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]} onPress={()=>{this.goBack()}} >
-                            <Image style={styles.photoProfile} source={ require(photoUrl) }/>
+                            <Image style={styles.photoProfile} source={ {uri:this.state.photoUrl }}/>
                         </TouchableHighlight>
                         <Text style={{color:'#ffffff',fontSize:14,fontWeight:'bold'}}>{this.state.user_display_name}</Text>
                         <Text style={{color:'#ffffff',fontSize:14}}>{this.state.user_email}</Text>
