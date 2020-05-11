@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView,Button} from 'react-native';
+import { ActivityIndicator,RefreshControl,AsyncStorage,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView,Button} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -23,7 +23,8 @@ class DashboardPage extends React.Component {
         survey:0,
         pelanggan:0,
         batal:0,
-        photoUrl:'../../assets/icon/profile_user.png'
+        photoUrl:'../../assets/icon/profile_user.png',
+        refreshing:false
     };
 
   onChange = (event, selectedDate) => {
@@ -62,74 +63,88 @@ class DashboardPage extends React.Component {
 
     this.setState({_boxStyle:{marginHorizontal:5,height:height/2.2}});
 
-    AsyncStorage.getItem('account', (error, result) => {
-            if (result) {
-                 let text ='Checking AsyncStorage' + "\n";
-       
-                
-                let account = JSON.parse(result);
-                console.log(account); 
-                this.setState({
-                    user_email:account.email,
-                    user_display_name: account.nama_lengkap
-                });
-                console.log('get full profile');
+    this.refreshData();
 
-                // show spinner
-                this.setState({spinner:true});
-                var formData = new FormData();
-                formData.append('user_id', account.user_id);
 
-               ///////////////
-                fetch('https://api-ppsl.perumdamtkr.com/loginService/getFullProfile/'+'1', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-type': 'application/json',
-                        'X-API-KEY' : '9c05c647d185d704fa3b5add357dd08777d05b99', 
-                        'X-APP-ID' : 'ppsl-droid'
-                    },
-                    body: formData
-                })
-
-                .then((response) =>{ 
-                    // console.log(response)
-                    response.json().then((res) => {
-
-                        if(res.data !== null){
-                            // SAVE LOGIN INFO TO ASYNC STORAGE
-                            console.log(res.data.foto);
-                            this.setState({
-                                prospek: res.data.am.prospek,
-                                survey: res.data.am.survey,
-                                pelanggan: res.data.am.pelanggan,
-                                batal: res.data.am.batal,
-                                photoUrl:res.data.foto
-                            });
-
-                            // Redirect to home page
-                        }else{
-                            // Disalay login error message
-                            this._loginError(true);
-                        }
-
-                    this.setState({ spinner:false });
-
-                    })
-                }
-                )
-                .catch((error) => {
-                    console.log(error)
-                    this.setState({ spinner:false });
-                })
-                .done();
-               ///////////////
-            }
-        });
   }
+    refreshData = () =>{
+        AsyncStorage.getItem('account', (error, result) => {
+    if (result) {
+            let text ='Checking AsyncStorage' + "\n";
+   
+            
+            let account = JSON.parse(result);
+            console.log(account); 
+            this.setState({
+                user_email:account.email,
+                user_display_name: account.nama_lengkap
+            });
+            console.log('get full profile');
+
+            // show spinner
+            this.setState({spinner:true});
+            var formData = new FormData();
+            formData.append('user_id', account.user_id);
+
+           ///////////////
+            fetch('https://api-ppsl.perumdamtkr.com/loginService/getFullProfile/'+'1', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json',
+                    'X-API-KEY' : '9c05c647d185d704fa3b5add357dd08777d05b99', 
+                    'X-APP-ID' : 'ppsl-droid'
+                },
+                body: formData
+            })
+
+            .then((response) =>{ 
+                // console.log(response)
+                response.json().then((res) => {
+
+                    if(res.data !== null){
+                        // SAVE LOGIN INFO TO ASYNC STORAGE
+                        console.log(res.data.foto);
+                        this.setState({
+                            prospek: res.data.am.prospek,
+                            survey: res.data.am.survey,
+                            pelanggan: res.data.am.pelanggan,
+                            batal: res.data.am.batal,
+                            photoUrl:res.data.foto
+                        });
+
+                        // Redirect to home page
+                    }else{
+                        // Disalay login error message
+                        this._loginError(true);
+                    }
+
+                this.setState({ spinner:false });
+
+                })
+            }
+            )
+            .catch((error) => {
+                console.log(error)
+                this.setState({ spinner:false });
+            })
+            .done();
+           ///////////////
+        }
+    });
+    }
     render(){
         let show=false;
+        let refreshing = <View></View>;
         // let haveFoto = '../../assets/icon/profile_user.png';
+        if (this.state.refreshing) {
+        refreshing = (
+        //loading view while data is loading
+        <View style={{ flex: 1, paddingTop: 20 }}>
+          <ActivityIndicator />
+        </View>
+      );
+    }
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
                 <LinearGradient
@@ -283,6 +298,11 @@ class DashboardPage extends React.Component {
                                       </Text>
                                     </LinearGradient>
                             </View>
+                            <RefreshControl
+              //refresh control used for the Pull to Refresh
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh.bind(this)}
+            />
                         </View>
                         
                     </ScrollView>
@@ -330,6 +350,11 @@ class DashboardPage extends React.Component {
     onProfile = ()=>{
         this.props.navigation.navigate('ProfilePage')
         
+    }
+    onRefresh = ()=>{
+        // this.setState({refreshing:true})
+        this.refreshData();
+        console.log('refreshing')
     }
     onLaporan(){
         console.log('onLaporan')
