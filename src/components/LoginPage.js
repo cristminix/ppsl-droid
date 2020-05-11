@@ -161,7 +161,7 @@ class LoginPage extends React.Component {
         }
     };
     _onSubmitForm = () => {
-        console.log('Prosess Submit Form');
+        // console.log('Prosess Submit Form');
         this._loginError(false);
         // show spinner
         this.setState({spinner:true});
@@ -169,7 +169,7 @@ class LoginPage extends React.Component {
         formData.append('username', this.state.email);
         formData.append('password', this.state.password);
 
-        fetch('http://192.168.1.234:8080/ppsl_api/loginService', {
+        fetch('https://api-ppsl.perumdamtkr.com/loginService', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -209,7 +209,7 @@ class LoginPage extends React.Component {
         }
         )
         .catch((error) => {
-            console.log(error)
+            // console.log(error)
             this.setState({ spinner:false });
         })
         .done();
