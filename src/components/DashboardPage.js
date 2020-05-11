@@ -297,7 +297,7 @@ class DashboardPage extends React.Component {
                                 </TouchableHighlight>
                             </View>
                             <View style={styles.tabItem}>
-                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
+                                <TouchableHighlight onPress={this.onTransaksi} style={[{marginHorizontal:10,marginVertical:10}]}>
                                     <View style={styles.tabWrp}>
                                         <Image Transaks={styles.tabIcon} source={ require('../../assets/icon/icon-transaksi-gray.png') }/>
                                         <Text style={this.state.tabItemTextStyle}>Transaksi</Text>
@@ -305,7 +305,7 @@ class DashboardPage extends React.Component {
                                 </TouchableHighlight>
                             </View>
                             <View style={styles.tabItem}>
-                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
+                                <TouchableHighlight onPress={this.onLaporan} style={[{marginHorizontal:10,marginVertical:10}]}>
                                     <View style={styles.tabWrp}>
                                         <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-laporan-gray.png') }/>
                                         <Text style={this.state.tabItemTextStyle}>Laporan</Text>
@@ -313,7 +313,7 @@ class DashboardPage extends React.Component {
                                 </TouchableHighlight>
                             </View>
                             <View style={styles.tabItem}>
-                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
+                                <TouchableHighlight  onPress={this.onProfile} style={[{marginHorizontal:10,marginVertical:10}]}>
                                     <View style={styles.tabWrp}>
                                         <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-profile-gray.png') }/>
                                         <Text style={this.state.tabItemTextStyle}>Profile</Text>
@@ -325,6 +325,17 @@ class DashboardPage extends React.Component {
 
             </KeyboardAvoidingView>    
         );
+    }
+
+    onProfile = ()=>{
+        this.props.navigation.navigate('ProfilePage')
+        
+    }
+    onLaporan(){
+        console.log('onLaporan')
+    }
+    onTransaksi(){
+        console.log('onTransaksi')
     }
 }
 const styles = StyleSheet.create({

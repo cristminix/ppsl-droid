@@ -27,13 +27,13 @@ class ProfilePage extends React.Component {
                         </TouchableHighlight>
                         </View>
                         <View style={{flex:1,textAlign:'left',paddingLeft:120,paddingVertical:20}}>
-                            <Text style={{color:'#ffffff',fontSize:14}}>Transaksi</Text>
+                            <Text style={{color:'#ffffff',fontSize:14}}>Profile</Text>
                         </View>
                     </View>
                     <SafeAreaView style={styles.content}>
                     <ScrollView style={{padding:20}}>
                     
-                        <Text style={{fontWeight:'bold',fontSize:16}}>Transaksi</Text>
+                        <Text style={{fontWeight:'bold',fontSize:16}}>Profile</Text>
                         <Text style={{marginVertical:10}}>-</Text>
                         
                     </ScrollView>
