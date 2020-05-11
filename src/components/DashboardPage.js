@@ -1,5 +1,5 @@
 import React from 'react';
-import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView,Button} from 'react-native';
+import { AsyncStorage,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView,Button} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -17,7 +17,12 @@ class DashboardPage extends React.Component {
         date:new Date(1598051730000),
         mode:'',
         loaderWidth:0,
-        _boxStyle:{height:300}
+        _boxStyle:{height:300},
+        text:'',
+        prospek:0,
+        survey:0,
+        pelanggan:0,
+        batal:0
     };
 
   onChange = (event, selectedDate) => {
@@ -41,6 +46,76 @@ class DashboardPage extends React.Component {
   measureSize = (nativeEvent) => {
     // this.setState({ loaderWidth: nativeEvent.layout.width });
   };
+  componentDidMount(){
+        
+       
+        AsyncStorage.getItem('account', (error, result) => {
+            if (result) {
+                 let text ='Checking AsyncStorage' + "\n";
+       
+                
+                let account = JSON.parse(result);
+                console.log(account); 
+                this.setState({
+                    user_email:account.email,
+                    user_display_name: account.nama_lengkap
+                });
+                console.log('get full profile');
+
+                // show spinner
+                this.setState({spinner:true});
+                var formData = new FormData();
+                formData.append('user_id', account.user_id);
+
+               ///////////////
+                fetch('https://api-ppsl.perumdamtkr.com/loginService/getFullProfile/'+'1', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-type': 'application/json',
+                        'X-API-KEY' : '9c05c647d185d704fa3b5add357dd08777d05b99', 
+                        'X-APP-ID' : 'ppsl-droid'
+                    },
+                    body: formData
+                })
+                .then((response) => 
+                {
+                    console.log(response);
+                        // if(res.data !== null){
+                        //     // SAVE LOGIN INFO TO ASYNC STORAGE
+                        //     console.log(res);
+                        //     // AsyncStorage.setItem('account', JSON.stringify(res.data));
+                        //     // this.setState({account:res.data});
+                        //     // if(this.state.account != null){
+                        //     //     // 
+                        //         setTimeout(()=>{
+                        //             if(this.state.account != null){
+                        //                 // this.props.navigation.navigate('EntryPoint')
+                        //             }
+                        //         },100);
+                                
+                        //     // }
+                        //     // Redirect to home page
+                        // }else{
+                        //     // Disalay login error message
+                        //     // this._loginError(true);
+                        // }
+
+                    this.setState({ spinner:false });
+
+                    // })
+                    }
+                )
+                .catch((error) => {
+                    console.log(error)
+                    this.setState({ spinner:false });
+                })
+                .done();
+               ///////////////
+            }
+        });
+        
+    }
   find_dimesions(layout){
     const {x, y, width, height} = layout;
     // console.warn(x);
@@ -122,7 +197,7 @@ class DashboardPage extends React.Component {
                                           paddingTop:30,
                                           color: '#fff',
                                         }}>
-                                        30
+                                        {this.state.prospek}
                                       </Text>
                                       <Text
                                         style={{
@@ -144,7 +219,8 @@ class DashboardPage extends React.Component {
                                           paddingTop:30,
                                           color: '#fff',
                                         }}>
-                                       10
+                                        {this.state.survey}
+                                       
                                       </Text>
                                        <Text
                                         style={{
@@ -168,7 +244,8 @@ class DashboardPage extends React.Component {
                                           paddingTop:30,
                                           color: '#fff',
                                         }}>
-                                        30
+                                        {this.state.pelanggan}
+                                        
                                       </Text>
                                       <Text
                                         style={{
@@ -176,7 +253,7 @@ class DashboardPage extends React.Component {
                                           fontSize: 15,
                                           color: '#fff',
                                         }}>
-                                        Prospek
+                                        Pelanggan
                                       </Text>
                                     </LinearGradient>
                                     <LinearGradient
@@ -190,7 +267,8 @@ class DashboardPage extends React.Component {
                                           paddingTop:30,
                                           color: '#fff',
                                         }}>
-                                       10
+                                        {this.state.batal}
+                                       
                                       </Text>
                                        <Text
                                         style={{
@@ -198,7 +276,7 @@ class DashboardPage extends React.Component {
                                           fontSize: 15,
                                           color: '#fff',
                                         }}>
-                                        Survey
+                                        Batal
                                       </Text>
                                     </LinearGradient>
                             </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView,SafeAreaView,Dimensions ,ScrollView } from 'react-native';
+import {  AsyncStorage,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView,SafeAreaView,Dimensions ,ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import ForgetPage from './ForgetPage';
 import RegisterPage from './RegisterPage';
@@ -13,9 +13,10 @@ class LoginPage extends React.Component {
    
    
     state = {
-        email:'',
-        password:'',
-        _btLoginDisabled: true,
+        account:null,
+        email:'yaskds@gmail.com',
+        password:'1234',
+        _btLoginDisabled: false,
         _form_HasError: false,
         _form_errorMessage: 'Email atau password salah.',
         _form_err_msg_style:{ display:'none'},
@@ -192,7 +193,18 @@ class LoginPage extends React.Component {
             response.json().then((res) => {
                 if(res.data !== null){
                     // SAVE LOGIN INFO TO ASYNC STORAGE
-                    console.log(res.data.msg);
+                    console.log(res);
+                    AsyncStorage.setItem('account', JSON.stringify(res.data));
+                    this.setState({account:res.data});
+                    // if(this.state.account != null){
+                    //     // 
+                        setTimeout(()=>{
+                            if(this.state.account != null){
+                                this.props.navigation.navigate('EntryPoint')
+                            }
+                        },100);
+                        
+                    // }
                     // Redirect to home page
                 }else{
                     // Disalay login error message

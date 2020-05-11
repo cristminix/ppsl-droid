@@ -1,24 +1,40 @@
 import React from 'react';
+import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView,Button} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import LoginPage from './LoginPage';
 import HelpPage from './HelpPage';
 import ForgetPage from './ForgetPage';
 import RegisterPage from './RegisterPage';
 
-import LoginPageNavigator from './LoginPageNavigator';
+
 import DashboardPage from './DashboardPage';
 import TransaksiPage from './TransaksiPage';
 import LaporanPage from './LaporanPage';
 import ProfilePage from './ProfilePage';
 
 import HomePageNavigator from './HomePageNavigator';
+import LoginPageNavigator from './LoginPageNavigator';
+import EntryPoint from './EntryPoint';
 
+class PPSLApp extends React.Component{
+	render(){
+        return(<NavigationContainer>
+        	      <Stack.Navigator initialRouteName="EntryPoint" headerMode="none">
+        	        <Stack.Screen name="EntryPoint" component={EntryPoint}/>
+        	        <Stack.Screen name="LoginPage" component={LoginPage}/>
+        	        <Stack.Screen name="RegisterPage" component={RegisterPage} />
+        	        <Stack.Screen name="ForgetPage" component={ForgetPage} />
+        	        <Stack.Screen name="HelpPage" component={HelpPage} />
+        	        <Stack.Screen name="DashboardPage" component={DashboardPage}/>
+        	        <Stack.Screen name="TransaksiPage" component={TransaksiPage}/>
+        	        <Stack.Screen name="LaporanPage" component={LaporanPage} />
+        	        <Stack.Screen name="ProfilePage" component={ProfilePage} />
+        	      </Stack.Navigator>
+        	    </NavigationContainer>)
+    }
+		
 
-function PPSLApp() {
-
-	return (
-		<HomePageNavigator />
-	);
-  
 }
-
+const Stack = createStackNavigator();
 export default PPSLApp;
