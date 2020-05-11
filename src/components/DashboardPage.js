@@ -22,7 +22,8 @@ class DashboardPage extends React.Component {
         prospek:0,
         survey:0,
         pelanggan:0,
-        batal:0
+        batal:0,
+        photoUrl:'../../assets/icon/profile_user.png'
     };
 
   onChange = (event, selectedDate) => {
@@ -49,7 +50,19 @@ class DashboardPage extends React.Component {
   componentDidMount(){
         
        
-        AsyncStorage.getItem('account', (error, result) => {
+        
+        
+    }
+  find_dimesions(layout){
+    const {x, y, width, height} = layout;
+    // console.warn(x);
+    // console.warn(y);
+    // console.warn(width);
+    // console.warn(height);
+
+    this.setState({_boxStyle:{marginHorizontal:5,height:height/2.2}});
+
+    AsyncStorage.getItem('account', (error, result) => {
             if (result) {
                  let text ='Checking AsyncStorage' + "\n";
        
@@ -68,7 +81,7 @@ class DashboardPage extends React.Component {
                 formData.append('user_id', account.user_id);
 
                ///////////////
-                fetch('https://api-ppsl.perumdamtkr.com/loginService/getFullProfile/'+'1', {
+                fetch('http://192.168.1.234:8080/ppsl_api/loginService/getFullProfile/'+'1', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -78,33 +91,24 @@ class DashboardPage extends React.Component {
                     },
                     body: formData
                 })
-                .then((response) => 
-                {
-                    console.log(response);
-                        // if(res.data !== null){
-                        //     // SAVE LOGIN INFO TO ASYNC STORAGE
-                        //     console.log(res);
-                        //     // AsyncStorage.setItem('account', JSON.stringify(res.data));
-                        //     // this.setState({account:res.data});
-                        //     // if(this.state.account != null){
-                        //     //     // 
-                        //         setTimeout(()=>{
-                        //             if(this.state.account != null){
-                        //                 // this.props.navigation.navigate('EntryPoint')
-                        //             }
-                        //         },100);
-                                
-                        //     // }
-                        //     // Redirect to home page
-                        // }else{
-                        //     // Disalay login error message
-                        //     // this._loginError(true);
-                        // }
+                .then((response) =>{ 
+                    // console.log(response)
+                    response.json().then((res) => {
+                        if(res.data !== null){
+                            // SAVE LOGIN INFO TO ASYNC STORAGE
+                            console.log(res);
+
+
+                            // Redirect to home page
+                        }else{
+                            // Disalay login error message
+                            this._loginError(true);
+                        }
 
                     this.setState({ spinner:false });
 
-                    // })
-                    }
+                    })
+                }
                 )
                 .catch((error) => {
                     console.log(error)
@@ -114,19 +118,10 @@ class DashboardPage extends React.Component {
                ///////////////
             }
         });
-        
-    }
-  find_dimesions(layout){
-    const {x, y, width, height} = layout;
-    // console.warn(x);
-    // console.warn(y);
-    // console.warn(width);
-    // console.warn(height);
-
-    this.setState({_boxStyle:{marginHorizontal:5,height:height/2.2}})
   }
     render(){
         let show=false;
+        let photoUrl='../../assets/icon/profile_user.png';
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
                 <LinearGradient
@@ -146,7 +141,7 @@ class DashboardPage extends React.Component {
                         <Text style={{color:'#ffffff',fontSize:20,fontWeight:'bold'}}>{'Selamat Datang,'}</Text>
 
                         <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]} onPress={()=>{this.goBack()}} >
-                            <Image style={styles.photoProfile} source={ require('../../assets/icon/profile_user.png') }/>
+                            <Image style={styles.photoProfile} source={ require(photoUrl) }/>
                         </TouchableHighlight>
                         <Text style={{color:'#ffffff',fontSize:14,fontWeight:'bold'}}>{this.state.user_display_name}</Text>
                         <Text style={{color:'#ffffff',fontSize:14}}>{this.state.user_email}</Text>

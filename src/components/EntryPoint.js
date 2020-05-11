@@ -17,33 +17,42 @@ class EntryPoint extends React.Component {
 
     componentDidMount(){
     	
-		let text ='Component did mount .... [ok]' + "\n";
+		
+    }
+    find_dimesions(layout){
+    	if(this.state.account != null){
+    		return;
+    	}
+	    const {x, y, width, height} = layout;
+	    let text ='Component did mount .... [ok]' + "\n";
     	this.setState({text:text});
     	console.log(text);
 
 		AsyncStorage.getItem('account', (error, result) => {
 			if (result) {
-			    console.log(result);
+			    // console.log(JSON.parse(result));
+			    this.setState({account:JSON.parse(result)})
+
 			}
 		});
     	/////////////////////////
     	setTimeout(()=>{
     		 text ='Starting app .... [ok]' ;
     		 let account = this.state.account;
-    		 console.log(typeof account);
-    		 if(typeof account == 'object'){
+    		 // console.log(account);
+    		 if(typeof account == 'object' && account != null){
     		 	text += "\n" +'Checking async storage `account`.... [found]' + "\n";
     		 	text += `\nRedirecting to HomePage\n`;
 
-    		 	setTimeout(()=>{
+    		 	// setTimeout(()=>{
         			this.props.navigation.navigate('DashboardPage');
-    		 	},1000);
+    		 	// },3000);
     		 }else{
     		 	text += "\n" +'Checking async storage `account`.... ['+account+']' + "\n";
     		 	text += `\nRedirecting to LoginPage\n`;
-    		 	setTimeout(()=>{
+    		 	// setTimeout(()=>{
         			this.props.navigation.navigate('LoginPage');
-    		 	},1000);
+    		 	// },1000);
     		 }
 
     		 
@@ -55,14 +64,13 @@ class EntryPoint extends React.Component {
     	},1000);
 		
     	console.log(text);
-    }
-
+	  }
 
 	render(){
 		console.log('rendering');
 		return (  
 			        
-            <View>
+            <View  onLayout={(event) => { this.find_dimesions(event.nativeEvent.layout) }}>
                 <Text style={{padding:100,fontSize:14}}>{this.state.text}</Text>
             </View>    
 		);

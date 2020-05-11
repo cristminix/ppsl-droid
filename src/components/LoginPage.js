@@ -161,25 +161,15 @@ class LoginPage extends React.Component {
         }
     };
     _onSubmitForm = () => {
-        // console.log('Prosess Submit Form');
+        console.log('Prosess Submit Form');
         this._loginError(false);
         // show spinner
         this.setState({spinner:true});
-        // 
-        // X-API-KEY = 9c05c647d185d704fa3b5add357dd08777d05b99
-        // X-APP-ID. = ppsl-droid
-        // let config = {};
-        // axios.get(`http://192.168.1.45:8080/ppsl_api/loginService`,{headers: config})
-        //     .then(res => {
-        // const categories = res.data;
-        // console.log(categories);
-        // this.setState({ categories });
-
         var formData = new FormData();
         formData.append('username', this.state.email);
         formData.append('password', this.state.password);
 
-        fetch('https://api-ppsl.perumdamtkr.com/loginService', {
+        fetch('http://192.168.1.234:8080/ppsl_api/loginService', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -189,11 +179,12 @@ class LoginPage extends React.Component {
             },
             body: formData
         })
-        .then(response => 
+        .then((response) =>{ 
+            // console.log(response)
             response.json().then((res) => {
                 if(res.data !== null){
                     // SAVE LOGIN INFO TO ASYNC STORAGE
-                    console.log(res);
+                    // console.log(res);
                     AsyncStorage.setItem('account', JSON.stringify(res.data));
                     this.setState({account:res.data});
                     // if(this.state.account != null){
@@ -203,7 +194,8 @@ class LoginPage extends React.Component {
                                 this.props.navigation.navigate('EntryPoint')
                             }
                         },100);
-                        
+
+
                     // }
                     // Redirect to home page
                 }else{
@@ -214,6 +206,7 @@ class LoginPage extends React.Component {
             this.setState({ spinner:false });
 
             })
+        }
         )
         .catch((error) => {
             console.log(error)
