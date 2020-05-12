@@ -23,7 +23,7 @@ class DashboardPage extends React.Component {
         survey:0,
         pelanggan:0,
         batal:0,
-        photoUrl:'../../assets/icon/profile_user.png',
+        photoUrl:'https://i.imgur.com/UePbdph.jpg',
         refreshing:false
     };
 
@@ -111,7 +111,8 @@ class DashboardPage extends React.Component {
                             survey: res.data.am.survey,
                             pelanggan: res.data.am.pelanggan,
                             batal: res.data.am.batal,
-                            photoUrl:res.data.foto,
+                            photoUrl:res.data.thumb,
+
                             user_email:res.data.am.email=='n/a'?res.data.am.nip_nik:res.data.email
                         });
 

@@ -4,10 +4,7 @@ import Constants from 'expo-constants';
 import ForgetPage from './ForgetPage';
 import RegisterPage from './RegisterPage';
 import HelpPage from './HelpPage';
-// import BlockUi from 'react-block-ui';
-// import 'react-block-ui/style.css';
 import Spinner from 'react-native-loading-spinner-overlay';
-//import axios from 'axios';
 
 class LoginPage extends React.Component {
    
@@ -42,13 +39,7 @@ class LoginPage extends React.Component {
         , spinner:false
 
     }; 
-    componentDidMount() {
-    // setInterval(() => {
-    //   this.setState({
-    //     spinner: !this.state.spinner
-    //   });
-    // }, 3000);
-  }
+    
     _onInputEmailFocus = () => {
         this.setState({ 
             _ie_Focused: true,
@@ -225,11 +216,7 @@ class LoginPage extends React.Component {
     render() {
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
-                <Spinner
-          visible={this.state.spinner}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        />
+                <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} /> 
                 <View style={styles.header}>
                         <Image style={styles.logo} source={ require('../../assets/logo.png') }/>
                         <Text style={styles.headerTitle}>PERUMDAM TKR</Text>

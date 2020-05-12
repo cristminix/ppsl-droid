@@ -40,7 +40,7 @@ class EntryPoint extends React.Component {
     }
 
     render(){
-        return ( <View>        
+        return ( <View style={{paddingTop:Constants.statusBarHeight}}>        
                     <View >
                         <NavigationEvents onWillFocus={payload => this.refreshData()} />
                         <Text>{this.state.text}</Text>
