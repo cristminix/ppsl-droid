@@ -7,7 +7,7 @@ import HelpPage from './HelpPage';
 // import BlockUi from 'react-block-ui';
 // import 'react-block-ui/style.css';
 import Spinner from 'react-native-loading-spinner-overlay';
-import axios from 'axios';
+//import axios from 'axios';
 
 class LoginPage extends React.Component {
    
@@ -173,18 +173,18 @@ class LoginPage extends React.Component {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-type': 'application/json',
+                'Content-Type': 'multipart/form-data',
                 'X-API-KEY' : '9c05c647d185d704fa3b5add357dd08777d05b99', 
                 'X-APP-ID' : 'ppsl-droid'
             },
             body: formData
         })
-        .then((response) =>{ 
+        .then((response) => 
             // console.log(response)
             response.json().then((res) => {
                 if(res.data !== null){
                     // SAVE LOGIN INFO TO ASYNC STORAGE
-                    // console.log(res);
+                    console.log(res);
                     AsyncStorage.setItem('account', JSON.stringify(res.data));
                     this.setState({account:res.data});
                     // if(this.state.account != null){
@@ -203,13 +203,13 @@ class LoginPage extends React.Component {
                     this._loginError(true);
                 }
 
-            this.setState({ spinner:false });
+                this.setState({ spinner:false });
 
             })
-        }
+        
         )
         .catch((error) => {
-            // console.log(error)
+            console.log(error)
             this.setState({ spinner:false });
         })
         .done();

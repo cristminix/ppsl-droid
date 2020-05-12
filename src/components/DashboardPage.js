@@ -91,7 +91,8 @@ class DashboardPage extends React.Component {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-type': 'application/json',
+                'Content-Type': 'multipart/form-data',
+                    
                     'X-API-KEY' : '9c05c647d185d704fa3b5add357dd08777d05b99', 
                     'X-APP-ID' : 'ppsl-droid'
                 },
