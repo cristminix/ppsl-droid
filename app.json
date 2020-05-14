@@ -24,7 +24,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.perumdamtkr.ppsl",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.perumdamtkr.ppsl",
+      "versionCode": 1
     }
   }
 }

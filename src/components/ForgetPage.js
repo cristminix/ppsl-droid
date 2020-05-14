@@ -26,7 +26,7 @@ class ForgetPage extends React.Component {
                             
                         </TouchableHighlight>
                         </View>
-                        <View style={{flex:1,textAlign:'left',paddingLeft:120,paddingVertical:20}}>
+                        <View style={{flex:1,paddingLeft:120,paddingVertical:20}}>
                             <Text style={{color:'#ffffff',fontSize:14}}>Lupa Sandi</Text>
                         </View>
                     </View>

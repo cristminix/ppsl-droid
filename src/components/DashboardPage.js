@@ -2,140 +2,15 @@ import React from 'react';
 import { ActivityIndicator,RefreshControl,AsyncStorage,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView,Button} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
-import DateTimePicker from '@react-native-community/datetimepicker';
+
 import { LinearGradient } from 'expo-linear-gradient';
-class DashboardPage extends React.Component {
-    goBack=()=>{
-        // this.props.navigation.navigate('LoginPage');
-    };
-    state = {
-        tabItemTextStyle:{color:'#CACACC'},
-        tabItemTextStyleActive:{color:'#009EEE'},
-        spinner:false,
-        user_display_name:'Hari Nugraha',
-        user_email:'nugrahahari@gmail.com',
-        date:new Date(1598051730000),
-        mode:'',
-        loaderWidth:0,
-        _boxStyle:{height:300},
-        text:'',
-        prospek:0,
-        survey:0,
-        pelanggan:0,
-        batal:0,
-        photoUrl:'https://i.imgur.com/UePbdph.jpg',
-        refreshing:false
-    };
+import { NavigationEvents } from '@react-navigation/compat';
+import DashboardAction from './actions/DashboardAction';
+class DashboardPage extends DashboardAction{
+    
+    
 
-  onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-  };
-
-  showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  showDatepicker = () => {
-    showMode('date');
-  };
-
-  showTimepicker = () => {
-    showMode('time');
-  };
-  measureSize = (nativeEvent) => {
-    // this.setState({ loaderWidth: nativeEvent.layout.width });
-  };
-  componentDidMount(){
-        
-       
-        
-        
-    }
-  find_dimesions(layout){
-    const {x, y, width, height} = layout;
-    // console.warn(x);
-    // console.warn(y);
-    // console.warn(width);
-    // console.warn(height);
-
-    this.setState({_boxStyle:{marginHorizontal:5,height:height/2.2}});
-
-    this.refreshData();
-
-
-  }
-    refreshData = () =>{
-        AsyncStorage.getItem('account', (error, result) => {
-    if (result) {
-            let text ='Checking AsyncStorage' + "\n";
-   
-            
-            let account = JSON.parse(result);
-            console.log(account); 
-            this.setState({
-                user_email:account.email,
-                user_display_name: account.nama_lengkap
-            });
-            console.log('get full profile');
-
-            // show spinner
-            this.setState({spinner:true});
-            var formData = new FormData();
-            formData.append('user_id', account.user_id);
-
-           ///////////////
-            fetch('https://api-ppsl.perumdamtkr.com/loginService/getFullProfile/'+account.user_id, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                'Content-Type': 'multipart/form-data',
-                    
-                    'X-API-KEY' : '9c05c647d185d704fa3b5add357dd08777d05b99', 
-                    'X-APP-ID' : 'ppsl-droid'
-                },
-                body: formData
-            })
-
-            .then((response) =>{ 
-                // console.log(response)
-                response.json().then((res) => {
-
-                    if(res.data !== null){
-                        // SAVE LOGIN INFO TO ASYNC STORAGE
-                        console.log(res.data);
-                        this.setState({
-                            prospek: res.data.am.prospek,
-                            survey: res.data.am.survey,
-                            pelanggan: res.data.am.pelanggan,
-                            batal: res.data.am.batal,
-                            photoUrl:res.data.thumb,
-
-                            user_email:res.data.am.email=='n/a'?res.data.am.nip_nik:res.data.email
-                        });
-
-                        // Redirect to home page
-                    }else{
-                        // Disalay login error message
-                        this._loginError(true);
-                    }
-
-                this.setState({ spinner:false });
-
-                })
-            }
-            )
-            .catch((error) => {
-                console.log(error)
-                this.setState({ spinner:false });
-            })
-            .done();
-           ///////////////
-        }
-    });
-    }
+  
     render(){
         let show=false;
         let refreshing = <View></View>;
@@ -150,6 +25,9 @@ class DashboardPage extends React.Component {
     }
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+                <View >
+                <NavigationEvents onWillFocus={payload => this.refreshData()} />
+                </View>
                 <LinearGradient
                   colors={['#009EEE', '#98D2FF']}
                   start={[0.0,0.122]}

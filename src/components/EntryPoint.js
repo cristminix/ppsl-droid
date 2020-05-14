@@ -22,16 +22,16 @@ class EntryPoint extends React.Component {
             }
 
             this.setState({text:text});
-            text ='Starting app .... [ok]' ;
+            text ='Sebentar lagi' ;
             let account = this.state.account;
             if(typeof account == 'object' && account != null){
-                text += "\n" +'Checking async storage `account`.... [found]' + "\n";
-                text += `\nRedirecting to HomePage\n`;
+                // text += "\n" +'Checking async storage `account`.... [found]' + "\n";
+                // text += `\nRedirecting to HomePage\n`;
 
                 this.props.navigation.navigate('DashboardPage');
             }else{
-                text += "\n" +'Checking async storage `account`.... ['+account+']' + "\n";
-                text += `\nRedirecting to LoginPage\n`;
+                // text += "\n" +'Checking async storage `account`.... ['+account+']' + "\n";
+                // text += `\nRedirecting to LoginPage\n`;
                 this.props.navigation.navigate('LoginPage');
             }
             this.setState({text:text});
@@ -40,10 +40,10 @@ class EntryPoint extends React.Component {
     }
 
     render(){
-        return ( <View style={{paddingTop:Constants.statusBarHeight}}>        
-                    <View >
+        return ( <View style={{paddingTop:Constants.statusBarHeight,flex:1,backgroundColor:'transparent'}}>        
+                    <View style={{flex:1,alignItems:'center'}}>
                         <NavigationEvents onWillFocus={payload => this.refreshData()} />
-                        <Text>{this.state.text}</Text>
+                        <Text style={{flex:1}}>{this.state.text}</Text>
                     </View>    
                 </View> );
     }
