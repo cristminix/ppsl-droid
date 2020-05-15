@@ -59,8 +59,9 @@ class ProfilePage extends React.Component {
                             <View style={{flexDirection:'row',marginVertical:10}}>
                                 <Image style={styles.tabIcon} source={require('../../assets/icon/icon-profile-blue.png')}/>
                                 <Text style={{marginLeft:10}}>Ubah Profil</Text>
-                                <Image style={styles.tabIconX} source={require('../../assets/icon/chevron-right-black.png')}/>
-
+                                <TouchableHighlight style={styles.btnActX} onPress={()=>{this.changeProfile()}}>
+                                    <Image style={styles.tabIconX} source={require('../../assets/icon/chevron-right-black.png')}/>
+                                </TouchableHighlight>
                             </View>
                         </View>
 
@@ -69,8 +70,9 @@ class ProfilePage extends React.Component {
                             <View style={{flexDirection:'row',marginVertical:10}}>
                                 <Image style={styles.tabIcon} source={require('../../assets/icon/icon-lock-blue.png')}/>
                                 <Text style={{marginLeft:10}}>Ubah Kata Sandi</Text>
-                                <Image style={styles.tabIconX} source={require('../../assets/icon/chevron-right-black.png')}/>
-
+                                <TouchableHighlight style={styles.btnActX} onPress={()=>{this.changePasswd()}}>
+                                    <Image style={styles.tabIconX} source={require('../../assets/icon/chevron-right-black.png')}/>
+                                </TouchableHighlight>
                                 
                             </View>
                             <View style={{flexDirection:'row',marginVertical:10}}>
@@ -79,7 +81,7 @@ class ProfilePage extends React.Component {
 
                             </View>
                             <View style={{marginVertical:10}}>
-                                <Text>Dokumen yang Anda berikan telah tersimpan dan terlindungi dengan aman di dalam sistem kami.</Text>
+                                <Text style={{color:'#8C8C98',fontSize:12}}> * Dokumen yang Anda berikan telah tersimpan dan terlindungi dengan aman di dalam sistem kami.</Text>
                             </View>
                         </View>
 
@@ -135,6 +137,14 @@ class ProfilePage extends React.Component {
         this.props.navigation.navigate('DashboardPage')
         
     }
+    changePasswd= ()=>{
+        this.props.navigation.navigate('ChangePasswdPage')
+        
+    }
+    changeProfile= ()=>{
+        this.props.navigation.navigate('ChangeProfilePage')
+        
+    }
     logout= ()=>{
         AsyncStorage.setItem('account', 'null');
         this.props.navigation.navigate('EntryPoint');
@@ -170,6 +180,9 @@ const styles = StyleSheet.create({
     tabIconX:{
         width:16,
         height:16,
+        
+    },
+    btnActX:{
         position:'absolute',
         right:0
     },

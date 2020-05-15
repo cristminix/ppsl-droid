@@ -16,6 +16,8 @@ import ProfilePage from './ProfilePage';
 import HomePageNavigator from './HomePageNavigator';
 import LoginPageNavigator from './LoginPageNavigator';
 import EntryPoint from './EntryPoint';
+import ChangeProfilePage from './ChangeProfilePage';
+import ChangePasswdPage from './ChangePasswdPage';
 
 class PPSLApp extends React.Component{
 	render(){
@@ -30,6 +32,8 @@ class PPSLApp extends React.Component{
         	        <Stack.Screen name="TransaksiPage" component={TransaksiPage}/>
         	        <Stack.Screen name="LaporanPage" component={LaporanPage} />
         	        <Stack.Screen name="ProfilePage" component={ProfilePage} />
+        	        <Stack.Screen name="ChangeProfilePage" component={ChangeProfilePage} />
+        	        <Stack.Screen name="ChangePasswdPage" component={ChangePasswdPage} />
         	      </Stack.Navigator>
         	    </NavigationContainer>)
     }
