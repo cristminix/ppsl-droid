@@ -26,7 +26,7 @@ class DashboardPage extends DashboardAction{
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
                 <View >
-                <NavigationEvents onWillFocus={payload => this.refreshData()} />
+                    <NavigationEvents onWillFocus={payload => this.refreshData()} />
                 </View>
                 <LinearGradient
                   colors={['#009EEE', '#98D2FF']}
@@ -82,7 +82,7 @@ class DashboardPage extends DashboardAction{
                     )}
                     </View>
                 <SafeAreaView style={[styles.content,{flex:1}]} onLayout={(event) => { this.find_dimesions(event.nativeEvent.layout) }}>
-                    <ScrollView>
+                    <ScrollView style={{paddingVertical:20}}>
                         <View style={[styles.statistic,{flex:1,flexDirection:'column'}]}>
                             <View style={[styles.boxItem,{flexDirection:'row',margin:10}]}>
                                   <LinearGradient

@@ -2,44 +2,65 @@ import React from 'react';
 import { AsyncStorage,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { NavigationEvents } from '@react-navigation/compat';
 
 class ProfilePage extends React.Component {
     goBack=()=>{
         this.props.navigation.navigate('DashboardPage');
     };
     state = {
-        spinner:false
+        spinner:false,
+        photoUrl:'../../assets/logo.png',
+        nomorHP:'',
+        email:'',
+        displayName:''
+    };
+
+    refreshData = ()=>{
+        AsyncStorage.getItem('full_profile', (error, result) => {
+            if (result) {
+                let full_profile = JSON.parse(result);
+                console.log(full_profile)
+                this.setState({
+                    photoUrl : full_profile.thumb,
+                    displayName: full_profile.account.nama_lengkap,
+                    email: full_profile.am.email,
+                    nomorHP: full_profile.am.no_hp
+                });
+            }
+        });
     };
     render(){
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
-                
-                <Spinner
-          visible={this.state.spinner}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        />
-                    <View style={styles.header}>
-                        <View style={{paddingHorizontal:10,paddingVertical:20}}>
-                        <TouchableHighlight onPress={()=>{this.goBack()}} >
-                        <Image style={{width:22}} source={ require('../../assets/icon/chevron-left.png') }/>
+                    <View >
+                        <NavigationEvents onWillFocus={payload => this.refreshData()} />
+                    </View>
+                    <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} /> 
+
+                    <View style={[styles.header]}>
+                        <Text style={{fontWeight:'bold',fontSize:20,marginBottom:10}}>Profil</Text>
+                        <View style={{flexDirection:'row'}}>
+                            <View>
+                                <Image style={styles.profilePhoto} source={{uri:this.state.photoUrl}}/>
+                            </View>
                             
-                        </TouchableHighlight>
-                        </View>
-                        <View style={{flex:1,textAlign:'left',paddingLeft:120,paddingVertical:20}}>
-                            <Text style={{color:'#ffffff',fontSize:14}}>Profile</Text>
+                            <View>
+                                <Text style={{fontSize:14,fontWeight:'bold',marginLeft:10,marginBottom:5}}>{this.state.displayName}</Text>
+                                <Text style={{fontSize:12,marginLeft:10,marginBottom:5}}>{this.state.nomorHP}</Text>
+                                <Text style={{fontSize:12,marginLeft:10,marginBottom:5}}>{this.state.email}</Text>
+                            </View>
                         </View>
                     </View>
                     <SafeAreaView style={styles.content}>
-                    <ScrollView style={{padding:20}}>
-                    
-                        <Text style={{fontWeight:'bold',fontSize:16}}>Profile</Text>
+                    <ScrollView>
+                        <Text style={{fontWeight:'bold',fontSize:14,marginBottom:10}}>Akun</Text>
+
                         <Text style={{marginVertical:10}}>-</Text>
 
-                        <TouchableHighlight onPress={()=>{this.logout()}} >
-                        <View>
-                        <Image style={{width:22}} source={ require('../../assets/icon/chevron-left.png') }/>
-                        <Text style={{marginVertical:10}}>Logout</Text>
+                        <TouchableHighlight style={styles.btnLogout} onPress={()=>{this.logout()}} >
+                            <View>
+                                <Text style={{color:'#fff',fontSize:14,fontWeight:'bold'}}>Keluar</Text>
                             </View>
                         </TouchableHighlight>
                         
@@ -131,10 +152,11 @@ const styles = StyleSheet.create({
     tabItem:{
 
     },
-    imagePreview:{
-        width:100,
-        height:100,
-        marginBottom:5
+    profilePhoto:{
+        width:80,
+        height:80,
+        marginBottom:5,
+        borderRadius:80
     },
     wrapper:{
         paddingTop:Constants.statusBarHeight,
@@ -142,49 +164,18 @@ const styles = StyleSheet.create({
         backgroundColor:'#F8F7FC' 
     },
     header:{
-        // flex:1,
-        flexDirection:'row',
-        backgroundColor:'#00A4F6',
-        // color:'#FFF'
+        paddingHorizontal:30,
+        paddingVertical:20,
+        backgroundColor:'#fff',
+        marginBottom:10
     },
     content:{
-        flex:2,
-        backgroundColor:'white',
-        borderTopLeftRadius:25,
-        borderTopRightRadius: 25,
+        flex:1,
+        backgroundColor:'#F8F7FC',
         padding:20
     },
-    photoUploadWrp:{
-        backgroundColor:'white',
-        borderRadius:5,
-        borderColor:'#EFEFEF',
-        borderWidth:1,
-        padding:20,
-        marginTop:20,
-        marginBottom:10,
-        justifyContent:'center',
-        alignItems:'center',
-        flex:1
-    },
-    headerTitle:{
-        flex:1,
-        color:'#36227C',
-        fontWeight:'bold',
-        fontSize:20
-    },
-    logo:{
-        flex:2,
-        resizeMode:'contain',
-        marginTop:10
-    },
-    content:{
-        flex:2,
-        backgroundColor:'white',
-        borderTopLeftRadius:25,
-        borderTopRightRadius: 25,
-        padding:20,
-        paddingBottom:0
-    },
+    
+    
     defaultText:{
         // fontSize:12,
         // letterSpacing:-0.02
@@ -225,11 +216,12 @@ const styles = StyleSheet.create({
     formGroup:{
         paddingVertical:2
     },
-    btnLogin:{
-        backgroundColor:'#CACACC',
+    btnLogout:{
+        backgroundColor:'#009EEE',
         borderRadius:50,
         padding:12,
-        marginTop:10
+        marginTop:10,
+        alignItems:'center'
     },
     btnLoginText:{
         color:'#fff',

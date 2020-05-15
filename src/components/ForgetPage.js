@@ -14,32 +14,27 @@ class ForgetPage extends React.Component {
 		return (
 			<KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
                 
-                <Spinner
-          visible={this.state.spinner}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        />
-                    <View style={styles.header}>
-                        <View style={{paddingHorizontal:10,paddingVertical:20}}>
-                        <TouchableHighlight onPress={()=>{this.goBack()}} >
-                        <Image style={{width:22}} source={ require('../../assets/icon/chevron-left.png') }/>
-                            
-                        </TouchableHighlight>
-                        </View>
-                        <View style={{flex:1,paddingLeft:120,paddingVertical:20}}>
-                            <Text style={{color:'#ffffff',fontSize:14}}>Lupa Sandi</Text>
-                        </View>
-                    </View>
-                    <SafeAreaView style={styles.content}>
-                    <ScrollView style={{padding:20}}>
-                    
-                        <Text style={{fontWeight:'bold',fontSize:16}}>Lupa Kata Sandi ?</Text>
-                        <Text style={{marginVertical:10}}>Silahkan masukkan alamat Email Anda</Text>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle}/>
+                <View style={styles.header}>
+                    <View style={{paddingHorizontal:10,paddingVertical:20}}>
+                    <TouchableHighlight onPress={()=>{this.goBack()}} >
+                    <Image style={{width:22}} source={ require('../../assets/icon/chevron-left.png') }/>
                         
-                    </ScrollView>
-                    </SafeAreaView>
-
-                    </KeyboardAvoidingView>    
+                    </TouchableHighlight>
+                    </View>
+                    <View style={{flex:1,paddingLeft:120,paddingVertical:20}}>
+                        <Text style={{color:'#ffffff',fontSize:14}}>Lupa Sandi</Text>
+                    </View>
+                </View>
+                <SafeAreaView style={styles.content}>
+                <ScrollView style={{padding:20}}>
+                
+                    <Text style={{fontWeight:'bold',fontSize:16}}>Lupa Kata Sandi ?</Text>
+                    <Text style={{marginVertical:10}}>Silahkan masukkan alamat Email Anda</Text>
+                    
+                </ScrollView>
+                </SafeAreaView>
+            </KeyboardAvoidingView>    
 		);
 	}
 }

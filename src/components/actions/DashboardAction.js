@@ -6,9 +6,9 @@ class DashboardAction extends React.Component{
         tabItemTextStyle:{color:'#CACACC'},
         tabItemTextStyleActive:{color:'#009EEE'},
         spinner:false,
-        user_display_name:'Hari Nugraha',
-        user_email:'nugrahahari@gmail.com',
-        date:new Date(1598051730000),
+        user_display_name:'',
+        user_email:'',
+        date:new Date(),
         mode:'date',
         loaderWidth:0,
         _boxStyle:{height:300},
@@ -48,7 +48,7 @@ class DashboardAction extends React.Component{
     const {x, y, width, height} = layout;
 
 
-    this.setState({_boxStyle:{marginHorizontal:5,height:height/2.2}});
+    this.setState({_boxStyle:{marginHorizontal:5,height:height/2.4}});
 
 
 
@@ -101,6 +101,8 @@ class DashboardAction extends React.Component{
 
                             user_email:res.data.am.email=='n/a'?res.data.am.nip_nik:res.data.email
                         });
+                        AsyncStorage.setItem('full_profile', JSON.stringify(res.data));
+
                          ////////////////////////////////////////////////////
                          // Lazy Loading	
                           // let urlOfImages = [res.data.thumb]

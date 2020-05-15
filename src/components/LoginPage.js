@@ -9,12 +9,9 @@ import LoginAction from './actions/LoginAction';
 
 class LoginPage extends LoginAction{
    
-   
-    
-    
     render() {
         return (
-            <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+            <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
                 <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} /> 
                 <View style={styles.header}>
                         <View style={{alignItems:'center'}}>
@@ -24,8 +21,8 @@ class LoginPage extends LoginAction{
                         
                 </View> 
                 
-                <SafeAreaView style={[styles.content]} >
-                <ScrollView>
+                <SafeAreaView style={styles.content}>
+                <ScrollView style={{paddingVertical:20}}>
                     <Text style={[styles.welcomeText,{padding:5}]}>Selamat datang,</Text>
                     <Text style={[styles.defaultText,{paddingHorizontal:5}]}>Silahkan Login</Text>
 
@@ -125,6 +122,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#F8F7FC' 
     },
     header:{
+        
         alignItems:'center',
         justifyContent:'center'
     },

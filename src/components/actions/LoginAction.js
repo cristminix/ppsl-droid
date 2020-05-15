@@ -4,8 +4,8 @@ import {  AsyncStorage } from 'react-native';
 class LoginAction extends React.Component{
 	state = {
         account:null,
-        email:'sanusi2',
-        password:'1234',
+        email:'',
+        password:'',
         _btLoginDisabled: false,
         _form_HasError: false,
         _form_errorMessage: 'Email atau password salah.',
