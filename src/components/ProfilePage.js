@@ -78,13 +78,18 @@ class ProfilePage extends React.Component {
                             <View style={{flexDirection:'row',marginVertical:10}}>
                                 <Image style={styles.tabIcon} source={require('../../assets/icon/icon-doc-blue.png')}/>
                                 <Text style={{marginLeft:10}}>Dokumen Data Diri</Text>
-
+                                <View style={{flexDirection:'row',position:'absolute',right:0,backgroundColor:'#A9FFCB',borderRadius:5,paddingVertical:5,paddingHorizontal:10,marginTop:-5}}>
+                                    <Image style={styles.tabIcon} source={require('../../assets/icon/icon-check-green.png')}/>
+                                    <Text style={{marginLeft:5,color:'#5DC759',fontSize:12,fontWeight:'bold'}}>Terverifikasi</Text>
+                                </View>
                             </View>
                             <View style={{marginVertical:10}}>
                                 <Text style={{color:'#8C8C98',fontSize:12}}> * Dokumen yang Anda berikan telah tersimpan dan terlindungi dengan aman di dalam sistem kami.</Text>
                             </View>
                         </View>
-
+                        <View style={{marginVertical:10}}>
+                                <Text style={{paddingHorizontal:10,color:'#8C8C98',fontSize:12}}> Version 1.0</Text>
+                        </View>
                         <TouchableHighlight style={[{margin:20},styles.btnLogout]} onPress={()=>{this.logout()}} >
                             <View>
                                 <Text style={{color:'#fff',fontSize:14,fontWeight:'bold'}}>Keluar</Text>
