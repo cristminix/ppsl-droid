@@ -53,10 +53,29 @@ class ProfilePage extends React.Component {
                         </View>
                     </View>
                     <SafeAreaView style={styles.content}>
-                    <ScrollView>
-                        <Text style={{fontWeight:'bold',fontSize:14,marginBottom:10}}>Akun</Text>
+                    <ScrollView style={{paddingVertical:0}}>
+                        <View style={{backgroundColor:'#fff',padding:20,marginBottom:10}}>
+                            <Text style={{fontWeight:'bold',fontSize:14,marginBottom:10}}>Akun</Text>
+                            <View style={{flexDirection:'row',marginVertical:10}}>
+                                <Image style={styles.tabIcon} source={require('../../assets/icon/icon-profile-blue.png')}/>
+                                <Text style={{marginLeft:10}}>Ubah Profil</Text>
+                            </View>
+                        </View>
 
-                        <Text style={{marginVertical:10}}>-</Text>
+                        <View style={{backgroundColor:'#fff',padding:20}}>
+                            <Text style={{fontWeight:'bold',fontSize:14,marginBottom:10}}>Keamanan</Text>
+                            <View style={{flexDirection:'row',marginVertical:10}}>
+                                <Image style={styles.tabIcon} source={require('../../assets/icon/icon-lock-blue.png')}/>
+                                <Text style={{marginLeft:10}}>Ubah Kata Sandi</Text>
+                            </View>
+                            <View style={{flexDirection:'row',marginVertical:10}}>
+                                <Image style={styles.tabIcon} source={require('../../assets/icon/icon-doc-blue.png')}/>
+                                <Text style={{marginLeft:10}}>Dokumen Data Diri</Text>
+                            </View>
+                            <View style={{marginVertical:10}}>
+                                <Text>Dokumen yang Anda berikan telah tersimpan dan terlindungi dengan aman di dalam sistem kami.</Text>
+                            </View>
+                        </View>
 
                         <TouchableHighlight style={styles.btnLogout} onPress={()=>{this.logout()}} >
                             <View>
@@ -164,7 +183,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#F8F7FC' 
     },
     header:{
-        paddingHorizontal:30,
+        paddingHorizontal:20,
         paddingVertical:20,
         backgroundColor:'#fff',
         marginBottom:10
@@ -172,7 +191,7 @@ const styles = StyleSheet.create({
     content:{
         flex:1,
         backgroundColor:'#F8F7FC',
-        padding:20
+        
     },
     
     
