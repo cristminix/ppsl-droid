@@ -1,24 +1,42 @@
 import React from 'react';
-import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
+import { AsyncStorage, View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { NavigationEvents } from '@react-navigation/compat';
 
 class ChangeProfilePage extends React.Component {
     goBack=()=>{
         this.props.navigation.navigate('ProfilePage');
     };
     state = {
-        spinner:false
+        spinner:false,
+        photoUrl:'../../assets/logo.png',
+        nama_lengkap: '',
+        no_ho:'',
+        email:''
+    };
+    refreshData = ()=>{
+        AsyncStorage.getItem('full_profile', (error, result) => {
+            if (result) {
+                let full_profile = JSON.parse(result);
+                // console.log(full_profile)
+                this.setState({
+                    photoUrl : full_profile.thumb,
+                    nama_lengkap: full_profile.account.nama_lengkap,
+                    email: full_profile.am.email,
+                    no_hp: full_profile.am.no_hp
+                });
+            }
+        });
     };
     render(){
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
-                
-                <Spinner
-          visible={this.state.spinner}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        />
+                <View >
+                        <NavigationEvents onWillFocus={payload => this.refreshData()} />
+                    </View>
+                    <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} /> 
+
                     <View style={styles.header}>
                         <View style={{paddingHorizontal:10,paddingVertical:20}}>
                         <TouchableHighlight onPress={()=>{this.goBack()}} >
@@ -26,15 +44,17 @@ class ChangeProfilePage extends React.Component {
                             
                         </TouchableHighlight>
                         </View>
-                        <View style={{flex:1,textAlign:'left',paddingLeft:120,paddingVertical:20}}>
-                            <Text style={{color:'#ffffff',fontSize:14}}>Ubah Profile</Text>
+                        <View style={{flex:1,textAlign:'center',paddingLeft:120,paddingVertical:20}}>
+                            <Text style={{color:'#ffffff',fontSize:14}}>Ubah Profil</Text>
                         </View>
                     </View>
                     <SafeAreaView style={styles.content}>
-                    <ScrollView style={{padding:20}}>
+                    <ScrollView style={{padding:5}}>
                     
-                        <Text style={{fontWeight:'bold',fontSize:16}}>Butuh Bantuan ?</Text>
-                        <Text style={{marginVertical:10}}>Silahkan chat kami</Text>
+                    <View style={{paddingHorizontal:10,paddingVertical:20,alignItems:'center'}}>
+                    <Image style={{width:100,height:100,borderRadius:60}} source={{uri:this.state.photoUrl}}/>
+
+                    </View>    
                         
                     </ScrollView>
                     </SafeAreaView>
