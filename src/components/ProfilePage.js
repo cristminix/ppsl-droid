@@ -59,6 +59,8 @@ class ProfilePage extends React.Component {
                             <View style={{flexDirection:'row',marginVertical:10}}>
                                 <Image style={styles.tabIcon} source={require('../../assets/icon/icon-profile-blue.png')}/>
                                 <Text style={{marginLeft:10}}>Ubah Profil</Text>
+                                <Image style={styles.tabIconX} source={require('../../assets/icon/chevron-right-black.png')}/>
+
                             </View>
                         </View>
 
@@ -67,17 +69,21 @@ class ProfilePage extends React.Component {
                             <View style={{flexDirection:'row',marginVertical:10}}>
                                 <Image style={styles.tabIcon} source={require('../../assets/icon/icon-lock-blue.png')}/>
                                 <Text style={{marginLeft:10}}>Ubah Kata Sandi</Text>
+                                <Image style={styles.tabIconX} source={require('../../assets/icon/chevron-right-black.png')}/>
+
+                                
                             </View>
                             <View style={{flexDirection:'row',marginVertical:10}}>
                                 <Image style={styles.tabIcon} source={require('../../assets/icon/icon-doc-blue.png')}/>
                                 <Text style={{marginLeft:10}}>Dokumen Data Diri</Text>
+
                             </View>
                             <View style={{marginVertical:10}}>
                                 <Text>Dokumen yang Anda berikan telah tersimpan dan terlindungi dengan aman di dalam sistem kami.</Text>
                             </View>
                         </View>
 
-                        <TouchableHighlight style={styles.btnLogout} onPress={()=>{this.logout()}} >
+                        <TouchableHighlight style={[{margin:20},styles.btnLogout]} onPress={()=>{this.logout()}} >
                             <View>
                                 <Text style={{color:'#fff',fontSize:14,fontWeight:'bold'}}>Keluar</Text>
                             </View>
@@ -159,6 +165,13 @@ const styles = StyleSheet.create({
     tabIcon:{
         width:18,
         height:18
+    },
+    
+    tabIconX:{
+        width:16,
+        height:16,
+        position:'absolute',
+        right:0
     },
     tabContainer:{
         flexDirection:'row',
