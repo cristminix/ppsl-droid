@@ -12,7 +12,7 @@ class TransaksiPage extends React.Component {
     };
     render(){
         return (
-            <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+            <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
                 
                 <Spinner
           visible={this.state.spinner}

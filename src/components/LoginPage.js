@@ -1,9 +1,6 @@
 import React from 'react';
 import {  AsyncStorage,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView,SafeAreaView,Dimensions ,ScrollView } from 'react-native';
 import Constants from 'expo-constants';
-import ForgetPage from './ForgetPage';
-import RegisterPage from './RegisterPage';
-import HelpPage from './HelpPage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import LoginAction from './actions/LoginAction';
 
@@ -24,12 +21,10 @@ class LoginPage extends LoginAction{
                 <SafeAreaView style={styles.content}>
                 <ScrollView style={{paddingVertical:20}}>
                     <Text style={[styles.welcomeText,{padding:5}]}>Selamat datang,</Text>
-                    <Text style={[styles.defaultText,{paddingHorizontal:5}]}>Silahkan Login</Text>
-
-
+                    <Text style={{paddingHorizontal:5}}>Silahkan Login</Text>
                     <View style={styles.form}>
                         <View style={styles.formGroup}>
-                            <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._ie_lbl_style]}>Email</Text>
+                            <Text style={[{paddingTop:5,paddingLeft:5},this.state._ie_lbl_style]}>Email</Text>
 
                             <TextInput style={styles.textInput}
                             value={this.state.email}
@@ -49,7 +44,7 @@ class LoginPage extends LoginAction{
                             </TouchableHighlight>       
                         </View>
                         <View style={styles.formGroup}>
-                            <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._ip_lbl_style]}>Password</Text>
+                            <Text style={[{paddingTop:5,paddingLeft:5},this.state._ip_lbl_style]}>Password</Text>
 
                             <TextInput style={styles.textInput}
                             value={this.state.password}
@@ -99,21 +94,15 @@ class LoginPage extends LoginAction{
                         <Text style={styles.anchorCenter}>Butuh Bantuan</Text>
                     </TouchableHighlight>
                     <TouchableHighlight onPress={this._onHelp}>
-
                         <Image style={styles.inlineIcon} source={ require('../../assets/icon/help.png') }/>
                     </TouchableHighlight>
-                    
-
                     </View>
                 </ScrollView>    
                 </SafeAreaView>
-                
             </KeyboardAvoidingView>
         );
     }
 }
-
-
 
 const styles = StyleSheet.create({
     wrapper:{
@@ -122,12 +111,10 @@ const styles = StyleSheet.create({
         backgroundColor:'#F8F7FC' 
     },
     header:{
-        
         alignItems:'center',
         justifyContent:'center'
     },
     headerTitle:{
-        // flex:1,
         color:'#36227C',
         fontWeight:'bold',
         fontSize:20,
@@ -135,7 +122,6 @@ const styles = StyleSheet.create({
         marginTop:-10,
     },
     logo:{
-        // flex:2,
         width:200,height:200,
         resizeMode:'contain',
         marginTop:10
@@ -147,10 +133,6 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 25,
         padding:10,
         paddingBottom:0
-    },
-    defaultText:{
-        // fontSize:12,
-        // letterSpacing:-0.02
     },
     anchor:{
         color:'#009EEE',
@@ -181,7 +163,6 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     help:{
-        // paddingVertical:8,
         flexDirection:'row',
         justifyContent:'center'
     },
@@ -237,7 +218,6 @@ const styles = StyleSheet.create({
         position:'absolute',
         marginTop:0,
         right:0,
-     
         width:40,
         height:40,
         padding:10

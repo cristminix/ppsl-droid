@@ -40,7 +40,9 @@ class DashboardPage extends DashboardAction{
                   }}
                 />
                 <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} /> 
-                
+                <TouchableHighlight style={[{position:'absolute',right:20,marginTop:45,marginHorizontal:10,marginVertical:10}]} onPress={()=>{this.goNotif()}} >
+                            <Image style={{width:28,height:31}} source={ require('../../assets/icon/icon-notification.png')}/>
+                        </TouchableHighlight>
                 <View style={[styles.header,{paddingVertical:10,paddingHorizontal:10}]}>
                         <Text style={{color:'#ffffff',fontSize:20,fontWeight:'bold'}}>{'Selamat Datang,'}</Text>
 
@@ -50,13 +52,13 @@ class DashboardPage extends DashboardAction{
                         <Text style={{color:'#ffffff',fontSize:14,fontWeight:'bold'}}>{this.state.user_display_name}</Text>
                         <Text style={{color:'#ffffff',fontSize:14}}>{this.state.user_email}</Text>
 
-
+                        
                 </View>
                 <View style={[styles.periodes,{}]}>
 
                         <View style={{backgroundColor:'#F8F7FC',borderRadius:5, flexDirection:'row'}}>
                             <Image style={styles.iconCalendar} source={ require('../../assets/icon/icon-calendar.png') }/>
-                            <Text  style={[{paddingHorizontal:10,paddingVertical:10}]}>08/06/2020</Text>
+                            <Text  style={[{paddingHorizontal:10,paddingVertical:10}]}>01/04/2020</Text>
                         </View>
                         <View style={{backgroundColor:'transparent', flexDirection:'row'}}>
                             <Image style={styles.iconSd} source={ require('../../assets/icon/icon-dash.png') }/>

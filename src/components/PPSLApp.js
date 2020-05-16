@@ -6,18 +6,16 @@ import LoginPage from './LoginPage';
 import HelpPage from './HelpPage';
 import ForgetPage from './ForgetPage';
 import RegisterPage from './RegisterPage';
-
-
 import DashboardPage from './DashboardPage';
 import TransaksiPage from './TransaksiPage';
 import LaporanPage from './LaporanPage';
 import ProfilePage from './ProfilePage';
-
 import HomePageNavigator from './HomePageNavigator';
 import LoginPageNavigator from './LoginPageNavigator';
 import EntryPoint from './EntryPoint';
 import ChangeProfilePage from './ChangeProfilePage';
 import ChangePasswdPage from './ChangePasswdPage';
+import SurveyPage from './SurveyPage';
 
 class PPSLApp extends React.Component{
 	render(){
@@ -34,6 +32,7 @@ class PPSLApp extends React.Component{
         	        <Stack.Screen name="ProfilePage" component={ProfilePage} />
         	        <Stack.Screen name="ChangeProfilePage" component={ChangeProfilePage} />
         	        <Stack.Screen name="ChangePasswdPage" component={ChangePasswdPage} />
+        	        <Stack.Screen name="SurveyPage" component={SurveyPage} />
         	      </Stack.Navigator>
         	    </NavigationContainer>)
     }
