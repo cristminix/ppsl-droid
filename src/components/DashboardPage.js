@@ -6,12 +6,16 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { LinearGradient } from 'expo-linear-gradient';
 import { NavigationEvents } from '@react-navigation/compat';
 import DashboardAction from './actions/DashboardAction';
+import BottomNavigation from './BottomNavigation';
+
 class DashboardPage extends DashboardAction{
     
     
 
   
     render(){
+        const { navigation } = this.props;
+        
         let show=false;
         let refreshing = <View></View>;
         // let haveFoto = '../../assets/icon/profile_user.png';
@@ -40,7 +44,7 @@ class DashboardPage extends DashboardAction{
                   }}
                 />
                 <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} /> 
-                <TouchableHighlight style={[{position:'absolute',right:20,marginTop:45,marginHorizontal:10,marginVertical:10}]} onPress={()=>{this.goNotif()}} >
+                <TouchableHighlight underlayColor='transparent' style={[{position:'absolute',right:20,marginTop:45,marginHorizontal:10,marginVertical:10}]} onPress={()=>{this.gotoNotif()}} >
                             <Image style={{width:28,height:31}} source={ require('../../assets/icon/icon-notification.png')}/>
                         </TouchableHighlight>
                 <View style={[styles.header,{paddingVertical:10,paddingHorizontal:10}]}>
@@ -87,7 +91,7 @@ class DashboardPage extends DashboardAction{
                     <ScrollView style={{paddingVertical:0}}>
                         <View style={[styles.statistic,{flex:1,flexDirection:'column'}]}>
                             <View style={[styles.boxItem,{flexDirection:'row',margin:10}]}>
-                                  <LinearGradient
+                                  <LinearGradient onPress={()=>{ this.gotoTransPage('prospek') }}
                                       colors={['#FFC583', '#FAA871']}
                                       style={[{ padding: 15, borderRadius: 10 ,flex:1,justifyContent:'flex-end'},this.state._boxStyle]}>
                                       <Text
@@ -186,69 +190,12 @@ class DashboardPage extends DashboardAction{
                         
                     </ScrollView>
                 </SafeAreaView>
-                <View style={styles.tabContainer}>
-                            <View style={styles.tabItem}>
-                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
-                                    <View style={styles.tabWrp}>
-                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-home-blue.png') }/>
-                                        <Text style={this.state.tabItemTextStyleActive}>Beranda</Text>
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                            <View style={styles.tabItem}>
-                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
-                                    <View style={styles.tabWrp}>
-                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-calendar-gray.png') }/>
-                                        <Text style={this.state.tabItemTextStyle}>Survey</Text>
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                            <View style={styles.tabItem}>
-                                <TouchableHighlight onPress={this.onTransaksi} style={[{marginHorizontal:10,marginVertical:10}]}>
-                                    <View style={styles.tabWrp}>
-                                        <Image Transaks={styles.tabIcon} source={ require('../../assets/icon/icon-transaksi-gray.png') }/>
-                                        <Text style={this.state.tabItemTextStyle}>Transaksi</Text>
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                            <View style={styles.tabItem}>
-                                <TouchableHighlight onPress={this.onLaporan} style={[{marginHorizontal:10,marginVertical:10}]}>
-                                    <View style={styles.tabWrp}>
-                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-laporan-gray.png') }/>
-                                        <Text style={this.state.tabItemTextStyle}>Laporan</Text>
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                            <View style={styles.tabItem}>
-                                <TouchableHighlight  onPress={this.onProfile} style={[{marginHorizontal:10,marginVertical:10}]}>
-                                    <View style={styles.tabWrp}>
-                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-profile-gray.png') }/>
-                                        <Text style={this.state.tabItemTextStyle}>Profile</Text>
-
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                </View> 
-
+                <BottomNavigation activeMenu="DashboardPage" navigation={navigation}/>
             </KeyboardAvoidingView>    
         );
     }
 
-    onProfile = ()=>{
-        this.props.navigation.navigate('ProfilePage')
-        
-    }
-    onRefresh = ()=>{
-        // this.setState({refreshing:true})
-        this.refreshData();
-        console.log('refreshing')
-    }
-    onLaporan(){
-        console.log('onLaporan')
-    }
-    onTransaksi(){
-        console.log('onTransaksi')
-    }
+    
 }
 const styles = StyleSheet.create({
     statistic:{
@@ -257,29 +204,7 @@ const styles = StyleSheet.create({
     boxItem:{
         flex:1,
     },
-    tabItem:{
-
-    },
-    tabWrp:{
-        marginHorizontal:5,
-
-        alignItems:'center'
-    },
-    tabIcon:{
-        width:18,
-        height:18
-    },
-    tabContainer:{
-        flexDirection:'row',
-        justifyContent:'center',
-        // position:'absolute',
-        alignItems:'center',
-
-        bottom:0
-    },
-    tabItem:{
-
-    },
+  
     iconCalendar:{
         width:20,
         height:20,

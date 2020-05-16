@@ -3,6 +3,7 @@ import { AsyncStorage,View,StyleSheet, Text, Image, TouchableHighlight, TextInpu
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { NavigationEvents } from '@react-navigation/compat';
+import BottomNavigation from './BottomNavigation';
 
 class ProfilePage extends React.Component {
     goBack=()=>{
@@ -31,6 +32,8 @@ class ProfilePage extends React.Component {
         });
     };
     render(){
+        const { navigation } = this.props;
+
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
                     <View >
@@ -98,49 +101,8 @@ class ProfilePage extends React.Component {
                         
                     </ScrollView>
                     </SafeAreaView>
-                    <View style={styles.tabContainer}>
-                            <View style={styles.tabItem}>
-                                <TouchableHighlight  onPress={this.onHome} style={[{marginHorizontal:10,marginVertical:10}]}>
-                                    <View style={styles.tabWrp}>
-                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-home-gray.png') }/>
-                                        <Text style={this.state.tabItemTextStyleActive}>Beranda</Text>
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                            <View style={styles.tabItem}>
-                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
-                                    <View style={styles.tabWrp}>
-                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-calendar-gray.png') }/>
-                                        <Text style={this.state.tabItemTextStyle}>Survey</Text>
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                            <View style={styles.tabItem}>
-                                <TouchableHighlight onPress={this.onTransaksi} style={[{marginHorizontal:10,marginVertical:10}]}>
-                                    <View style={styles.tabWrp}>
-                                        <Image Transaks={styles.tabIcon} source={ require('../../assets/icon/icon-transaksi-gray.png') }/>
-                                        <Text style={this.state.tabItemTextStyle}>Transaksi</Text>
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                            <View style={styles.tabItem}>
-                                <TouchableHighlight onPress={this.onLaporan} style={[{marginHorizontal:10,marginVertical:10}]}>
-                                    <View style={styles.tabWrp}>
-                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-laporan-gray.png') }/>
-                                        <Text style={this.state.tabItemTextStyle}>Laporan</Text>
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                            <View style={styles.tabItem}>
-                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
-                                    <View style={styles.tabWrp}>
-                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-profile-blue.png') }/>
-                                        <Text style={this.state.tabItemTextStyle}>Profile</Text>
-
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                </View> 
+                    <BottomNavigation activeMenu="ProfilePage" navigation={navigation}/>
+                    
                     </KeyboardAvoidingView>    
         );
 

@@ -3,8 +3,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {  AsyncStorage } from 'react-native';
 class DashboardAction extends React.Component{
 	state = {
-        tabItemTextStyle:{color:'#CACACC'},
-        tabItemTextStyleActive:{color:'#009EEE'},
+        
         spinner:false,
         user_display_name:'',
         user_email:'',
@@ -53,6 +52,24 @@ class DashboardAction extends React.Component{
 
 
   }
+  gotoNotif=()=>{
+      
+  }
+  onProfile = ()=>{
+    this.props.navigation.navigate('ProfilePage')
+    
+}
+onRefresh = ()=>{
+    // this.setState({refreshing:true})
+    this.refreshData();
+    console.log('refreshing')
+}
+onLaporan(){
+    console.log('onLaporan')
+}
+onTransaksi(){
+    console.log('onTransaksi')
+}
     refreshData = () =>{
         AsyncStorage.getItem('account', (error, result) => {
     if (result) {

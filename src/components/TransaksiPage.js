@@ -2,6 +2,7 @@ import React from 'react';
 import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
+import BottomNavigation from './BottomNavigation';
 
 class TransaksiPage extends React.Component {
     goBack=()=>{
@@ -11,6 +12,8 @@ class TransaksiPage extends React.Component {
         spinner:false
     };
     render(){
+        const { navigation } = this.props;
+
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
                 
@@ -38,6 +41,7 @@ class TransaksiPage extends React.Component {
                         
                     </ScrollView>
                     </SafeAreaView>
+                 <BottomNavigation activeMenu="TransaksiPage" navigation={navigation}/>
 
                     </KeyboardAvoidingView>    
         );
