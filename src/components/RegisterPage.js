@@ -475,7 +475,7 @@ _pickImageKtpSelfie = async () => {
 	render(){
         let { image_ktp,image_ktp_selfie } = this.state;
 			return (
-            <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+            <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
 				
                 <Spinner
           visible={this.state.spinner}
