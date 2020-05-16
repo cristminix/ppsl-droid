@@ -82,7 +82,7 @@ class DashboardPage extends DashboardAction{
                     )}
                     </View>
                 <SafeAreaView style={[styles.content,{flex:1}]} onLayout={(event) => { this.find_dimesions(event.nativeEvent.layout) }}>
-                    <ScrollView style={{paddingVertical:20}}>
+                    <ScrollView style={{paddingVertical:0}}>
                         <View style={[styles.statistic,{flex:1,flexDirection:'column'}]}>
                             <View style={[styles.boxItem,{flexDirection:'row',margin:10}]}>
                                   <LinearGradient
@@ -302,11 +302,7 @@ const styles = StyleSheet.create({
     box:{
 
     },
-    content:{
-        flex:1,
-        backgroundColor:'white',
-        padding:0
-    },
+  
     periodes:{
         alignItems:'center',
         backgroundColor:'#fff',
@@ -353,9 +349,9 @@ const styles = StyleSheet.create({
     content:{
         // flex:2,
         backgroundColor:'white',
-        borderTopLeftRadius:25,
-        borderTopRightRadius: 25,
-        padding:20,
+        borderTopLeftRadius:40,
+        borderTopRightRadius: 40,
+        padding:10,
         paddingBottom:0
     },
     defaultText:{
