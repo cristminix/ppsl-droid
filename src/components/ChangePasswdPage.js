@@ -8,17 +8,222 @@ class ChangePasswdPage extends React.Component {
         this.props.navigation.navigate('ProfilePage');
     };
     state = {
-        spinner:false
+        spinner:false,
+        old_passwd: '',
+        new_passwd:'',
+        repeat_new_passwd:'',
+
+        _ip_Focused: false,
+        _ip_Secured: true,
+        _inp_Focused: false,
+        _inp_Secured: true,
+        _irp_Focused: false,
+        _irp_Secured: true,
+
+        _ip_underlineColor  : '#EFEFEF',
+        _ip_placeHolderText : 'Kata Sandi Lama',
+        _ip_lbl_style: {display:'none'},
+        _ip_shp_o_btn_style: {},
+        _ip_shp_c_btn_style: {height: 0, width: 0, opacity: 0},
+
+        _inp_underlineColor  : '#EFEFEF',
+        _inp_placeHolderText : 'Kata Sandi Baru',
+        _inp_lbl_style: {display:'none'},
+        _inp_shp_o_btn_style: {},
+        _inp_shp_c_btn_style: {height: 0, width: 0, opacity: 0},
+
+        _irp_underlineColor  : '#EFEFEF',
+        _irp_placeHolderText : 'Ulangi Kata Sandi Baru',
+        _irp_lbl_style: {display:'none'},
+        _irp_shp_o_btn_style: {},
+        _irp_shp_c_btn_style: {height: 0, width: 0, opacity: 0}
+    };
+    _inp_viewPass = () => {
+        console.log('please view password');
+        this.setState({ 
+            _inp_Secured : false,
+            _inp_shp_o_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-open btn
+            _inp_shp_c_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 ,padding:10,width:40,height:40}, // show eye-close
+        });
+    };
+
+    _inp_hidePass = () => {
+        console.log('please hide password');
+
+        this.setState({ 
+            _inp_Secured : true ,
+            _inp_shp_c_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-close
+            _inp_shp_o_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 } // show eye-open
+
+
+        });
+    };
+    _ip_viewPass = () => {
+        console.log('please view password');
+        this.setState({ 
+            _ip_Secured : false,
+            _ip_shp_o_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-open btn
+            _ip_shp_c_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 ,padding:10,width:40,height:40}, // show eye-close
+        });
+    };
+
+    _ip_hidePass = () => {
+        console.log('please hide password');
+
+        this.setState({ 
+            _ip_Secured : true ,
+            _ip_shp_c_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-close
+            _ip_shp_o_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 } // show eye-open
+
+
+        });
+    };
+    _irp_viewPass = () => {
+        console.log('please view password');
+        this.setState({ 
+            _irp_Secured : false,
+            _irp_shp_o_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-open btn
+            _irp_shp_c_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 ,padding:10,width:40,height:40}, // show eye-close
+        });
+    };
+
+    _irp_hidePass = () => {
+        console.log('please hide password');
+
+        this.setState({ 
+            _irp_Secured : true ,
+            _irp_shp_c_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-close
+            _irp_shp_o_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 } // show eye-open
+
+
+        });
+    };
+    _onInputOldPasswordFocus = () => {
+        this.setState({ 
+             _ip_Focused: true,
+             _ip_underlineColor: '#009EEE',
+             _ip_placeHolderText: '',
+             _ip_lbl_style: {display:'flex',color:'#009EEE',marginTop:4}
+         });
+ 
+        if(this.state._ip_Secured){  // jika password hidden
+             this.setState({ 
+                 _ip_shp_o_btn_style: {marginTop:30}, // show eye-open
+             });
+        }else{
+             this.setState({ 
+                 _ip_shp_c_btn_style: {marginTop:30,padding:10,width:40,height:40}, // show eye-close
+             });
+        }
+     };
+    _onInputNewPasswordFocus = () => {
+        this.setState({ 
+             _inp_Focused: true,
+             _inp_underlineColor: '#009EEE',
+             _inp_placeHolderText: '',
+             _inp_lbl_style: {display:'flex',color:'#009EEE',marginTop:4}
+         });
+ 
+        if(this.state._ip_Secured){  // jika password hidden
+             this.setState({ 
+                 _inp_shp_o_btn_style: {marginTop:30}, // show eye-open
+             });
+        }else{
+             this.setState({ 
+                 _ip_shp_c_btn_style: {marginTop:30,padding:10,width:40,height:40}, // show eye-close
+             });
+        }
+     };
+     _onInputRPasswordFocus = () => {
+         this.setState({ 
+              _irp_Focused: true,
+              _irp_underlineColor: '#009EEE',
+              _irp_placeHolderText: '',
+              _irp_lbl_style: {display:'flex',color:'#009EEE',marginTop:4}
+          });
+  
+         if(this.state._irp_Secured){  // jika password hidden
+              this.setState({ 
+                  _irp_shp_o_btn_style: {marginTop:30}, // show eye-open
+              });
+         }else{
+              this.setState({ 
+                  _irp_shp_c_btn_style: {marginTop:30,padding:10,width:40,height:40}, // show eye-close
+              });
+         }
+      };
+      _onInputOldPasswordBlur = () => {
+        this.setState({ 
+             _ip_Focused: false,
+             _ip_underlineColor: '#EFEFEF',
+             _ip_placeHolderText : 'Password',
+             _ip_lbl_style: {display:'none'},
+             
+         });
+        if(this.state._ip_Secured){  // jika password hidden
+             this.setState({ 
+                 _ip_shp_o_btn_style: {marginTop:0}, // show eye-open
+             });
+        }else{
+             this.setState({ 
+                 _ip_shp_c_btn_style: {marginTop:0,padding:10,width:40,height:40}, // show eye-close
+             });
+        }
+        this._validateInput();
+ 
+     };
+     _onInputNewPasswordBlur = () => {
+        this.setState({ 
+             _inp_Focused: false,
+             _inp_underlineColor: '#EFEFEF',
+             _inp_placeHolderText : 'Password',
+             _inp_lbl_style: {display:'none'},
+             
+         });
+        if(this.state._inp_Secured){  // jika password hidden
+             this.setState({ 
+                 _inp_shp_o_btn_style: {marginTop:0}, // show eye-open
+             });
+        }else{
+             this.setState({ 
+                 _inp_shp_c_btn_style: {marginTop:0,padding:10,width:40,height:40}, // show eye-close
+             });
+        }
+        this._validateInput();
+ 
+     };
+     _onInputRPasswordBlur = () => {
+         this.setState({ 
+              _irp_Focused: false,
+              _irp_underlineColor: '#EFEFEF',
+              _irp_placeHolderText : 'Password',
+              _irp_lbl_style: {display:'none'},
+              
+          });
+         if(this.state._irp_Secured){  // jika password hidden
+              this.setState({ 
+                  _irp_shp_o_btn_style: {marginTop:0}, // show eye-open
+              });
+         }else{
+              this.setState({ 
+                  _irp_shp_c_btn_style: {marginTop:0,padding:10,width:40,height:40}, // show eye-close
+              });
+         }
+         this._validateInput();
+  
+      };
+      _validateInput = ()=>{
+        // if(this.state.old_passwd.length >= 4 && this.state.password.length>= 4){
+        //     this.setState({_btLoginDisabled:false});
+        // }else{
+        //     this.setState({_btLoginDisabled:true});
+        // }
     };
     render(){
         return (
-            <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+            <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
                 
-                <Spinner
-          visible={this.state.spinner}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        />
+                <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} />
                     <View style={styles.header}>
                         <View style={{paddingHorizontal:10,paddingVertical:20}}>
                         <TouchableHighlight onPress={()=>{this.goBack()}} >
@@ -26,15 +231,87 @@ class ChangePasswdPage extends React.Component {
                             
                         </TouchableHighlight>
                         </View>
-                        <View style={{flex:1,textAlign:'left',paddingLeft:120,paddingVertical:20}}>
-                            <Text style={{color:'#ffffff',fontSize:14}}>Ubah Kata Sandi</Text>
+                        <View style={{flex:1,alignItems:'center',paddingVertical:20}}>
+                            <Text style={{color:'#ffffff',fontSize:14,marginLeft:-22}}>Ubah Kata Sandi</Text>
                         </View>
                     </View>
                     <SafeAreaView style={styles.content}>
-                    <ScrollView style={{padding:20}}>
+                    <ScrollView style={{paddingVertical:10}}>
                     
-                        <Text style={{fontWeight:'bold',fontSize:16}}>Butuh Bantuan ?</Text>
-                        <Text style={{marginVertical:10}}>Silahkan chat kami</Text>
+                        <Text style={{fontWeight:'bold',fontSize:16,marginVertical:5}}>Masukkan kata sandi lama Anda terlebih dahulu kemudian kata sandi baru.</Text>
+                        <View style={styles.form}>
+                        <View style={styles.formGroup}>
+                            <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._ip_lbl_style]}>Kata Sandi Lama</Text>
+
+                            <TextInput style={styles.textInput}
+                            value={this.state.old_passwd}
+                            onChangeText={( old_password ) => this.setState({ old_passwd })}
+                            onFocus={this._onInputOldPasswordFocus}
+                            onBlur={this._onInputOldPasswordBlur}
+                            onKeyPress={this._validateInput}
+                            placeholder={this.state._ip_placeHolderText}
+                            placeholderTextColor="#8F8EA0"
+                            underlineColorAndroid={this.state._ip_underlineColor}
+                            secureTextEntry={this.state._ip_Secured}
+                                />
+                            <TouchableHighlight onPress={this._ip_viewPass} style={[styles.formIconViewPass,this.state._ip_shp_o_btn_style]}>
+                                <Image source={ require('../../assets/icon/eye-close.png') }/>
+                            </TouchableHighlight>
+
+                            <TouchableHighlight onPress={this._ip_hidePass} style={[styles.formIconClose,this.state._ip_shp_c_btn_style]}>
+                                <Image  source={ require('../../assets/icon/eye-open.png') }/>
+                            </TouchableHighlight>
+                        </View>
+                        <View style={styles.formGroup}>
+                            <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._inp_lbl_style]}>Kata Sandi Baru</Text>
+
+                            <TextInput style={styles.textInput}
+                            value={this.state.new_passwd}
+                            onChangeText={( new_passwd ) => this.setState({ new_passwd })}
+                            onFocus={this._onInputNewPasswordFocus}
+                            onBlur={this._onInputNewPasswordBlur}
+                            onKeyPress={this._validateInput}
+                            placeholder={this.state._inp_placeHolderText}
+                            placeholderTextColor="#8F8EA0"
+                            underlineColorAndroid={this.state._inp_underlineColor}
+                            secureTextEntry={this.state._inp_Secured}
+                                />
+                            <TouchableHighlight onPress={this._inp_viewPass} style={[styles.formIconViewPass,this.state._inp_shp_o_btn_style]}>
+                                <Image source={ require('../../assets/icon/eye-close.png') }/>
+                            </TouchableHighlight>
+
+                            <TouchableHighlight onPress={this._inp_hidePass} style={[styles.formIconClose,this.state._inp_shp_c_btn_style]}>
+                                <Image  source={ require('../../assets/icon/eye-open.png') }/>
+                            </TouchableHighlight>
+                        </View>
+                        <View style={styles.formGroup}>
+                            <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._irp_lbl_style]}>Ulangi Kata Sandi</Text>
+
+                            <TextInput style={styles.textInput}
+                            value={this.state.repeat_new_passwd}
+                            onChangeText={( repeat_new_passwd) => this.setState({ repeat_new_passwd })}
+                            onFocus={this._onInputRPasswordFocus}
+                            onBlur={this._onInputRPasswordBlur}
+                            onKeyPress={this._validateInput}
+                            placeholder={this.state._irp_placeHolderText}
+                            placeholderTextColor="#8F8EA0"
+                            underlineColorAndroid={this.state._irp_underlineColor}
+                            secureTextEntry={this.state._irp_Secured}
+                                />
+                            <TouchableHighlight onPress={this._irp_viewPass} style={[styles.formIconViewPass,this.state._irp_shp_o_btn_style]}>
+                                <Image source={ require('../../assets/icon/eye-close.png') }/>
+                            </TouchableHighlight>
+
+                            <TouchableHighlight onPress={this._irp_hidePass} style={[styles.formIconClose,this.state._irp_shp_c_btn_style]}>
+                                <Image  source={ require('../../assets/icon/eye-open.png') }/>
+                            </TouchableHighlight>
+                        </View>
+                        <TouchableHighlight style={[{margin:20},styles.btnSimpan]} onPress={()=>{this.simpan()}} >
+                            <View>
+                                <Text style={{color:'#fff',fontSize:14,fontWeight:'bold'}}>Simpan</Text>
+                            </View>
+                        </TouchableHighlight>
+                        </View>
                         
                     </ScrollView>
                     </SafeAreaView>
@@ -44,6 +321,13 @@ class ChangePasswdPage extends React.Component {
     }
 }
 const styles = StyleSheet.create({
+    btnSimpan:{
+        backgroundColor:'#009EEE',
+        borderRadius:50,
+        padding:12,
+        marginTop:10,
+        alignItems:'center'
+    },
     imagePreview:{
         width:100,
         height:100,

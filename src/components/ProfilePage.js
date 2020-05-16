@@ -108,6 +108,14 @@ class ProfilePage extends React.Component {
                                 </TouchableHighlight>
                             </View>
                             <View style={styles.tabItem}>
+                                <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]}>
+                                    <View style={styles.tabWrp}>
+                                        <Image style={styles.tabIcon} source={ require('../../assets/icon/icon-calendar-gray.png') }/>
+                                        <Text style={this.state.tabItemTextStyle}>Survey</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+                            <View style={styles.tabItem}>
                                 <TouchableHighlight onPress={this.onTransaksi} style={[{marginHorizontal:10,marginVertical:10}]}>
                                     <View style={styles.tabWrp}>
                                         <Image Transaks={styles.tabIcon} source={ require('../../assets/icon/icon-transaksi-gray.png') }/>
@@ -173,7 +181,7 @@ const styles = StyleSheet.create({
 
     },
     tabWrp:{
-        marginHorizontal:10,
+        marginHorizontal:5,
 
         alignItems:'center'
     },
