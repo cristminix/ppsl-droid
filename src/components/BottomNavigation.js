@@ -1,6 +1,5 @@
 import React from 'react';
 import { View,StyleSheet, Text, Image, TouchableHighlight } from 'react-native';
-// import { useNavigation } from '@react-navigation/native';
 
 class BottomNavigation extends React.Component{
     constructor(props) {
@@ -20,6 +19,14 @@ class BottomNavigation extends React.Component{
     
             iconProfilePage : require('../../assets/icon/icon-profile-gray.png'),
             iconProfilePageActive : require('../../assets/icon/icon-profile-blue.png'),
+
+            menuItems:[
+                {id:1,caption:'Dashboard',menuName:'DashboardPage'},
+                {id:2,caption:'Survey',menuName:'SurveyPage'},
+                {id:3,caption:'Transaksi',menuName:'TransaksiPage'},
+                {id:4,caption:'Laporan',menuName:'LaporanPage'},
+                {id:5,caption:'Profil',menuName:'ProfilePage'}
+            ]
         };
     }
 
@@ -31,56 +38,29 @@ class BottomNavigation extends React.Component{
         return {color : styleColor};
     }
     navigate = (menuName) => {
-        console.log(menuName)
-        // const { navigation } = this.props;
-        // const navigation = useNavigation();
         if(this.props.activeMenu !== menuName){
             this.props.navigation.navigate(menuName);
         }
     }
     render(){ 
+        let menuItems = this.state.menuItems.map((a,i)=>{
+            let caption = a.caption;
+            let menuName = a.menuName;
+            console.log(menuName)
+            return(
+                <View style={styles.tabItem} key={i}>
+                    <TouchableHighlight underlayColor='transparent' onPress={()=>{this.navigate(menuName)}}  style={styles.touchX}>
+                        <View style={styles.tabWrp}>
+                            <Image style={styles.tabIcon} source={this.setIcon(menuName)}/>
+                            <Text style={this.setNavTextStyle(menuName)}>{caption}</Text>
+                        </View>
+                    </TouchableHighlight>
+                </View>
+            )
+        });
         return (
             <View style={styles.tabContainer}>
-                <View style={styles.tabItem}>
-                    <TouchableHighlight underlayColor='transparent' onPress={()=>{this.navigate('DashboardPage')}}  style={styles.touchX}>
-                        <View style={styles.tabWrp}>
-                            <Image style={styles.tabIcon} source={this.setIcon('DashboardPage')}/>
-                            <Text style={this.setNavTextStyle('DashboardPage')}>Beranda</Text>
-                        </View>
-                    </TouchableHighlight>
-                </View>
-                <View style={styles.tabItem}>
-                    <TouchableHighlight underlayColor='transparent' onPress={()=>{this.navigate('SurveyPage')}}  style={styles.touchX}>
-                        <View style={styles.tabWrp}>
-                            <Image style={styles.tabIcon} source={this.setIcon('SurveyPage')}/>
-                            <Text style={this.setNavTextStyle('SurveyPage')}>Survey</Text>
-                        </View>
-                    </TouchableHighlight>
-                </View>
-                <View style={styles.tabItem}>
-                    <TouchableHighlight underlayColor='transparent'  onPress={()=>{this.navigate('TransaksiPage')}} style={styles.touchX}>
-                        <View style={styles.tabWrp}>
-                            <Image Transaks={styles.tabIcon} source={this.setIcon('TransaksiPage')}/>
-                            <Text style={this.setNavTextStyle('TransaksiPage')}>Transaksi</Text>
-                        </View>
-                    </TouchableHighlight>
-                </View>
-                <View style={styles.tabItem}>
-                    <TouchableHighlight underlayColor='transparent'  onPress={()=>{this.navigate('LaporanPage')}} style={styles.touchX}>
-                        <View style={styles.tabWrp}>
-                            <Image style={styles.tabIcon} source={this.setIcon('LaporanPage')}/>
-                            <Text style={this.setNavTextStyle('LaporanPage')}>Laporan</Text>
-                        </View>
-                    </TouchableHighlight>
-                </View>
-                <View style={styles.tabItem}>
-                    <TouchableHighlight  underlayColor='transparent' onPress={()=>{this.navigate('ProfilePage')}} style={styles.touchX}>
-                        <View style={styles.tabWrp}>
-                            <Image style={styles.tabIcon} source={this.setIcon('ProfilePage')}/>
-                            <Text style={this.setNavTextStyle('ProfilePage')}>Profile</Text>
-                        </View>
-                    </TouchableHighlight>
-                </View>
+                {menuItems}
             </View> 
         )
     }
