@@ -77,15 +77,15 @@ onTransaksi(){
    
             
             let account = JSON.parse(result);
-            console.log(account); 
+            // console.log(account); 
             this.setState({
-                user_email:account.email,
+                user_email:account.email=='0'?'':account.email,
                 user_display_name: account.nama_lengkap
             });
-            console.log('get full profile');
+            // console.log('get full profile');
 
             // show spinner
-            this.setState({spinner:true});
+            // this.setState({spinner:true});
             var formData = new FormData();
             formData.append('user_id', account.user_id);
 
@@ -108,7 +108,7 @@ onTransaksi(){
 
                     if(res.data !== null){
                         // SAVE LOGIN INFO TO ASYNC STORAGE
-                        console.log(res.data);
+                        // console.log(res.data);
                         this.setState({
                             prospek: res.data.am.prospek,
                             survey: res.data.am.survey,

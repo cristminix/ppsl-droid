@@ -43,7 +43,7 @@ class DashboardPage extends DashboardAction{
                     height: 400,
                   }}
                 />
-                <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} /> 
+                <Spinner visible={this.state.spinner} textContent={''} textStyle={styles.spinnerTextStyle} /> 
                 <TouchableHighlight underlayColor='transparent' style={[{position:'absolute',right:20,marginTop:45,marginHorizontal:10,marginVertical:10}]} onPress={()=>{this.gotoNotif()}} >
                             <Image style={{width:28,height:31}} source={ require('../../assets/icon/icon-notification.png')}/>
                         </TouchableHighlight>

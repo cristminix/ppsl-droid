@@ -21,7 +21,7 @@ class ProfilePage extends React.Component {
         AsyncStorage.getItem('full_profile', (error, result) => {
             if (result) {
                 let full_profile = JSON.parse(result);
-                console.log(full_profile)
+                // console.log(full_profile)
                 this.setState({
                     photoUrl : full_profile.thumb,
                     displayName: full_profile.account.nama_lengkap,

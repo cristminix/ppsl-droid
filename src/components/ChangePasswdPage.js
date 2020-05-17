@@ -2,6 +2,7 @@ import React from 'react';
 import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { LinearGradient } from 'expo-linear-gradient';
 
 class ChangePasswdPage extends React.Component {
     goBack=()=>{
@@ -261,6 +262,10 @@ class ChangePasswdPage extends React.Component {
                             <TouchableHighlight onPress={this._ip_hidePass} style={[styles.formIconClose,this.state._ip_shp_c_btn_style]}>
                                 <Image  source={ require('../../assets/icon/eye-open.png') }/>
                             </TouchableHighlight>
+
+                            <View style={{flexDirection:'row-reverse',paddingVertical:10,paddingHorizontal:5}}>
+                                <Text style={[styles.anchor]} onPress={this._onForgetPassword}>Lupa Password ?</Text>
+                            </View>
                         </View>
                         <View style={styles.formGroup}>
                             <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._inp_lbl_style]}>Kata Sandi Baru</Text>
@@ -283,6 +288,9 @@ class ChangePasswdPage extends React.Component {
                             <TouchableHighlight onPress={this._inp_hidePass} style={[styles.formIconClose,this.state._inp_shp_c_btn_style]}>
                                 <Image  source={ require('../../assets/icon/eye-open.png') }/>
                             </TouchableHighlight>
+                            <View style={{padding:5}}>
+                                <Text style={{lineHeight:16,fontSize:14,color:'#c4c4c4'}}>* Password minimal 6 karakter dan terdapat minimal 1 huruf dan angka.</Text>
+                            </View>
                         </View>
                         <View style={styles.formGroup}>
                             <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._irp_lbl_style]}>Ulangi Kata Sandi</Text>
@@ -306,14 +314,21 @@ class ChangePasswdPage extends React.Component {
                                 <Image  source={ require('../../assets/icon/eye-open.png') }/>
                             </TouchableHighlight>
                         </View>
-                        <TouchableHighlight style={[{margin:20},styles.btnSimpan]} onPress={()=>{this.simpan()}} >
-                            <View>
-                                <Text style={{color:'#fff',fontSize:14,fontWeight:'bold'}}>Simpan</Text>
-                            </View>
-                        </TouchableHighlight>
+                       
                         </View>
                         
                     </ScrollView>
+                    <View style={{flex:1,flexDirection:'column-reverse',paddingHorizontal:5,paddingVertical:10}}>
+                        <TouchableHighlight underlayColor='transparent' onPress={()=>{ this.formSubmit() }} >
+                            <View>
+                                <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} 
+                                    style={{flex:1,alignItems:'center',padding:20,borderRadius:10}}>
+                                    <Text style={[{marginTop:-10},styles.btnActionText]}>Ubah Kata Sandi</Text>
+
+                                </LinearGradient>    
+                            </View>
+                        </TouchableHighlight>
+                    </View>
                     </SafeAreaView>
 
                     </KeyboardAvoidingView>    
@@ -321,6 +336,17 @@ class ChangePasswdPage extends React.Component {
     }
 }
 const styles = StyleSheet.create({
+    btnAction:{
+        backgroundColor:'#CACACC',
+        borderRadius:50,
+        padding:12,
+        marginTop:10
+    },
+    btnActionText:{
+        color:'#fff',
+        fontSize:14,
+        fontWeight:'bold'
+    },
     btnSimpan:{
         backgroundColor:'#009EEE',
         borderRadius:50,

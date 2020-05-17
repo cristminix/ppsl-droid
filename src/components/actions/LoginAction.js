@@ -1,6 +1,6 @@
 import React from 'react';
 import {  AsyncStorage } from 'react-native';
-import App from '../../../App';
+import Config from '../../app/Config';
 
 class LoginAction extends React.Component{
 	state = {
@@ -26,11 +26,11 @@ class LoginAction extends React.Component{
         _ip_placeHolderText : 'Password',
         _ip_lbl_style: {display:'none'},
         _ip_shp_o_btn_style: {},
-        _ip_shp_c_btn_style: {height: 0, width: 0, opacity: 0}
+        _ip_shp_c_btn_style: {height: 0, width: 0, opacity: 0},
 
+        loadingText:'Login...',
 
-
-        , spinner:false
+        spinner:false
 
     }; 
     _updateFormView = () => {
@@ -177,13 +177,13 @@ class LoginAction extends React.Component{
         formData.append('username', this.state.email);
         formData.append('password', this.state.password);
 
-        fetch(`${App.config.api_endpoint}/loginService`, {
+        fetch(`${Config.api_endpoint}/loginService`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'multipart/form-data',
-                'X-API-KEY' : App.config.api_key, 
-                'X-APP-ID' : App.config.api_appid
+                'X-API-KEY' : Config.api_key, 
+                'X-APP-ID' : Config.api_appid
             },
             body: formData
         })

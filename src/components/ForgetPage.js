@@ -3,7 +3,7 @@ import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAv
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { LinearGradient } from 'expo-linear-gradient';
-import App from '../../App';
+import Helper from '../app/Helper';
 
 class ForgetPage extends React.Component {
     
@@ -26,7 +26,7 @@ class ForgetPage extends React.Component {
         if(this.state.email.length == 0){
             return;
         }
-        let validEmail = App.helper.validateEmail(this.state.email);
+        let validEmail = Helper.validateEmail(this.state.email);
         if(!validEmail){
             this.setState({
                 _form_errorMessage : 'Email tidak valid.',
@@ -69,7 +69,7 @@ class ForgetPage extends React.Component {
                     </TouchableHighlight>
                     </View>
                     <View style={{flex:1,alignItems:'center',paddingVertical:0}}>
-                        <Text style={{color:'#ffffff',fontSize:14,marginLeft:-40,marginTop:-20}}>Lupa Sandi</Text>
+                        <Text style={{color:'#ffffff',fontSize:14,marginLeft:-22,marginTop:-20}}>Lupa Sandi</Text>
                     </View>
                     </LinearGradient>
                 </View>
@@ -107,16 +107,16 @@ class ForgetPage extends React.Component {
                             
                     </ScrollView>
                     <View style={{flex:1,flexDirection:'column-reverse',padding:5}}>
-                            <TouchableHighlight underlayColor='transparent' onPress={()=>{ this.formSubmit() }} >
-                                <View>
-                                    <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} 
-                                     style={{flex:1,alignItems:'center',padding:20,borderRadius:10}}>
-                                        <Text style={[{marginTop:-10},styles.btnActionText]}>Ubah Kata Sandi</Text>
+                        <TouchableHighlight underlayColor='transparent' onPress={()=>{ this.formSubmit() }} >
+                            <View>
+                                <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} 
+                                    style={{flex:1,alignItems:'center',padding:20,borderRadius:10}}>
+                                    <Text style={[{marginTop:-10},styles.btnActionText]}>Ubah Kata Sandi</Text>
 
-                                    </LinearGradient>    
-                                </View>
-                            </TouchableHighlight>
-                        </View>
+                                </LinearGradient>    
+                            </View>
+                        </TouchableHighlight>
+                    </View>
                 </SafeAreaView>
             </KeyboardAvoidingView>    
 		);
