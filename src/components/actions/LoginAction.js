@@ -1,5 +1,6 @@
 import React from 'react';
 import {  AsyncStorage } from 'react-native';
+import App from '../../../App';
 
 class LoginAction extends React.Component{
 	state = {
@@ -32,7 +33,29 @@ class LoginAction extends React.Component{
         , spinner:false
 
     }; 
-    
+    _updateFormView = () => {
+        let ok = 0;
+        if(this.state.email != '' ){
+            this.setState({ _ie_lbl_style: {display:'flex',color:'#8F8EA0'} });
+            ok += 1;
+        }
+        if(this.state.password != '' ){
+            this.setState({ _ip_lbl_style: {display:'flex',color:'#8F8EA0'} });
+            if(this.state._ip_Secured){  // jika password hidden
+                this.setState({ 
+                    _ip_shp_o_btn_style: {marginTop:30}, // show eye-c
+                    
+                });
+           }else{
+                this.setState({ 
+                    _ip_shp_c_btn_style: {marginTop:30,padding:10,width:40,height:40}, // show eye-o
+                });
+                
+
+           }
+            ok += 1;
+        }
+    }
 	_onInputEmailFocus = () => {
         this.setState({ 
             _ie_Focused: true,
@@ -52,6 +75,7 @@ class LoginAction extends React.Component{
             _ie_clr_btn_style: {height: 0, width: 0, opacity: 0}
         });
         this._validateInput();
+        this._updateFormView();
     };
 
     _onInputPasswordFocus = () => {
@@ -64,11 +88,11 @@ class LoginAction extends React.Component{
 
        if(this.state._ip_Secured){  // jika password hidden
             this.setState({ 
-                _ip_shp_o_btn_style: {marginTop:30}, // show eye-open
+                _ip_shp_o_btn_style: {marginTop:30}, // show eye-c
             });
        }else{
             this.setState({ 
-                _ip_shp_c_btn_style: {marginTop:30,padding:10,width:40,height:40}, // show eye-close
+                _ip_shp_c_btn_style: {marginTop:30,padding:10,width:40,height:40}, // show eye-o
             });
        }
     };
@@ -82,14 +106,20 @@ class LoginAction extends React.Component{
         });
        if(this.state._ip_Secured){  // jika password hidden
             this.setState({ 
-                _ip_shp_o_btn_style: {marginTop:0}, // show eye-open
+                _ip_shp_o_btn_style: {marginTop:0}, // show eye-c
             });
        }else{
             this.setState({ 
-                _ip_shp_c_btn_style: {marginTop:0,padding:10,width:40,height:40}, // show eye-close
+                _ip_shp_c_btn_style: {marginTop:0,padding:10,width:40,height:40}, // show eye-o
+                
             });
+            
        }
+       setTimeout(() => {
+            this._updateFormView();
+       },10);
        this._validateInput();
+       
 
     };
 
@@ -101,9 +131,10 @@ class LoginAction extends React.Component{
         console.log('please view password');
         this.setState({ 
             _ip_Secured : false,
-            _ip_shp_o_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-open btn
-            _ip_shp_c_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 ,padding:10,width:40,height:40}, // show eye-close
+            _ip_shp_o_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-c btn
+            _ip_shp_c_btn_style: {marginTop: this.state._ip_Focused ? 30 : (this.state.password != '' ? 30 : 0) ,padding:10,width:40,height:40}, // show eye-o
         });
+        
     };
 
     _ip_hidePass = () => {
@@ -111,30 +142,25 @@ class LoginAction extends React.Component{
 
         this.setState({ 
             _ip_Secured : true ,
-            _ip_shp_c_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-close
-            _ip_shp_o_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 } // show eye-open
+            _ip_shp_c_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-o
+            _ip_shp_o_btn_style: {marginTop: this.state._ip_Focused ? 30 : (this.state.password != '' ? 30 : 0) } // show eye-c
 
 
         });
+       
     };
     
 
     _onForgetPassword = () => {
-        console.log('please navigate to Forget Password Page');
         this.props.navigation.navigate('ForgetPage')
-
     };
 
     _onRegister = () => {
-        console.log('please navigate to Register Page');
         this.props.navigation.navigate('RegisterPage')
-
     };
 
     _onHelp = () => {
-        console.log('please navigate to Help Page');
         this.props.navigation.navigate('HelpPage')
-        // console.log(this.props.navigation)
     };
 
     _validateInput = ()=>{
@@ -145,26 +171,23 @@ class LoginAction extends React.Component{
         }
     };
     _onSubmitForm = () => {
-        // console.log('Prosess Submit Form');
         this._loginError(false);
-        // show spinner
         this.setState({spinner:true});
         var formData = new FormData();
         formData.append('username', this.state.email);
         formData.append('password', this.state.password);
 
-        fetch('https://api-ppsl.perumdamtkr.com/loginService', {
+        fetch(`${App.config.api_endpoint}/loginService`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'multipart/form-data',
-                'X-API-KEY' : '9c05c647d185d704fa3b5add357dd08777d05b99', 
-                'X-APP-ID' : 'ppsl-droid'
+                'X-API-KEY' : App.config.api_key, 
+                'X-APP-ID' : App.config.api_appid
             },
             body: formData
         })
         .then((response) => 
-            // console.log(response)
             response.json().then((res) => {
                 if(res.data !== null){
                     // SAVE LOGIN INFO TO ASYNC STORAGE

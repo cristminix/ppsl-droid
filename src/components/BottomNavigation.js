@@ -1,5 +1,6 @@
 import React from 'react';
 import { View,StyleSheet, Text, Image, TouchableHighlight } from 'react-native';
+import App from '../../App';
 
 class BottomNavigation extends React.Component{
     constructor(props) {
@@ -43,10 +44,11 @@ class BottomNavigation extends React.Component{
         }
     }
     render(){ 
+        console.log(App.config);
         let menuItems = this.state.menuItems.map((a,i)=>{
             let caption = a.caption;
             let menuName = a.menuName;
-            console.log(menuName)
+         
             return(
                 <View style={styles.tabItem} key={i}>
                     <TouchableHighlight underlayColor='transparent' onPress={()=>{this.navigate(menuName)}}  style={styles.touchX}>

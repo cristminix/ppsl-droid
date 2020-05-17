@@ -5,14 +5,21 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import LoginAction from './actions/LoginAction';
 
 class LoginPage extends LoginAction{
-   
+    
     render() {
+        let icons = {
+            logo :  require('../../assets/logo.png'),
+            close:  require('../../assets/icon/close.png'),
+            eye_close:  require('../../assets/icon/eye-close.png') ,
+            eye_open: require('../../assets/icon/eye-open.png') ,
+            help: require('../../assets/icon/help.png') 
+        };
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
-                <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} /> 
+                <Spinner visible={this.state.spinner} textContent={'Memuat data ...'} textStyle={styles.spinnerTextStyle} /> 
                 <View style={styles.header}>
                         <View style={{alignItems:'center'}}>
-                            <Image style={styles.logo} source={ require('../../assets/logo.png') }/>
+                            <Image style={styles.logo} source={icons.logo}/>
                         <Text style={styles.headerTitle}>PERUMDAM TKR</Text>
                         </View>
                         
@@ -20,7 +27,7 @@ class LoginPage extends LoginAction{
                 
                 <SafeAreaView style={styles.content}>
                 <ScrollView style={{paddingVertical:20}}>
-                    <Text style={[styles.welcomeText,{padding:5}]}>Selamat datang,</Text>
+                    <Text style={[styles.welcomeText]}>Selamat datang,</Text>
                     <Text style={{paddingHorizontal:5}}>Silahkan Login</Text>
                     <View style={styles.form}>
                         <View style={styles.formGroup}>
@@ -37,10 +44,8 @@ class LoginPage extends LoginAction{
                             autoCapitalize = 'none'
                             underlineColorAndroid={this.state._ie_underlineColor}
                                 />
-                            <TouchableHighlight onPress={this._ie_clear} style={[styles.formIconClose,this.state._ie_clr_btn_style]}>
-                                <Image  source={ require('../../assets/icon/close.png') }
-                                    
-                                />
+                            <TouchableHighlight underlayColor='transparent' onPress={this._ie_clear} style={[styles.formIconClose,this.state._ie_clr_btn_style]}>
+                                <Image  source={icons.close}/>
                             </TouchableHighlight>       
                         </View>
                         <View style={styles.formGroup}>
@@ -57,17 +62,17 @@ class LoginPage extends LoginAction{
                             underlineColorAndroid={this.state._ip_underlineColor}
                             secureTextEntry={this.state._ip_Secured}
                                 />
-                            <TouchableHighlight onPress={this._ip_viewPass} style={[styles.formIconViewPass,this.state._ip_shp_o_btn_style]}>
-                                <Image source={ require('../../assets/icon/eye-close.png') }/>
+                            <TouchableHighlight underlayColor='transparent' onPress={this._ip_viewPass} style={[styles.formIconViewPass,this.state._ip_shp_o_btn_style]}>
+                                <Image source={icons.eye_close}/>
                             </TouchableHighlight>
 
-                            <TouchableHighlight onPress={this._ip_hidePass} style={[styles.formIconClose,this.state._ip_shp_c_btn_style]}>
-                                <Image  source={ require('../../assets/icon/eye-open.png') }/>
+                            <TouchableHighlight underlayColor='transparent' onPress={this._ip_hidePass} style={[styles.formIconClose,this.state._ip_shp_c_btn_style]}>
+                                <Image  source={icons.eye_open}/>
                             </TouchableHighlight>
                         </View>
 
-                        <View style={styles.formGroup}>
-                            <Text style={styles.anchorRight} onPress={this._onForgetPassword}>Lupa Password ?</Text>
+                        <View style={{flexDirection:'row-reverse',paddingVertical:10,paddingHorizontal:5}}>
+                            <Text style={[styles.anchor]} onPress={this._onForgetPassword}>Lupa Password ?</Text>
 
                         </View>
 
@@ -78,23 +83,23 @@ class LoginPage extends LoginAction{
                         </View>
 
                         <View  style={styles.formGroup}>
-                        <TouchableHighlight style={styles.btnLogin} onPress={this._onSubmitForm} disabled={this.state._btLoginDisabled}>
+                        <TouchableHighlight underlayColor='transparent' style={styles.btnLogin} onPress={this._onSubmitForm} disabled={this.state._btLoginDisabled}>
                             <Text style={styles.btnLoginText}> Login </Text>
                         </TouchableHighlight>
                         </View>
                     </View>
                     <View style={styles.info}>
                         <Text style={{textAlign:'center'}}>Belum punya akun ? </Text> 
-                        <TouchableHighlight onPress={this._onRegister}>
+                        <TouchableHighlight onPress={this._onRegister} underlayColor='transparent'>
                             <Text style={styles.anchorBold}>Registrasi</Text>
                         </TouchableHighlight>
                     </View>
                     <View style={styles.help}>
-                    <TouchableHighlight onPress={this._onHelp}>
+                    <TouchableHighlight onPress={this._onHelp} underlayColor='transparent'>
                         <Text style={styles.anchorCenter}>Butuh Bantuan</Text>
                     </TouchableHighlight>
-                    <TouchableHighlight onPress={this._onHelp}>
-                        <Image style={styles.inlineIcon} source={ require('../../assets/icon/help.png') }/>
+                    <TouchableHighlight onPress={this._onHelp} underlayColor='transparent'>
+                        <Image style={styles.inlineIcon} source={icons.help}/>
                     </TouchableHighlight>
                     </View>
                 </ScrollView>    
@@ -156,6 +161,7 @@ const styles = StyleSheet.create({
         color:'#3A3E4A',
         fontWeight:'bold',
         fontSize:16,
+        padding:5
     },  
     info:{
         paddingVertical:20,
