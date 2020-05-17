@@ -152,19 +152,19 @@ class LoginAction extends React.Component{
     
 
     _onForgetPassword = () => {
-        this.props.navigation.navigate('ForgetPage')
+        this.props.navigation.navigate('ForgetPage',{sourcePage:'LoginPage'});
     };
 
     _onRegister = () => {
-        this.props.navigation.navigate('RegisterPage')
+        this.props.navigation.navigate('RegisterPage',{sourcePage:'LoginPage'});
     };
 
     _onHelp = () => {
-        this.props.navigation.navigate('HelpPage')
+        this.props.navigation.navigate('HelpPage',{sourcePage:'LoginPage'});
     };
 
     _validateInput = ()=>{
-        if(this.state.email.length >= 4 && this.state.password.length>= 4){
+        if(this.state.email.length >= 0 && this.state.password.length>= 0){
             this.setState({_btLoginDisabled:false});
         }else{
             this.setState({_btLoginDisabled:true});

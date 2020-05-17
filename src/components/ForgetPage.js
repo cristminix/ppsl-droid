@@ -19,7 +19,7 @@ class ForgetPage extends React.Component {
     };
 
     goBack=()=>{
-        this.props.navigation.navigate('LoginPage');
+        this.props.navigation.navigate(this.props.route.params.sourcePage);
     };
     
     formSubmit = () => {
