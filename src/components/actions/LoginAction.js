@@ -1,6 +1,8 @@
 import React from 'react';
 import {  AsyncStorage } from 'react-native';
 import Config from '../../app/Config';
+import Store from '../../app/Store';
+import Session from '../../app/Session';
 
 class LoginAction extends React.Component{
 	state = {
@@ -173,53 +175,26 @@ class LoginAction extends React.Component{
     _onSubmitForm = () => {
         this._loginError(false);
         this.setState({spinner:true});
-        var formData = new FormData();
-        formData.append('username', this.state.email);
-        formData.append('password', this.state.password);
 
-        fetch(`${Config.api_endpoint}/loginService`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'multipart/form-data',
-                'X-API-KEY' : Config.api_key, 
-                'X-APP-ID' : Config.api_appid
-            },
-            body: formData
-        })
-        .then((response) => 
-            response.json().then((res) => {
-                if(res.data !== null){
-                    // SAVE LOGIN INFO TO ASYNC STORAGE
-                    console.log(res);
-                    AsyncStorage.setItem('account', JSON.stringify(res.data));
-                    this.setState({account:res.data});
-                    // if(this.state.account != null){
-                    //     // 
-                        setTimeout(()=>{
-                            if(this.state.account != null){
-                                this.props.navigation.navigate('EntryPoint')
-                            }
-                        },100);
+        Store.LoginService.getLogin(this.state.email, this.state.password, (res) => {
+            if(res.data !== null){
+                Session.setUserData('account', res.data);
+                this.setState({ account : res.data });
 
-
-                    // }
-                    // Redirect to home page
-                }else{
-                    // Disalay login error message
-                    this._loginError(true);
-                }
-
-                this.setState({ spinner:false });
-
-            })
-        
-        )
-        .catch((error) => {
-            console.log(error)
+                setTimeout(()=>{
+                    if(this.state.account != null){
+                        this.props.navigation.navigate('EntryPoint')
+                    }
+                },100);
+            }else{
+                this._loginError(true);
+            }
             this.setState({ spinner:false });
-        })
-        .done();
+        }, (error) => {
+            this.setState({ spinner:false });
+        });
+
+        
     };
     _loginError = (state) => {
         if(state){

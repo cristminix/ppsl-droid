@@ -39,8 +39,7 @@ class EntryPoint extends React.Component {
         })
         return (
           <View style={[styles.container,{ alignItems:'stretch'}]}>
-              <LinearGradient
-                                      colors={['#ACB4FF', '#778BFE']}
+              <LinearGradient colors={['#009EEE', '#98D2FF']}
                                       style={[{ flex:1,justifyContent:'center'},this.state._boxStyle]}>
                                       
             

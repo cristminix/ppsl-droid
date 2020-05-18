@@ -8,70 +8,62 @@ import { NavigationEvents } from '@react-navigation/compat';
 import DashboardAction from './actions/DashboardAction';
 import BottomNavigation from './BottomNavigation';
 
-class DashboardPage extends DashboardAction{
-    
-    
 
-  
+class DashboardPage extends DashboardAction{
+
     render(){
         const { navigation } = this.props;
-        
+        let icons = {
+            notification: require('../../assets/icon/icon-notification.png'),
+            calendar: require('../../assets/icon/icon-calendar.png'),
+            dash: require('../../assets/icon/icon-dash.png') 
+        };
         let show=false;
         let refreshing = <View></View>;
-        // let haveFoto = '../../assets/icon/profile_user.png';
         if (this.state.refreshing) {
-        refreshing = (
-        //loading view while data is loading
-        <View style={{ flex: 1, paddingTop: 20 }}>
-          <ActivityIndicator />
-        </View>
-      );
-    }
+            refreshing = (
+                //loading view while data is loading
+                <View style={{ flex: 1, paddingTop: 20 }}>
+                <ActivityIndicator />
+                </View>
+            );
+        }
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
-                <View >
+                <Spinner visible={this.state.spinner} textContent={''} textStyle={styles.spinnerTextStyle} /> 
+
+                <View>
                     <NavigationEvents onWillFocus={payload => this.refreshData()} />
                 </View>
-                <LinearGradient
-                  colors={['#009EEE', '#98D2FF']}
-                  start={[0.0,0.122]}
-                  style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    height: 400,
-                  }}
-                />
-                <Spinner visible={this.state.spinner} textContent={''} textStyle={styles.spinnerTextStyle} /> 
-                <TouchableHighlight underlayColor='transparent' style={[{position:'absolute',right:20,marginTop:45,marginHorizontal:10,marginVertical:10}]} onPress={()=>{this.gotoNotif()}} >
-                            <Image style={{width:28,height:31}} source={ require('../../assets/icon/icon-notification.png')}/>
-                        </TouchableHighlight>
+                <LinearGradient  colors={['#009EEE', '#98D2FF']} start={[0.0,0.122]} style={styles.topGradient} />
+
+                <TouchableHighlight underlayColor='transparent' style={styles.notifBtn} onPress={()=>{this.gotoNotif()}} >
+                    <Image style={styles.notifIcon} source={icons.notification}/>
+                </TouchableHighlight>
+
                 <View style={[styles.header,{paddingVertical:10,paddingHorizontal:10}]}>
-                        <Text style={{color:'#ffffff',fontSize:20,fontWeight:'bold'}}>{'Selamat Datang,'}</Text>
+                    <Text style={styles.welcomeText}>{'Selamat Datang,'}</Text>
 
-                        <TouchableHighlight style={[{marginHorizontal:10,marginVertical:10}]} onPress={()=>{this.goBack()}} >
-                            <Image style={styles.photoProfile} source={ {uri:this.state.photoUrl }}/>
-                        </TouchableHighlight>
-                        <Text style={{color:'#ffffff',fontSize:14,fontWeight:'bold'}}>{this.state.user_display_name}</Text>
-                        <Text style={{color:'#ffffff',fontSize:14}}>{this.state.user_email}</Text>
+                    <TouchableHighlight underlayColor='transparent' style={styles.ppContainer} >
+                        <Image style={styles.photoProfile} source={ {uri:this.state.photoUrl }}/>
+                    </TouchableHighlight>
 
-                        
+                    <Text style={styles.displayName}>{this.state.user_display_name}</Text>
+                    <Text style={styles.emailText}>{this.state.user_email}</Text>
                 </View>
                 <View style={[styles.periodes,{}]}>
 
-                        <View style={{backgroundColor:'#F8F7FC',borderRadius:5, flexDirection:'row'}}>
-                            <Image style={styles.iconCalendar} source={ require('../../assets/icon/icon-calendar.png') }/>
-                            <Text  style={[{paddingHorizontal:10,paddingVertical:10}]}>01/04/2020</Text>
+                        <View style={styles.datePickerContainer}>
+                            <Image style={styles.iconCalendar} source={icons.calendar}/>
+                            <Text  style={styles.dateTxt}>{this.state.start_date_text}</Text>
                         </View>
-                        <View style={{backgroundColor:'transparent', flexDirection:'row'}}>
-                            <Image style={styles.iconSd} source={ require('../../assets/icon/icon-dash.png') }/>
-
+                        <View style={styles.dashContainer}>
+                            <Image style={styles.iconSd} source={icons.dash}/>
                         </View>
 
-                        <View style={{backgroundColor:'#F8F7FC',borderRadius:5, flexDirection:'row'}}>
-                            <Image style={styles.iconCalendar } source={ require('../../assets/icon/icon-calendar.png') }/>
-                            <Text style={[{paddingHorizontal:10,paddingVertical:10}]}>08/06/2020</Text>
+                        <View style={styles.datePickerContainer}>
+                            <Image style={styles.iconCalendar } source={icons.calendar}/>
+                            <Text style={styles.dateTxt}>{this.state.end_date_text}</Text>
                         </View>
                     
 
@@ -87,103 +79,31 @@ class DashboardPage extends DashboardAction{
                     />
                     )}
                     </View>
-                <SafeAreaView style={[styles.content,{flex:1}]} onLayout={(event) => { this.find_dimesions(event.nativeEvent.layout) }}>
+                <SafeAreaView style={styles.content} onLayout={(event) => { this.find_dimesions(event.nativeEvent.layout) }}>
                     <ScrollView style={{paddingVertical:0}}>
-                        <View style={[styles.statistic,{flex:1,flexDirection:'column'}]}>
-                            <View style={[styles.boxItem,{flexDirection:'row',margin:10}]}>
-                                  <LinearGradient onPress={()=>{ this.gotoTransPage('prospek') }}
-                                      colors={['#FFC583', '#FAA871']}
-                                      style={[{ padding: 15, borderRadius: 10 ,flex:1,justifyContent:'flex-end'},this.state._boxStyle]}>
-                                      <Text
-                                        style={{
-                                          backgroundColor: 'transparent',
-                                          fontSize: 40,
-                                          fontWeight:'bold',
-                                          paddingTop:30,
-                                          color: '#fff',
-                                        }}>
-                                        {this.state.prospek}
-                                      </Text>
-                                      <Text
-                                        style={{
-                                          backgroundColor: 'transparent',
-                                          fontSize: 15,
-                                          color: '#fff',
-                                        }}>
-                                        Prospek
-                                      </Text>
-                                    </LinearGradient>
-                                    <LinearGradient
-                                      colors={['#ACB4FF', '#778BFE']}
-                                      style={[{ padding: 15, borderRadius: 10 ,flex:1,justifyContent:'flex-end'},this.state._boxStyle]}>
-                                      <Text
-                                        style={{
-                                          backgroundColor: 'transparent',
-                                          fontSize: 40,
-                                          fontWeight:'bold',
-                                          paddingTop:30,
-                                          color: '#fff',
-                                        }}>
-                                        {this.state.survey}
-                                       
-                                      </Text>
-                                       <Text
-                                        style={{
-                                          backgroundColor: 'transparent',
-                                          fontSize: 15,
-                                          color: '#fff',
-                                        }}>
-                                        Survey
-                                      </Text>
-                                    </LinearGradient>
+                        <View style={styles.statistic}>
+                            <View style={styles.boxItem}>
+                                
+                                <LinearGradient colors={['#FFC583', '#FAA871']} style={[styles.boxStyle,this.state._boxStyle]}>
+                                    <Text style={styles.statisticVal}>{this.state.prospek}</Text>
+                                    <Text style={styles.statisticText}>Prospek</Text>
+                                </LinearGradient>
+                                
+                                <LinearGradient colors={['#ACB4FF', '#778BFE']} style={[styles.boxStyle,this.state._boxStyle]}>
+                                    <Text style={styles.statisticVal}> {this.state.survey} </Text>
+                                    <Text style={styles.statisticText}>Survey</Text>
+                                </LinearGradient>
                             </View>
-                            <View style={[styles.boxItem,{flexDirection:'row',margin:10}]}>
-                                  <LinearGradient
-                                      colors={['#7EDC84', '#5DC759']}
-                                      style={[{ padding: 15, borderRadius: 10 ,flex:1,justifyContent:'flex-end'},this.state._boxStyle]}>
-                                      <Text
-                                        style={{
-                                          backgroundColor: 'transparent',
-                                          fontSize: 40,
-                                          fontWeight:'bold',
-                                          paddingTop:30,
-                                          color: '#fff',
-                                        }}>
-                                        {this.state.pelanggan}
-                                        
-                                      </Text>
-                                      <Text
-                                        style={{
-                                          backgroundColor: 'transparent',
-                                          fontSize: 15,
-                                          color: '#fff',
-                                        }}>
-                                        Pelanggan
-                                      </Text>
-                                    </LinearGradient>
-                                    <LinearGradient
-                                      colors={['#FE9797', '#FF7070']}
-                                      style={[{ padding: 15, borderRadius: 10 ,flex:1,justifyContent:'flex-end'},this.state._boxStyle]}>
-                                      <Text
-                                        style={{
-                                          backgroundColor: 'transparent',
-                                          fontSize: 40,
-                                          fontWeight:'bold',
-                                          paddingTop:30,
-                                          color: '#fff',
-                                        }}>
-                                        {this.state.batal}
-                                       
-                                      </Text>
-                                       <Text
-                                        style={{
-                                          backgroundColor: 'transparent',
-                                          fontSize: 15,
-                                          color: '#fff',
-                                        }}>
-                                        Batal
-                                      </Text>
-                                    </LinearGradient>
+                            <View style={styles.boxItem}>
+                                <LinearGradient colors={['#7EDC84', '#5DC759']} style={[styles.boxStyle,this.state._boxStyle]}>
+                                    <Text style={styles.statisticVal}>{this.state.pelanggan}</Text>
+                                    <Text style={styles.statisticText}>Pelanggan</Text>
+                                </LinearGradient>
+                                
+                                <LinearGradient colors={['#FE9797', '#FF7070']} style={[styles.boxStyle,this.state._boxStyle]}>
+                                    <Text style={styles.statisticVal}>{this.state.batal}</Text>
+                                    <Text style={styles.statisticText}>Batal</Text>
+                                </LinearGradient>
                             </View>
                            
                         </View>
@@ -198,11 +118,41 @@ class DashboardPage extends DashboardAction{
     
 }
 const styles = StyleSheet.create({
-    statistic:{
-        flex:1
+    header:{
+        alignItems:'center'
     },
-    boxItem:{
+    boxItem:{flex:1,flexDirection:'row',margin:10},
+    boxStyle:{ padding: 15, borderRadius: 10 ,flex:1,justifyContent:'flex-end'},
+    statisticVal:{
+        backgroundColor: 'transparent',
+        fontSize: 40,
+        fontWeight:'bold',
+        paddingTop:30,
+        color: '#fff',
+      },
+    statisticText:{
+        backgroundColor: 'transparent',
+        fontSize: 15,
+        color: '#fff',
+      },
+    notifIcon:{width:28,height:31},
+    ppContainer:{marginHorizontal:10,marginVertical:10},
+    dashContainer:{backgroundColor:'transparent', flexDirection:'row'},
+    dateTxt:{paddingHorizontal:10,paddingVertical:10},
+    datePickerContainer:{backgroundColor:'#F8F7FC',borderRadius:5, flexDirection:'row'},
+    emailText:{color:'#ffffff',fontSize:14},
+    displayName:{color:'#ffffff',fontSize:14,fontWeight:'bold'},
+    notifBtn:{position:'absolute',right:20,marginTop:45,marginHorizontal:10,marginVertical:10},
+    topGradient:{
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: 400,
+      },
+    statistic:{
         flex:1,
+        flex:1,flexDirection:'column'
     },
   
     iconCalendar:{
@@ -222,12 +172,6 @@ const styles = StyleSheet.create({
         flex:1,
         paddingTop:Constants.statusBarHeight,
         backgroundColor:'transparent' 
-    },
-    header:{
-        alignItems:'center'
-    },
-    box:{
-
     },
   
     periodes:{
@@ -262,155 +206,18 @@ const styles = StyleSheet.create({
         alignItems:'center',
         flex:1
     },
-    headerTitle:{
-        // flex:1,
-        color:'#36227C',
-        fontWeight:'bold',
-        fontSize:20
-    },
-    logo:{
-        // flex:2,
-        resizeMode:'contain',
-        marginTop:10
-    },
+    
     content:{
-        // flex:2,
+        flex:1,
         backgroundColor:'white',
         borderTopLeftRadius:40,
         borderTopRightRadius: 40,
         padding:10,
         paddingBottom:0
     },
-    defaultText:{
-        // fontSize:12,
-        // letterSpacing:-0.02
-    },
-    anchor:{
-        color:'#009EEE',
-        textDecorationLine:'underline'
-    },
-    anchorRight:{
-        color:'#009EEE',
-        textDecorationLine:'underline',
-        textAlign:'right'
-    },
-    anchorCenter:{
-        color:'#009EEE',
-        textDecorationLine:'underline',
-        textAlign:'center'
-    },
-    anchorBold:{
-        color:'#009EEE',
-        fontWeight:'bold'
-    },
-    welcomeText:{
-        color:'#3A3E4A',
-        fontWeight:'bold',
-        fontSize:16,
-    },  
-    info:{
-        paddingVertical:20,
-        flexDirection:'row',
-        justifyContent:'center'
-    },
-    help:{
-        // paddingVertical:8,
-        flexDirection:'row',
-        justifyContent:'center'
-    },
-    formGroup:{
-        paddingVertical:2
-    },
-    btnLogin:{
-        backgroundColor:'#CACACC',
-        borderRadius:50,
-        padding:12,
-        marginTop:10
-    },
-    btnLoginText:{
-        color:'#fff',
-        fontSize:14,
-        fontWeight:'bold',
-        textAlign:'center'
-    },
-    btnRegister:{
-        backgroundColor:'#CACACC',
-        borderRadius:50,
-        padding:12,
-        marginTop:10,
-        marginBottom:40
-    },
-    btnRegisterText:{
-        color:'#fff',
-        fontSize:14,
-        fontWeight:'bold',
-        textAlign:'center'
-    },
-    btnUpload:{
-        borderColor:'#009EEE',
-        borderWidth:1,
-        borderRadius:5,
-        padding:12,
-        marginTop:10
-
-    },
-    btnUploadText:{
-        color:'#009EEE',
-        fontSize:14,
-        fontWeight:'bold',
-        textAlign:'center'
-    },
-    textInput:{
-        paddingVertical:10,
-        paddingHorizontal:5,
-        fontSize:14
-    },
-    inlineIcon:{
-        position:'relative',
-        margin:4
-    },
-    formIcon:{
-        position:'absolute',
-        marginTop:20,
-        right:0
-    },
-    formIconClose:{
-        position:'absolute',
-        marginTop:0,
-        right:0,
-        
-        width:40,
-        height:40,
-        padding:10
-
-    },
-    formIconViewPass:{
-        position:'absolute',
-        marginTop:0,
-        right:0,
-        
-        width:40,
-        height:40,
-        padding:10
-    },
-    formIconHidePass:{
-        position:'absolute',
-        marginTop:0,
-        right:0,
-     
-        width:40,
-        height:40,
-        padding:10
-
-    },
-    errorMessage:{
-        backgroundColor:'#e22134',
-        marginVertical:15,
-        alignItems:'center',
-        padding:10,
-        borderRadius:5,
-        marginBottom:10
-    }    
+    
+    welcomeText:{color:'#ffffff',fontSize:20,fontWeight:'bold'},  
+    
 });
 
 export default DashboardPage;
