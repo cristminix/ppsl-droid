@@ -11,7 +11,7 @@ Session = {
             }
             cbError(error);
         });
-	}
+	},
 	getAccount : (cbSuccess, cbError) => {
 		Session.userData('account', cbSuccess, cbError);
 	},
