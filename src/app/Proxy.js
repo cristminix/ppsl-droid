@@ -1,6 +1,38 @@
 import Config from './Config';
+import axios from 'axios';
 Proxy={
 	post : (url,postData,cbSuccess,cbError) => {
+		var formData = new FormData();
+
+		for(let key in postData){
+            formData.append(key, postData[key]);
+		}
+		if(Config.debug){
+			console.log(`NET,POST:${url}\n`);		
+		}
+		axios({
+            method:'post',
+            url: url,
+            data:formData,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data',
+                'X-API-KEY' : Config.api_key, 
+                'X-APP-ID' : Config.api_appid
+            },
+
+        })
+        .then((response) => {
+            cbSuccess(response.data);
+        })
+        .catch((error) => {
+            console.log(error)
+            alert(error)
+        });
+
+		
+	},
+	post_legacy : (url,postData,cbSuccess,cbError) => {
 		var formData = new FormData();
 
 		for(let key in postData){
@@ -28,7 +60,8 @@ Proxy={
             cbError(error);
         })
         .done();
-	} 
+	},
+
 };
 
 export default Proxy;

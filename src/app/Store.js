@@ -5,7 +5,7 @@ import Config from './Config';
 Store = {
 	Pelanggan : {
 		getMinMaxDate : (id_user, cb) => {
-			let url  = `${Config.api_endpoint}/Pelanggan/getMinMaxDate`;
+			let url  = `${Config.api_endpoint}pelanggan/getMinMaxDate/${id_user}`;
 			let data = {user_id:id_user};
 
 			Proxy.post(url,data,cb,(error)=>{});
@@ -27,6 +27,12 @@ Store = {
 	        };
 
 	        Proxy.post(url,data,success,error);
+		},
+		forgetPassword: (email,success,error) => {
+			let url  = `${Config.api_endpoint}loginService/forgetPassword`;
+			let data = {email:email};
+
+			Proxy.post(url,data,success,error);
 		}
 	}
 };

@@ -122,6 +122,7 @@ class ProfilePage extends React.Component {
     }
     logout= ()=>{
         AsyncStorage.setItem('account', 'null');
+        AsyncStorage.setItem('full_profile', 'null');
         this.props.navigation.navigate('EntryPoint');
 
         

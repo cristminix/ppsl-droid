@@ -6,8 +6,9 @@ Session = {
 	},
 	userData : (key, cbSuccess, cbError) =>{
 		AsyncStorage.getItem(key, (error, result) => {
-            if(result) {
-            	return cbSuccess(JSON.parse(result));
+            let data = JSON.parse(result);
+            if(typeof data == 'object') {
+            	return cbSuccess(data);
             }
             cbError(error);
         });

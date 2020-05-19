@@ -70,7 +70,7 @@ class BottomNavigation extends React.Component{
 }
 const styles = StyleSheet.create({
     boxItem:{
-        flex:1,
+        // flex:1,
     },
     tabWrp:{
         marginHorizontal:5,
@@ -88,7 +88,8 @@ const styles = StyleSheet.create({
     },
     tabItem:{ },
     touchX:{
-        margin:10
+        marginHorizontal:5,
+        marginVertical:10
     }
 });
 export default BottomNavigation;

@@ -7,10 +7,26 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { NavigationEvents } from '@react-navigation/compat';
 import DashboardAction from './actions/DashboardAction';
 import BottomNavigation from './BottomNavigation';
-
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 class DashboardPage extends DashboardAction{
-
+    pickDate = (what) =>{
+        console.log('pickDate')
+        let jsDate = new Date();
+        if(what=='start_date'){
+            let dateParts = this.state.start_date_text.split("-");
+            jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
+        }
+        if(what=='end_date'){
+            let dateParts = this.state.end_date_text.split("-");
+            jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
+        }
+        this.setState({
+            date: jsDate,
+            datepicker_key: what
+        });
+        this.showDatePicker();
+    }
     render(){
         const { navigation } = this.props;
         let icons = {
@@ -18,7 +34,7 @@ class DashboardPage extends DashboardAction{
             calendar: require('../../assets/icon/icon-calendar.png'),
             dash: require('../../assets/icon/icon-dash.png') 
         };
-        let show=false;
+        let isDatePickerVisible=this.isDatePickerVisible();
         let refreshing = <View></View>;
         if (this.state.refreshing) {
             refreshing = (
@@ -53,31 +69,36 @@ class DashboardPage extends DashboardAction{
                 </View>
                 <View style={[styles.periodes,{}]}>
 
+                        <TouchableHighlight onPress={()=>{this.pickDate('start_date')}} underlayColor='transparent' >
                         <View style={styles.datePickerContainer}>
+                          
                             <Image style={styles.iconCalendar} source={icons.calendar}/>
                             <Text  style={styles.dateTxt}>{this.state.start_date_text}</Text>
+                           
                         </View>
+                        </TouchableHighlight>
                         <View style={styles.dashContainer}>
                             <Image style={styles.iconSd} source={icons.dash}/>
                         </View>
 
+                        <TouchableHighlight onPress={()=>{this.pickDate('end_date')}}  underlayColor='transparent' >
                         <View style={styles.datePickerContainer}>
+                           
                             <Image style={styles.iconCalendar } source={icons.calendar}/>
                             <Text style={styles.dateTxt}>{this.state.end_date_text}</Text>
+                           
                         </View>
+                        </TouchableHighlight> 
                     
 
-                    {show && (
-                    <DateTimePicker
-                      testID="dateTimePicker"
-                      timeZoneOffsetInMinutes={0}
-                      value={this.state.date}
-                      mode={this.state.mode}
-                      is24Hour={true}
-                      display="default"
-                      onChange={this.onChange}
+                    
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={this.onChangeDate}
+                        date={this.state.date}
+                        onCancel={()=>{}}
                     />
-                    )}
                     </View>
                 <SafeAreaView style={styles.content} onLayout={(event) => { this.find_dimesions(event.nativeEvent.layout) }}>
                     <ScrollView style={{paddingVertical:0}}>
