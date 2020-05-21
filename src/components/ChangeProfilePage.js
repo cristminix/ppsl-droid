@@ -2,8 +2,12 @@ import React from 'react';
 import { AsyncStorage, View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { NavigationEvents } from '@react-navigation/compat';
 
+import { LinearGradient } from 'expo-linear-gradient';
+import { NavigationEvents } from '@react-navigation/compat';
+import Config from '../app/Config';
+import Store from '../app/Store';
+import Session from '../app/Session';
 class ChangeProfilePage extends React.Component {
     goBack=()=>{
         this.props.navigation.navigate('ProfilePage');
@@ -17,9 +21,12 @@ class ChangeProfilePage extends React.Component {
         nama_lengkap: '',
         nomor_hp:'',
         email:'',
+        user_id:'',
+        _inputNamaLengkapDisabled: false,
+        foto:null,
 
 
-        _btUpdateDisabled: false,
+        _btSimpanDisabled: false,
         _form_HasError: false,
         _form_errorMessage: 'Data tidak valid.',
         _form_err_msg_style:{ display:'none'},
@@ -42,20 +49,37 @@ class ChangeProfilePage extends React.Component {
         _ihp_placeHolderText : 'Nomor HP',
         _ihp_lbl_style: {display:'none'},
         _ihp_clr_btn_style: {height: 0, width: 0, opacity: 0},
+
+        _disableChangePhoto: false,
+        formErrorMsg:'',
+        fomsErrorShown: false,
+        formErrorMsgStyle: {display:'none'},
     };
     refreshData = ()=>{
-        AsyncStorage.getItem('full_profile', (error, result) => {
-            if (result) {
-                let full_profile = JSON.parse(result);
-                // console.log(full_profile)
+        Session.getFullProfile((full_profile)=>{
+            console.log(full_profile);
+            this.setState({
+                photoUrl : full_profile.thumb,
+                nama_lengkap: full_profile.account.nama_lengkap,
+                email: full_profile.am.email=='n/a'?'':full_profile.am.email,
+                nomor_hp: full_profile.am.no_hp,
+
+            });
+            if(full_profile.account.rules === 'pegawai'){
                 this.setState({
-                    photoUrl : full_profile.thumb,
-                    nama_lengkap: full_profile.account.nama_lengkap,
-                    email: full_profile.am.email=='n/a'?'':full_profile.am.email,
-                    no_hp: full_profile.am.no_hp
-                });
+                    _inputNamaLengkapDisabled : true,
+                    _disableChangePhoto: true
+                })
+            }else{
+                this.setState({
+                    _inputNamaLengkapDisabled : false,
+                    _disableChangePhoto: false
+                })
             }
+        },(error)=>{
+            console.log(error);
         });
+        
     };
     _ie_clear = () => {
         this.setState({ email: '' });
@@ -127,36 +151,73 @@ class ChangeProfilePage extends React.Component {
         this._validateInput();
     };
     _validateInput = ()=>{
-        if(this.state.email.length >= 4 && this.state.password.length>= 4){
-            this.setState({_btLoginDisabled:false});
+        if(this.state.nama_lengkap.length >= 0 && this.state.nomor_hp.length>= 0 && this.state.email.length > 0){
+            this.setState({_btSimpanDisabled:false});
         }else{
-            this.setState({_btLoginDisabled:true});
+            this.setState({_btSimpanDisabled:true});
         }
     };
+    onRefresh = ()=>{
+        this.refreshData();
+    };
+    formSubmit = ()=>{
+        this.setState({spinner:true});
+        Session.userData('account',(account)=>{
+            Store.LoginService.changeProfile(account.user_id,this.state.nama_lengkap,this.state.nomor_hp, this.state.email, this.state.foto,(res)=>{
+                console.log(res)
+                if(res.data.success){
+                    this.setState({
+                        changeProfileSucces: true
+                        
+                    });
+                }else{
+                    this.setState({
+                        changeProfileSucces : false,
+                        formErrorMsg: res.msg,
+                        fomsErrorShown:true,
+                        formErrorMsgStyle:{display:'flex'},
+    
+                        
+                    });
+                };
+                this.setState({spinner:false});
+            },(error)=>{
+                console.log(error);
+                this.setState({spinner:false});
+
+            });
+        },(error)=>{});
+        
+    };
     render(){
+        let icons = {
+            back :  require('../../assets/icon/chevron-left.png') 
+        };
         return (
             <KeyboardAvoidingView style={styles.wrapper}  behavior={Platform.OS === "ios" ? "padding" : null}>
                 <View >
-                    <NavigationEvents onWillFocus={payload => this.refreshData()} />
+                    <NavigationEvents onWillFocus={payload => this.onRefresh()} />
                 </View>
                 <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} /> 
 
-                <View style={styles.header}>
-                    <View style={{paddingHorizontal:10,paddingVertical:20}}>
-                        <TouchableHighlight onPress={()=>{this.goBack()}} >
-                            <Image style={{width:22}} source={ require('../../assets/icon/icon-chevron-left-white.png') }/>
-                        </TouchableHighlight>
+                <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} style={[{paddingVertical:20},styles.headerGradient]}>
+
+                    <View style={{paddingHorizontal:10,paddingVertical:0}}>
+                    <TouchableHighlight underlayColor='transparent' onPress={()=>{this.goBack()}} >
+                        <Image style={{width:22}} source={icons.back}/>
+                    </TouchableHighlight>
                     </View>
-                    <View style={{flex:1,textAlign:'center',paddingLeft:120,paddingVertical:20}}>
-                        <Text style={{color:'#ffffff',fontSize:14}}>Ubah Profil</Text>
+                    <View style={{flex:1,alignItems:'center',paddingVertical:0}}>
+                        <Text style={{color:'#ffffff',fontSize:14,marginLeft:-22,marginTop:-20}}>Ubah Profile</Text>
                     </View>
-                </View>
+                    </LinearGradient>
+               
                 <View style={{alignItems:"center",backgroundColor:'#fff'}}>
                     <View style={{paddingHorizontal:10,paddingVertical:20}}>
-                        <TouchableHighlight onPress={()=>{this.changePhoto()}} >
+                        <TouchableHighlight underlayColor='transparent'  onPress={()=>{this.changePhoto()}} >
                             <Image style={{width:100,height:100,borderRadius:90}} source={ {uri: this.state.photoUrl }}/>
                         </TouchableHighlight>
-                        <TouchableHighlight onPress={()=>{this.changePhoto()}} style={{position:'absolute',marginTop:100,marginLeft:80,backgroundColor:'#fff',padding:5,alignItems:'center',borderRadius:10}}>
+                        <TouchableHighlight underlayColor='transparent'  onPress={()=>{this.changePhoto()}} style={{position:'absolute',marginTop:100,marginLeft:80,backgroundColor:'#fff',padding:5,alignItems:'center',borderRadius:10,opacity:this.state._disableChangePhoto?0:1}}>
                             <Image style={{width:12,height:12,borderRadius:5}} source={require('../../assets/icon/icon-pencil-blue.png')}/>
                         </TouchableHighlight>
                     </View>
@@ -169,6 +230,7 @@ class ChangeProfilePage extends React.Component {
                                 <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._in_lbl_style]}>Nama Lengkap</Text>
 
                                 <TextInput style={styles.textInput}
+                                editable={!this.state._inputNamaLengkapDisabled}
                                 value={this.state.nama_lengkap}
                                 onChangeText={( nama_lengkap ) => this.setState({ nama_lengkap })}
                                 onKeyPress={this._validateInput}
@@ -212,6 +274,7 @@ class ChangeProfilePage extends React.Component {
                                 placeholderTextColor="#8F8EA0"
                                 autoCapitalize = 'none'
                                 underlineColorAndroid={this.state._ie_underlineColor}
+                                
                                     />
                                 <TouchableHighlight onPress={this._ie_clear} style={[styles.formIconClose,this.state._ie_clr_btn_style]}>
                                     <Image  source={ require('../../assets/icon/close.png') }
@@ -219,19 +282,41 @@ class ChangeProfilePage extends React.Component {
                                     />
                                 </TouchableHighlight>       
                             </View>
-                            <TouchableHighlight style={[{margin:20},styles.btnSimpan]} onPress={()=>{this.simpan()}} >
-                            <View>
-                                <Text style={{color:'#fff',fontSize:14,fontWeight:'bold'}}>Simpan</Text>
+                            
+                            <View style={[styles.errorMessage,this.state.formErrorMsgStyle]}>
+                                <Text style={{color:'#fff',marginBottom:-10}}>{this.state.formErrorMsg}</Text>
                             </View>
-                        </TouchableHighlight>
+                             
                         </View>
                     </ScrollView>
+                    <View style={[{flex:1,flexDirection:'column-reverse',paddingHorizontal:5,paddingVertical:10,marginBottom:10},{display:this.state.changePasswordSucces?'none':'flex'}]}>
+                        <TouchableHighlight disabled={this.state._btSimpanDisabled} underlayColor='transparent' onPress={()=>{ this.formSubmit() }} >
+                            <View>
+                                <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} 
+                                    style={{flex:1,alignItems:'center',padding:20,borderRadius:10}}>
+                                    <Text style={[{marginTop:-10},styles.btnActionText]}>Simpan</Text>
+
+                                </LinearGradient>    
+                            </View>
+                        </TouchableHighlight>
+                    </View>
                 </SafeAreaView>
             </KeyboardAvoidingView>    
         );
     }
 }
 const styles = StyleSheet.create({
+    btnAction:{
+        backgroundColor:'#CACACC',
+        borderRadius:50,
+        padding:12,
+        marginTop:10
+    },
+    btnActionText:{
+        color:'#fff',
+        fontSize:14,
+        fontWeight:'bold'
+    },
     imagePreview:{
         width:100,
         height:100,
@@ -252,7 +337,8 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor:'white',
         padding:10,
-        paddingBottom:0
+        paddingBottom:0,
+        paddingHorizontal:20
     },
     btnSimpan:{
         backgroundColor:'#009EEE',

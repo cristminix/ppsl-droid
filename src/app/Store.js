@@ -44,6 +44,13 @@ Store = {
 		changePassword: (user_id,old_passwd,new_passwd,repeat_new_passwd,success,error) => {
 			let url  = `${Config.api_endpoint}loginService/changePassword`;
 			let data = {user_id:user_id,old_passwd:old_passwd,new_passwd:new_passwd,repeat_new_passwd:repeat_new_passwd};
+			
+			Proxy.post(url,data,success,error);
+		},
+
+		changeProfile : (user_id,nama_lengkap, nomor_hp, email, foto, success, error) =>{
+			let url  = `${Config.api_endpoint}loginService/changeProfile`;
+			let data = {user_id:user_id,nama:nama_lengkap,nomor_hp:nomor_hp,email:email,foto:foto};
 			console.log(data);
 			Proxy.post(url,data,success,error);
 		}
