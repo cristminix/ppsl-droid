@@ -45,7 +45,12 @@ class ChangePasswdPage extends React.Component {
         _irp_placeHolderText : 'Ulangi Kata Sandi Baru',
         _irp_lbl_style: {display:'none'},
         _irp_shp_o_btn_style: {},
-        _irp_shp_c_btn_style: {height: 0, width: 0, opacity: 0}
+        _irp_shp_c_btn_style: {height: 0, width: 0, opacity: 0},
+
+        formErrorMsg:'',
+        fomsErrorShown: false,
+        formErrorMsgStyle: {display:'none'},
+        changePasswordSucces: false
     };
     _inp_viewPass = () => {
         console.log('please view password');
@@ -289,6 +294,12 @@ class ChangePasswdPage extends React.Component {
         if(Config.enable_dummy){  
             this.setState(Config.dummy.ChangePasswdPage);
         }
+        this.setState({
+            changePasswordSucces : false,
+            fomsErrorShown:false,
+            formErrorMsgStyle:{display:'none'},
+            formErrorMsg:''
+        });
         Session.getAccount((account)=>{
             this.setState({'user_id':account.user_id});
             setTimeout(()=>{
@@ -301,6 +312,21 @@ class ChangePasswdPage extends React.Component {
         this.setState({spinner:true});
         Store.LoginService.changePassword(this.state.user_id,this.state.old_passwd, this.state.new_passwd, this.state.repeat_new_passwd,(res)=>{
             console.log(res);
+            if(res.data.success){
+                this.setState({
+                    changePasswordSucces : true
+                    
+                });
+            }else{
+                this.setState({
+                    changePasswordSucces : false,
+                    formErrorMsg: res.msg,
+                    fomsErrorShown:true,
+                    formErrorMsgStyle:{display:'flex'},
+
+                    
+                });
+            };
             this.setState({spinner:false});
 
         },(error)=>{
@@ -333,7 +359,10 @@ class ChangePasswdPage extends React.Component {
                 </View>
                     <SafeAreaView style={styles.content}>
                     <ScrollView style={{paddingVertical:10}}>
-                    
+                    <View style={{display: this.state.changePasswordSucces?'flex':'none'}}>
+                        <Text style={{fontWeight:'bold',fontSize:16,marginVertical:5}}>Kata sandi Anda telah dirubah.</Text>
+                    </View>    
+                    <View style={{display: !this.state.changePasswordSucces?'flex':'none'}}>
                         <Text style={{fontWeight:'bold',fontSize:16,marginVertical:5}}>Masukkan kata sandi lama Anda terlebih dahulu kemudian kata sandi baru.</Text>
                         <View style={styles.form}>
                         <View style={styles.formGroup}>
@@ -361,6 +390,7 @@ class ChangePasswdPage extends React.Component {
                             <View style={{flexDirection:'row-reverse',paddingVertical:10,paddingHorizontal:5}}>
                                 <Text style={[styles.anchor]} onPress={() => {this.goto('ForgetPage')}}>Lupa Password ?</Text>
                             </View>
+                        </View>
                         </View>
                         <View style={styles.formGroup}>
                             <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._inp_lbl_style]}>Kata Sandi Baru</Text>
@@ -409,11 +439,13 @@ class ChangePasswdPage extends React.Component {
                                 <Image  source={ require('../../assets/icon/eye-open.png') }/>
                             </TouchableHighlight>
                         </View>
-                       
+                       <View style={[styles.errorMessage,this.state.formErrorMsgStyle]}>
+                            <Text style={{color:'#fff',marginBottom:-10}}>{this.state.formErrorMsg}</Text>
+                       </View>
                         </View>
                         
                     </ScrollView>
-                    <View style={{flex:1,flexDirection:'column-reverse',paddingHorizontal:5,paddingVertical:10,marginBottom:10}}>
+                    <View style={[{flex:1,flexDirection:'column-reverse',paddingHorizontal:5,paddingVertical:10,marginBottom:10},{display:this.state.changePasswordSucces?'none':'flex'}]}>
                         <TouchableHighlight underlayColor='transparent' onPress={()=>{ this.formSubmit() }} >
                             <View>
                                 <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} 

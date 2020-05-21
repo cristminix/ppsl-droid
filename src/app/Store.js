@@ -40,10 +40,11 @@ Store = {
 
 			Proxy.post(url,data,success,error);
 		},
+         
 		changePassword: (user_id,old_passwd,new_passwd,repeat_new_passwd,success,error) => {
 			let url  = `${Config.api_endpoint}loginService/changePassword`;
 			let data = {user_id:user_id,old_passwd:old_passwd,new_passwd:new_passwd,repeat_new_passwd:repeat_new_passwd};
-
+			console.log(data);
 			Proxy.post(url,data,success,error);
 		}
 	}
