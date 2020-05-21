@@ -9,6 +9,12 @@ Store = {
 			let data = {user_id:id_user};
 
 			Proxy.post(url,data,cb,(error)=>{});
+		},
+		getStatisticData : (id_user,start_date,end_date,cb)=> {
+			let url  = `${Config.api_endpoint}pelanggan/getStatisticData/${id_user}`;
+			let data = {user_id:id_user,dt_start:start_date,dt_end:end_date};
+
+			Proxy.post(url,data,cb,(error)=>{});
 		}
 	},
 	LoginService : {
@@ -31,6 +37,12 @@ Store = {
 		forgetPassword: (email,success,error) => {
 			let url  = `${Config.api_endpoint}loginService/forgetPassword`;
 			let data = {email:email};
+
+			Proxy.post(url,data,success,error);
+		},
+		changePassword: (user_id,old_passwd,new_passwd,repeat_new_passwd,success,error) => {
+			let url  = `${Config.api_endpoint}loginService/changePassword`;
+			let data = {user_id:user_id,old_passwd:old_passwd,new_passwd:new_passwd,repeat_new_passwd:repeat_new_passwd};
 
 			Proxy.post(url,data,success,error);
 		}

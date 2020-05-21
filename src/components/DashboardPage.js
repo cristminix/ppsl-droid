@@ -10,23 +10,7 @@ import BottomNavigation from './BottomNavigation';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 class DashboardPage extends DashboardAction{
-    pickDate = (what) =>{
-        console.log('pickDate')
-        let jsDate = new Date();
-        if(what=='start_date'){
-            let dateParts = this.state.start_date_text.split("-");
-            jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
-        }
-        if(what=='end_date'){
-            let dateParts = this.state.end_date_text.split("-");
-            jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
-        }
-        this.setState({
-            date: jsDate,
-            datepicker_key: what
-        });
-        this.showDatePicker();
-    }
+    
     render(){
         const { navigation } = this.props;
         let icons = {
@@ -34,7 +18,7 @@ class DashboardPage extends DashboardAction{
             calendar: require('../../assets/icon/icon-calendar.png'),
             dash: require('../../assets/icon/icon-dash.png') 
         };
-        let isDatePickerVisible=this.isDatePickerVisible();
+        // let isDatePickerVisible=this.isDatePickerVisible();
         let refreshing = <View></View>;
         if (this.state.refreshing) {
             refreshing = (
@@ -93,7 +77,7 @@ class DashboardPage extends DashboardAction{
 
                     
                     <DateTimePickerModal
-                        isVisible={isDatePickerVisible}
+                        isVisible={this.state.datepicker_shown}
                         mode="date"
                         onConfirm={this.onChangeDate}
                         date={this.state.date}

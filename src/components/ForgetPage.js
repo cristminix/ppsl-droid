@@ -82,6 +82,9 @@ class ForgetPage extends React.Component {
             this.setState({ _ie_lbl_style: {display:'flex',color:'#8F8EA0'} });
             ok += 1;
         }
+        this.setState({
+            _form_err_msg_style:{ display:'none'}
+        });
     }
     onRefresh(){
         this.setState({email_sent:false});

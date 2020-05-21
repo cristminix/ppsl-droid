@@ -5,18 +5,12 @@ import Config from '../../app/Config';
 import Store from '../../app/Store';
 import Session from '../../app/Session';
 import Helper from '../../app/Helper';
-const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
 
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
 
 class DashboardAction extends React.Component{
 
 
+ 
    state = {
             spinner : false,
 
@@ -47,15 +41,34 @@ class DashboardAction extends React.Component{
             start_date_text : '',
             end_date_text : '',
 
-            datepicker_key:''
+            datepicker_key:'',
+
+            datepicker_shown:false
         }; 
 
-	
+	pickDate = (what) =>{
+        console.log('pickDate')
+        let jsDate = new Date();
+        if(what=='start_date'){
+            let dateParts = this.state.start_date_text.split("-");
+            jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
+        }
+        if(what=='end_date'){
+            let dateParts = this.state.end_date_text.split("-");
+            jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
+        }
+        this.setState({
+            date: jsDate,
+            datepicker_key: what,
+            datepicker_shown: true
+        });
+        
+    }
 
     onChangeDate = (selectedDate) => {
-        // this.setState({
-        //     showDatepicker :  false
-        // });
+        this.setState({
+            datepicker_shown :  false
+        });
 
         if(this.state.datepicker_key == 'start_date'){
             this.setState({
@@ -70,17 +83,11 @@ class DashboardAction extends React.Component{
         }
         
         setTimeout(()=>{
-            // this.refreshData();
+            this.refreshData();
         },100);
     };
 
-    showDatepicker = () => {
-        setDatePickerVisibility(true);
-    };
-
-    hideDatepicker = () => {
-        setDatePickerVisibility(false);
-    };
+   
 
     find_dimesions(layout){
         const {x, y, width, height} = layout;
@@ -144,24 +151,36 @@ class DashboardAction extends React.Component{
             });
             
         }else{
-
+            let start_date = this.state.start_date_text;
+            let end_date = this.state.end_date_text;
+            this.setState({spinner:true});
+            Store.Pelanggan.getStatisticData(user_id, start_date, end_date,(res)=>{
+                let statistic = res.data.statistic;
+                this.setState({
+                    prospek : statistic.prospek,
+                    survey : statistic.survey,
+                    pelanggan : statistic.pelanggan,
+                    batal : statistic.batal,
+                });
+                console.log(res)
+                this.setState({ spinner:false });
+            },(error)=>{
+                this.setState({ spinner:false });       
+            });
         }
         
 
 
     }
-    isDatePickerVisible=()=>{
-        return isDatePickerVisible;
-    }
     refreshData = () =>{
-
+        this.setState({datepicker_shown:false});
         Session.getAccount((account)=>{
             this.setState({
                 user_email : account.email == '0' ? '' : account.email,
                 user_display_name : account.nama_lengkap
             });
             if(this.state.start_date_text != '' && this.state.end_date_text != ''){
-                this.getStatisticData(account.user_id);
+                this.getStatisticData(account.user_id,true);
             }else{
                 Store.Pelanggan.getMinMaxDate(account.user_id,(res)=>{
                     if(res.data != null){

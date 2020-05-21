@@ -4,10 +4,11 @@ import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { NavigationEvents } from '@react-navigation/compat';
 import BottomNavigation from './BottomNavigation';
+import Session from '../app/Session';
 
 class ProfilePage extends React.Component {
-    goBack=()=>{
-        this.props.navigation.navigate('DashboardPage');
+    goto=(nav)=>{
+        this.props.navigation.navigate(nav,{sourcePage:'ProfilePage'});
     };
     state = {
         spinner:false,
@@ -31,6 +32,20 @@ class ProfilePage extends React.Component {
             }
         });
     };
+    onRefresh = ()=>{
+        // this.setState({refreshing:true})
+        this.refreshData();
+        console.log('refreshing')
+    }
+
+    logout(){
+        Session.unsetUserData('account');
+        Session.unsetUserData('full_profile');
+
+        setTimeout(()=>{
+            this.props.navigation.navigate('LoginPage');
+        },100);
+    }
     render(){
         const { navigation } = this.props;
 
@@ -62,23 +77,23 @@ class ProfilePage extends React.Component {
                             <View style={{flexDirection:'row',marginVertical:10}}>
                                 <Image style={styles.tabIcon} source={require('../../assets/icon/icon-profile-blue.png')}/>
                                 <Text style={{marginLeft:10}}>Ubah Profil</Text>
-                                <TouchableHighlight style={styles.btnActX} onPress={()=>{this.changeProfile()}}>
+                                <TouchableHighlight underlayColor='transparent' style={styles.btnActX} onPress={()=>{this.goto('ChangeProfilePage')}}>
                                     <Image style={styles.tabIconX} source={require('../../assets/icon/chevron-right-black.png')}/>
                                 </TouchableHighlight>
                             </View>
                         </View>
 
                         <View style={{backgroundColor:'#fff',padding:20}}>
-                            <Text style={{fontWeight:'bold',fontSize:14,marginBottom:10}}>Keamanan</Text>
-                            <View style={{flexDirection:'row',marginVertical:10}}>
+                            <Text style={{fontWeight:'bold',fontSize:14,marginBottom:20}}>Keamanan</Text>
+                            <View style={{flexDirection:'row',marginVertical:20}}>
                                 <Image style={styles.tabIcon} source={require('../../assets/icon/icon-lock-blue.png')}/>
                                 <Text style={{marginLeft:10}}>Ubah Kata Sandi</Text>
-                                <TouchableHighlight style={styles.btnActX} onPress={()=>{this.changePasswd()}}>
+                                <TouchableHighlight underlayColor='transparent' style={styles.btnActX} onPress={()=>{this.goto('ChangePasswdPage')}}>
                                     <Image style={styles.tabIconX} source={require('../../assets/icon/chevron-right-black.png')}/>
                                 </TouchableHighlight>
                                 
                             </View>
-                            <View style={{flexDirection:'row',marginVertical:10}}>
+                            <View style={{flexDirection:'row',marginVertical:20}}>
                                 <Image style={styles.tabIcon} source={require('../../assets/icon/icon-doc-blue.png')}/>
                                 <Text style={{marginLeft:10}}>Dokumen Data Diri</Text>
                                 <View style={{flexDirection:'row',position:'absolute',right:0,backgroundColor:'#A9FFCB',borderRadius:5,paddingVertical:5,paddingHorizontal:10,marginTop:-5}}>
@@ -90,16 +105,19 @@ class ProfilePage extends React.Component {
                                 <Text style={{color:'#8C8C98',fontSize:12}}> * Dokumen yang Anda berikan telah tersimpan dan terlindungi dengan aman di dalam sistem kami.</Text>
                             </View>
                         </View>
-                        <View style={{marginVertical:10}}>
-                                <Text style={{paddingHorizontal:10,color:'#8C8C98',fontSize:12}}> Version 1.0</Text>
+                        <View style={{marginTop:10}}>
+                                <Text style={{paddingHorizontal:20,color:'#8C8C98',fontSize:12}}> Version 1.0</Text>
                         </View>
-                        <TouchableHighlight style={[{margin:20},styles.btnLogout]} onPress={()=>{this.logout()}} >
+                        
+                        
+                    </ScrollView>
+                    <View style={{flexDirection:'column-reverse',backgroundColor:'#fff'}}>
+                    <TouchableHighlight underlayColor='transparent' style={[{margin:20},styles.btnLogout]} onPress={()=>{this.logout()}} >
                             <View>
                                 <Text style={{color:'#fff',fontSize:14,fontWeight:'bold'}}>Keluar</Text>
                             </View>
                         </TouchableHighlight>
-                        
-                    </ScrollView>
+                    </View>
                     </SafeAreaView>
                     <BottomNavigation activeMenu="ProfilePage" navigation={navigation}/>
                     
@@ -108,36 +126,8 @@ class ProfilePage extends React.Component {
 
 
     }
-    onHome= ()=>{
-        this.props.navigation.navigate('DashboardPage')
-        
-    }
-    changePasswd= ()=>{
-        this.props.navigation.navigate('ChangePasswdPage')
-        
-    }
-    changeProfile= ()=>{
-        this.props.navigation.navigate('ChangeProfilePage')
-        
-    }
-    logout= ()=>{
-        AsyncStorage.setItem('account', 'null');
-        AsyncStorage.setItem('full_profile', 'null');
-        this.props.navigation.navigate('EntryPoint');
-
-        
-    }
-    onRefresh = ()=>{
-        // this.setState({refreshing:true})
-        this.refreshData();
-        console.log('refreshing')
-    }
-    onLaporan(){
-        console.log('onLaporan')
-    }
-    onTransaksi(){
-        console.log('onTransaksi')
-    }
+    
+    
 }
 const styles = StyleSheet.create({
     tabItem:{
@@ -154,8 +144,8 @@ const styles = StyleSheet.create({
     },
     
     tabIconX:{
-        width:16,
-        height:16,
+        width:22,
+        height:22,
         
     },
     btnActX:{
@@ -196,44 +186,6 @@ const styles = StyleSheet.create({
         
     },
     
-    
-    defaultText:{
-        // fontSize:12,
-        // letterSpacing:-0.02
-    },
-    anchor:{
-        color:'#009EEE',
-        textDecorationLine:'underline'
-    },
-    anchorRight:{
-        color:'#009EEE',
-        textDecorationLine:'underline',
-        textAlign:'right'
-    },
-    anchorCenter:{
-        color:'#009EEE',
-        textDecorationLine:'underline',
-        textAlign:'center'
-    },
-    anchorBold:{
-        color:'#009EEE',
-        fontWeight:'bold'
-    },
-    welcomeText:{
-        color:'#3A3E4A',
-        fontWeight:'bold',
-        fontSize:16,
-    },  
-    info:{
-        paddingVertical:20,
-        flexDirection:'row',
-        justifyContent:'center'
-    },
-    help:{
-        // paddingVertical:8,
-        flexDirection:'row',
-        justifyContent:'center'
-    },
     formGroup:{
         paddingVertical:2
     },
@@ -243,91 +195,7 @@ const styles = StyleSheet.create({
         padding:12,
         marginTop:10,
         alignItems:'center'
-    },
-    btnLoginText:{
-        color:'#fff',
-        fontSize:14,
-        fontWeight:'bold',
-        textAlign:'center'
-    },
-    btnRegister:{
-        backgroundColor:'#CACACC',
-        borderRadius:50,
-        padding:12,
-        marginTop:10,
-        marginBottom:40
-    },
-    btnRegisterText:{
-        color:'#fff',
-        fontSize:14,
-        fontWeight:'bold',
-        textAlign:'center'
-    },
-    btnUpload:{
-        borderColor:'#009EEE',
-        borderWidth:1,
-        borderRadius:5,
-        padding:12,
-        marginTop:10
-
-    },
-    btnUploadText:{
-        color:'#009EEE',
-        fontSize:14,
-        fontWeight:'bold',
-        textAlign:'center'
-    },
-    textInput:{
-        paddingVertical:10,
-        paddingHorizontal:5,
-        fontSize:14
-    },
-    inlineIcon:{
-        position:'relative',
-        margin:4
-    },
-    formIcon:{
-        position:'absolute',
-        marginTop:20,
-        right:0
-    },
-    formIconClose:{
-        position:'absolute',
-        marginTop:0,
-        right:0,
-        
-        width:40,
-        height:40,
-        padding:10
-
-    },
-    formIconViewPass:{
-        position:'absolute',
-        marginTop:0,
-        right:0,
-        
-        width:40,
-        height:40,
-        padding:10
-    },
-    formIconHidePass:{
-        position:'absolute',
-        marginTop:0,
-        right:0,
-     
-        width:40,
-        height:40,
-        padding:10
-
-    },
-    errorMessage:{
-        backgroundColor:'#e22134',
-        marginVertical:15,
-        alignItems:'center',
-        padding:10,
-        borderRadius:5,
-        marginBottom:10
-    }    
+    }  
 });
 
 export default ProfilePage;

@@ -32,6 +32,7 @@ class EntryPoint extends React.Component {
           }
         ).start(() => this.spin())
       }
+      
       render () {
         const spin = this.spinValue.interpolate({
           inputRange: [0, 1],
@@ -39,23 +40,21 @@ class EntryPoint extends React.Component {
         })
         return (
           <View style={[styles.container,{ alignItems:'stretch'}]}>
-              <LinearGradient colors={['#009EEE', '#98D2FF']}
-                                      style={[{ flex:1,justifyContent:'center'},this.state._boxStyle]}>
-                                      
+                                     
             
             <View style={{flex:1,alignItems:'center'}}>
             <Image
               style={{
                marginTop:200,   
-                width: 96,
-                height: 96,
+                width: 100,
+                height: 81,
                   }}
                 source={require('../../assets/logo.png')}
             />
                 <NavigationEvents onWillFocus={payload => this.refreshData()} />
-                <Text style={{flex:1,textAlign:'center',color:'#fff'}}>{this.state.text}</Text>
+                <Text style={{flex:1,textAlign:'center',color:'#240E6F',fontWeight:'bold'}}>{this.state.text}</Text>
             </View>  
-            </LinearGradient>
+            
           </View>
         )
     }
@@ -88,7 +87,7 @@ class EntryPoint extends React.Component {
             }
             setTimeout(()=>{ 
                 this.props.navigation.navigate(gotopage);
-            },3000);
+            },6000);
            
             this.setState({text:text});
         });
@@ -98,12 +97,13 @@ class EntryPoint extends React.Component {
 }
 const styles = StyleSheet.create({
     container:{
-        paddingTop:Constants.statusBarHeight,
-        // paddingVertical:50,
+      
+        paddingVertical:50,
+        marginTop: Constants.statusBarHeight,
         flex:1,
         justifyContent:'center',
         alignItems:"center",
-        backgroundColor:'red'
+        backgroundColor:'#fff'
     }
 });
 
