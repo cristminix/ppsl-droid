@@ -342,7 +342,7 @@ class ChangePasswdPage extends React.Component {
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
                 
-                <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} />
+                <Spinner visible={this.state.spinner} textContent={''} textStyle={styles.spinnerTextStyle} />
                 <NavigationEvents onWillFocus={payload => this.onRefresh()} />
                 <View>
                 <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} style={[{paddingVertical:20},styles.headerGradient]}>
@@ -443,19 +443,19 @@ class ChangePasswdPage extends React.Component {
                             <Text style={{color:'#fff',marginBottom:-10}}>{this.state.formErrorMsg}</Text>
                        </View>
                         </View>
-                        
-                    </ScrollView>
                     <View style={[{flex:1,flexDirection:'column-reverse',paddingHorizontal:5,paddingVertical:10,marginBottom:10},{display:this.state.changePasswordSucces?'none':'flex'}]}>
                         <TouchableHighlight underlayColor='transparent' onPress={()=>{ this.formSubmit() }} >
                             <View>
                                 <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} 
-                                    style={{flex:1,alignItems:'center',padding:20,borderRadius:10}}>
-                                    <Text style={[{marginTop:-10},styles.btnActionText]}>Ubah Kata Sandi</Text>
+                                    style={{flex:1,alignItems:'center',padding:12,borderRadius:50}}>
+                                    <Text style={[{marginTop:0},styles.btnActionText]}>Ubah Kata Sandi</Text>
 
                                 </LinearGradient>    
                             </View>
                         </TouchableHighlight>
-                    </View>
+                    </View>    
+                    </ScrollView>
+                    
                     </SafeAreaView>
 
                     </KeyboardAvoidingView>    

@@ -12,25 +12,22 @@ class ProfilePage extends React.Component {
     };
     state = {
         spinner:false,
-        photoUrl:'../../assets/logo.png',
+        photoUrl:'https://ppsl.perumdamtkr.com/themes/metronic/assets/pages/media/profile/profile_user.png',
         nomorHP:'',
         email:'',
         displayName:''
     };
 
     refreshData = ()=>{
-        AsyncStorage.getItem('full_profile', (error, result) => {
-            if (result) {
-                let full_profile = JSON.parse(result);
-                // console.log(full_profile)
-                this.setState({
-                    photoUrl : full_profile.thumb,
-                    displayName: full_profile.account.nama_lengkap,
-                    email: full_profile.am.email,
-                    nomorHP: full_profile.am.no_hp
-                });
-            }
-        });
+        
+        Session.userData('profile',(profile)=>{
+            this.setState({
+                photoUrl : profile.photo_thumb_url,
+                displayName: profile.nama_lengkap,
+                email: profile.email,
+                nomorHP: profile.nomor_hp
+            });
+        },(error)=>{});
     };
     onRefresh = ()=>{
         // this.setState({refreshing:true})
@@ -39,8 +36,9 @@ class ProfilePage extends React.Component {
     }
 
     logout(){
-        Session.unsetUserData('account');
-        Session.unsetUserData('full_profile');
+        Session.setUserData('account',null);
+        Session.setUserData('profile',null);
+        Session.setUserData('statistic',null);
 
         setTimeout(()=>{
             this.props.navigation.navigate('LoginPage');
@@ -50,11 +48,11 @@ class ProfilePage extends React.Component {
         const { navigation } = this.props;
 
         return (
-            <KeyboardAvoidingView style={styles.wrapper} behavior='padding'>
+            <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
                     <View >
                         <NavigationEvents onWillFocus={payload => this.refreshData()} />
                     </View>
-                    <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} /> 
+                    <Spinner visible={this.state.spinner} textContent={''} textStyle={styles.spinnerTextStyle} /> 
 
                     <View style={[styles.header]}>
                         <Text style={{fontWeight:'bold',fontSize:20,marginBottom:10}}>Profil</Text>
@@ -109,15 +107,15 @@ class ProfilePage extends React.Component {
                                 <Text style={{paddingHorizontal:20,color:'#8C8C98',fontSize:12}}> Version 1.0</Text>
                         </View>
                         
-                        
-                    </ScrollView>
                     <View style={{flexDirection:'column-reverse',backgroundColor:'#fff'}}>
                     <TouchableHighlight underlayColor='transparent' style={[{margin:20},styles.btnLogout]} onPress={()=>{this.logout()}} >
                             <View>
                                 <Text style={{color:'#fff',fontSize:14,fontWeight:'bold'}}>Keluar</Text>
                             </View>
                         </TouchableHighlight>
-                    </View>
+                    </View>    
+                    </ScrollView>
+                    
                     </SafeAreaView>
                     <BottomNavigation activeMenu="ProfilePage" navigation={navigation}/>
                     

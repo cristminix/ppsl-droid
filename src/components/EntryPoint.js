@@ -87,7 +87,7 @@ class EntryPoint extends React.Component {
             }
             setTimeout(()=>{ 
                 this.props.navigation.navigate(gotopage);
-            },6000);
+            },1000);
            
             this.setState({text:text});
         });
@@ -98,7 +98,7 @@ class EntryPoint extends React.Component {
 const styles = StyleSheet.create({
     container:{
       
-        paddingVertical:50,
+       
         marginTop: Constants.statusBarHeight,
         flex:1,
         justifyContent:'center',

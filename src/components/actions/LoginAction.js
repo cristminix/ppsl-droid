@@ -177,6 +177,7 @@ class LoginAction extends React.Component{
         this.setState({spinner:true});
 
         Store.LoginService.getLogin(this.state.email, this.state.password, (res) => {
+            console.log(res)
             if(res.data !== null){
                 Session.setUserData('account', res.data);
                 this.setState({ account : res.data });

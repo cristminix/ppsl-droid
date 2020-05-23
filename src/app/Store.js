@@ -18,14 +18,14 @@ Store = {
 		}
 	},
 	LoginService : {
-		getFullProfile : (id_user, success, error) => {
-			let url  = `${Config.api_endpoint}loginService/getFullProfile/${id_user}`;
+		getProfile : (id_user, success, error) => {
+			let url  = `${Config.api_endpoint}loginService/getProfile/${id_user}`;
 			let data = {user_id:id_user};
 
 			Proxy.post(url,data,success,error);
 		},
 		getLogin : (username, password, success, error) => {
-			let url = `${Config.api_endpoint}/loginService`;
+			let url = `${Config.api_endpoint}loginService`;
 
 			let data = {
 	            username : username,
@@ -47,10 +47,9 @@ Store = {
 			
 			Proxy.post(url,data,success,error);
 		},
-
-		changeProfile : (user_id,nama_lengkap, nomor_hp, email, foto, success, error) =>{
+		changeProfile : (group_id,user_id,nama_lengkap, nomor_hp, email, foto, success, error) =>{
 			let url  = `${Config.api_endpoint}loginService/changeProfile`;
-			let data = {user_id:user_id,nama:nama_lengkap,nomor_hp:nomor_hp,email:email,foto:foto};
+			let data = {group_id:group_id,user_id:user_id,nama_lengkap:nama_lengkap,nomor_hp:nomor_hp,email:email,foto:foto};
 			console.log(data);
 			Proxy.post(url,data,success,error);
 		}

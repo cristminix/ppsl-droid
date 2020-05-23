@@ -31,7 +31,7 @@ class DashboardAction extends React.Component{
             pelanggan : 0,
             batal : 0,
             
-            photoUrl : '../../assets/logo.png',
+            photoUrl : 'https://ppsl.perumdamtkr.com/themes/metronic/assets/pages/media/profile/profile_user.png',
             refreshing : false,
             
             // Select Date
@@ -106,19 +106,23 @@ class DashboardAction extends React.Component{
     initStatistic = (user_id) =>{
         this.setState({spinner:true});
 
-        Store.LoginService.getFullProfile(user_id,(res)=>{
-            this.setState({
-                prospek : res.data.am.prospek,
-                survey : res.data.am.survey,
-                pelanggan : res.data.am.pelanggan,
-                batal : res.data.am.batal,
-                photoUrl :res.data.thumb,
+        Store.LoginService.getProfile(user_id,(res)=>{
+            let statistic = res.data.statistic;
+            let profile = res.data.profile;
 
-                user_email : res.data.am.email == 'n/a' ? res.data.am.nip_nik : res.data.email
+            this.setState({
+                prospek : statistic.prospek,
+                survey : statistic.survey,
+                pelanggan : statistic.pelanggan,
+                batal : statistic.batal,
+
+                photoUrl :profile.photo_thumb_url,
+                user_email : profile.email == '' ? profile.nip_nik : profile.email
             });
 
-            Session.setUserData('full_profile',res.data);
-            
+            Session.setUserData('profile',profile);
+            Session.setUserData('statistic',statistic);
+            Config.DashboardPage.mustUpdateProfile = false;
             this.setState({ spinner:false });
         },(error)=>{
             this.setState({ spinner:false });       
@@ -127,46 +131,52 @@ class DashboardAction extends React.Component{
     getStatisticData = (user_id,statisticOnly)=>{
 
         if(!statisticOnly){
-            Session.userData('full_profile',(data)=>{
-                try{
-                    this.setState({
-                        prospek : data.am.prospek,
-                        survey : data.am.survey,
-                        pelanggan : data.am.pelanggan,
-                        batal : data.am.batal,
-                        photoUrl : data.thumb,
+            Session.userData('profile',(profile)=>{
+              
 
-                        user_email : data.am.email == 'n/a' ? data.am.nip_nik : data.email
-                    });
-                }catch(e){
-                    console.log(e);
+                if(profile == null){
                     this.initStatistic(user_id);
+                }else{
+                    this.setState({
+                        photoUrl :profile.photo_thumb_url,
+                        user_email : profile.email == '' ? profile.nip_nik : profile.email
+                    });
+                    Session.userData('statistic',(statistic)=>{
+                        this.setState({
+                            prospek : statistic.prospek,
+                            survey : statistic.survey,
+                            pelanggan : statistic.pelanggan,
+                            batal : statistic.batal,
+                        });   
+                    },(error) => {});
                 }
-                
+            },(error) => {});
 
-                    
-            },(error) => {
-
-                this.initStatistic(user_id);
-            });
             
+
         }else{
-            let start_date = this.state.start_date_text;
-            let end_date = this.state.end_date_text;
-            this.setState({spinner:true});
-            Store.Pelanggan.getStatisticData(user_id, start_date, end_date,(res)=>{
-                let statistic = res.data.statistic;
-                this.setState({
-                    prospek : statistic.prospek,
-                    survey : statistic.survey,
-                    pelanggan : statistic.pelanggan,
-                    batal : statistic.batal,
+            if(Config.DashboardPage.mustUpdateProfile){
+                this.initStatistic(user_id);
+           }else{
+                            
+                       
+                let start_date = this.state.start_date_text;
+                let end_date = this.state.end_date_text;
+                this.setState({spinner:true});
+                Store.Pelanggan.getStatisticData(user_id, start_date, end_date,(res)=>{
+                    let statistic = res.data.statistic;
+                    this.setState({
+                        prospek : statistic.prospek,
+                        survey : statistic.survey,
+                        pelanggan : statistic.pelanggan,
+                        batal : statistic.batal,
+                    });
+                     
+                    this.setState({ spinner:false });
+                },(error)=>{
+                    this.setState({ spinner:false });       
                 });
-                console.log(res)
-                this.setState({ spinner:false });
-            },(error)=>{
-                this.setState({ spinner:false });       
-            });
+            }
         }
         
 
@@ -189,7 +199,12 @@ class DashboardAction extends React.Component{
                             start_date_text : res.data.min_date,
                             end_date_text : res.data.max_date,
                         });
-                        this.getStatisticData(account.user_id,false);
+                        if(Config.DashboardPage.mustUpdateProfile){
+                            this.initStatistic(account.user_id);
+                        }else{
+                            this.getStatisticData(account.user_id, false);
+                        }
+                        
                     }
                 });
             }

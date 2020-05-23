@@ -16,7 +16,7 @@ class LoginPage extends LoginAction{
         };
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
-                <Spinner visible={this.state.spinner} textContent={'Memuat data ...'} textStyle={styles.spinnerTextStyle} /> 
+                <Spinner visible={this.state.spinner} textContent={''} textStyle={styles.spinnerTextStyle} /> 
                 <View style={styles.header}>
                         <View style={{alignItems:'center'}}>
                             <Image style={styles.logo} source={icons.logo}/>
@@ -127,12 +127,12 @@ const styles = StyleSheet.create({
         marginTop:-10,
     },
     logo:{
-        width:200,height:200,
+        width:100,height:100,
         resizeMode:'contain',
         marginTop:10
     },
     content:{
-        flex:1,
+        flex:2,
         backgroundColor:'white',
         borderTopLeftRadius:25,
         borderTopRightRadius: 25,

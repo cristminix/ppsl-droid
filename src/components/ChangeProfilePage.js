@@ -56,16 +56,16 @@ class ChangeProfilePage extends React.Component {
         formErrorMsgStyle: {display:'none'},
     };
     refreshData = ()=>{
-        Session.getFullProfile((full_profile)=>{
-            console.log(full_profile);
+        Session.getProfile((profile)=>{
+            console.log(profile);
             this.setState({
-                photoUrl : full_profile.thumb,
-                nama_lengkap: full_profile.account.nama_lengkap,
-                email: full_profile.am.email=='n/a'?'':full_profile.am.email,
-                nomor_hp: full_profile.am.no_hp,
+                photoUrl : profile.photo_thumb_url,
+                nama_lengkap: profile.nama_lengkap,
+                email: profile.email,
+                nomor_hp: profile.nomor_hp,
 
             });
-            if(full_profile.account.rules === 'pegawai'){
+            if(profile.group_id == '2'){
                 this.setState({
                     _inputNamaLengkapDisabled : true,
                     _disableChangePhoto: true
@@ -151,7 +151,7 @@ class ChangeProfilePage extends React.Component {
         this._validateInput();
     };
     _validateInput = ()=>{
-        if(this.state.nama_lengkap.length >= 0 && this.state.nomor_hp.length>= 0 && this.state.email.length > 0){
+        if(this.state.nama_lengkap.length >= 0 || this.state.nomor_hp.length>= 0 || this.state.email.length > 0){
             this.setState({_btSimpanDisabled:false});
         }else{
             this.setState({_btSimpanDisabled:true});
@@ -163,13 +163,26 @@ class ChangeProfilePage extends React.Component {
     formSubmit = ()=>{
         this.setState({spinner:true});
         Session.userData('account',(account)=>{
-            Store.LoginService.changeProfile(account.user_id,this.state.nama_lengkap,this.state.nomor_hp, this.state.email, this.state.foto,(res)=>{
+            let nama_lengkap = this.state.nama_lengkap.length > 0 ? this.state.nama_lengkap: account.nama_lengkap;
+            Store.LoginService.changeProfile(account.group_id,account.user_id,nama_lengkap,this.state.nomor_hp, this.state.email, this.state.foto,(res)=>{
                 console.log(res)
                 if(res.data.success){
                     this.setState({
                         changeProfileSucces: true
-                        
                     });
+
+                    //update profile
+                    let updated_profil = res.data.data;
+                    Session.userData('profile',(profile)=>{
+                        if(profile != null){
+                            profile.email = updated_profil.email;
+                            profile.nomor_hp = updated_profil.nomor_hp;
+                            profile.email = updated_profil.email;
+
+                            Session.setUserData('profile',profile);
+                        }
+                    },(err)=>{});
+
                 }else{
                     this.setState({
                         changeProfileSucces : false,
@@ -198,7 +211,7 @@ class ChangeProfilePage extends React.Component {
                 <View >
                     <NavigationEvents onWillFocus={payload => this.onRefresh()} />
                 </View>
-                <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} /> 
+                <Spinner visible={this.state.spinner} textContent={''} textStyle={styles.spinnerTextStyle} /> 
 
                 <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} style={[{paddingVertical:20},styles.headerGradient]}>
 
@@ -288,18 +301,19 @@ class ChangeProfilePage extends React.Component {
                             </View>
                              
                         </View>
-                    </ScrollView>
-                    <View style={[{flex:1,flexDirection:'column-reverse',paddingHorizontal:5,paddingVertical:10,marginBottom:10},{display:this.state.changePasswordSucces?'none':'flex'}]}>
+                        <View style={[{flex:1,flexDirection:'column-reverse',paddingHorizontal:5,paddingVertical:10,marginBottom:10},{display:this.state.changePasswordSucces?'none':'flex'}]}>
                         <TouchableHighlight disabled={this.state._btSimpanDisabled} underlayColor='transparent' onPress={()=>{ this.formSubmit() }} >
                             <View>
                                 <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} 
-                                    style={{flex:1,alignItems:'center',padding:20,borderRadius:10}}>
-                                    <Text style={[{marginTop:-10},styles.btnActionText]}>Simpan</Text>
+                                    style={{flex:1,alignItems:'center',padding:12,borderRadius:50}}>
+                                    <Text style={[{marginTop:0},styles.btnActionText]}>Simpan</Text>
 
                                 </LinearGradient>    
                             </View>
                         </TouchableHighlight>
                     </View>
+                    </ScrollView>
+                    
                 </SafeAreaView>
             </KeyboardAvoidingView>    
         );
