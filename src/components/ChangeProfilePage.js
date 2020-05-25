@@ -1,6 +1,8 @@
 import React from 'react';
 import { AsyncStorage, View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import { LinearGradient } from 'expo-linear-gradient';
@@ -59,11 +61,12 @@ class ChangeProfilePage extends React.Component {
         Session.getProfile((profile)=>{
             console.log(profile);
             this.setState({
+                foto: null,
                 photoUrl : profile.photo_thumb_url,
                 nama_lengkap: profile.nama_lengkap,
                 email: profile.email,
                 nomor_hp: profile.nomor_hp,
-
+                formErrorMsgStyle:{display:'none'}
             });
             if(profile.group_id == '2'){
                 this.setState({
@@ -157,11 +160,30 @@ class ChangeProfilePage extends React.Component {
             this.setState({_btSimpanDisabled:true});
         }
     };
+
+    _pickImageFoto = async () => {
+        try {
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1,
+            });
+            if (!result.cancelled) {
+                this.setState({ foto: result.uri });
+                this.setState({ photoUrl: result.uri });
+            }
+            console.log(result);
+        } catch (E) {
+            console.log(E);
+        }
+    };
     onRefresh = ()=>{
         this.refreshData();
     };
     formSubmit = ()=>{
-        this.setState({spinner:true});
+
+        this.setState({spinner:true, formErrorMsgStyle:{display:'none'}});
         Session.userData('account',(account)=>{
             let nama_lengkap = this.state.nama_lengkap.length > 0 ? this.state.nama_lengkap: account.nama_lengkap;
             Store.LoginService.changeProfile(account.group_id,account.user_id,nama_lengkap,this.state.nomor_hp, this.state.email, this.state.foto,(res)=>{
@@ -178,8 +200,12 @@ class ChangeProfilePage extends React.Component {
                             profile.email = updated_profil.email;
                             profile.nomor_hp = updated_profil.nomor_hp;
                             profile.email = updated_profil.email;
-
+                            profile.photo_thumb_url = updated_profil.photo_thumb_url;
+                            profile.nama_lengkap = updated_profil.nama_lengkap;
                             Session.setUserData('profile',profile);
+                            setTimeout(()=>{
+                                this.props.navigation.navigate('ProfilePage');
+                            },500);
                         }
                     },(err)=>{});
 
@@ -227,10 +253,10 @@ class ChangeProfilePage extends React.Component {
                
                 <View style={{alignItems:"center",backgroundColor:'#fff'}}>
                     <View style={{paddingHorizontal:10,paddingVertical:20}}>
-                        <TouchableHighlight underlayColor='transparent'  onPress={()=>{this.changePhoto()}} >
+                        <TouchableHighlight underlayColor='transparent'  onPress={()=>{this._pickImageFoto()}} >
                             <Image style={{width:100,height:100,borderRadius:90}} source={ {uri: this.state.photoUrl }}/>
                         </TouchableHighlight>
-                        <TouchableHighlight underlayColor='transparent'  onPress={()=>{this.changePhoto()}} style={{position:'absolute',marginTop:100,marginLeft:80,backgroundColor:'#fff',padding:5,alignItems:'center',borderRadius:10,opacity:this.state._disableChangePhoto?0:1}}>
+                        <TouchableHighlight underlayColor='transparent'  onPress={()=>{this._pickImageFoto()}} style={{position:'absolute',marginTop:100,marginLeft:80,backgroundColor:'#fff',padding:5,alignItems:'center',borderRadius:10,opacity:this.state._disableChangePhoto?0:1}}>
                             <Image style={{width:12,height:12,borderRadius:5}} source={require('../../assets/icon/icon-pencil-blue.png')}/>
                         </TouchableHighlight>
                     </View>

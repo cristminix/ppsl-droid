@@ -1,7 +1,7 @@
 import Config from './Config';
 import axios from 'axios';
 Proxy={
-	post : (url,postData,cbSuccess,cbError) => {
+	post : (url,postData,cbSuccess,cbErro,optArgs) => {
 		var formData = new FormData();
 
 		for(let key in postData){
@@ -10,6 +10,16 @@ Proxy={
 		if(Config.debug){
 			console.log(`NET,POST:${url}\n`);		
 		}
+        try{
+            if(typeof optArgs === 'object'){
+                for(n in optArgs){
+                    let f = optArgs[n];
+                    formData.append(n,f);
+                }
+            }
+        }catch(e){
+            console.log(e);
+        }
 		axios({
             method:'post',
             url: url,

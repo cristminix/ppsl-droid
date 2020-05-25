@@ -51,7 +51,19 @@ Store = {
 			let url  = `${Config.api_endpoint}loginService/changeProfile`;
 			let data = {group_id:group_id,user_id:user_id,nama_lengkap:nama_lengkap,nomor_hp:nomor_hp,email:email,foto:foto};
 			console.log(data);
-			Proxy.post(url,data,success,error);
+			let optArgs = null;
+			if(foto != null){
+				let localUri = foto;
+				let filename = localUri.split('/').pop();
+
+				let match = /\.(\w+)$/.exec(filename);
+				let type = match ? `image/${match[1]}` : `image`;
+				let fotoObj = { uri: localUri, name: filename, type };
+				optArgs = {
+					foto : fotoObj
+				}
+			}
+			Proxy.post(url,data,success,error,optArgs);
 		}
 	}
 };

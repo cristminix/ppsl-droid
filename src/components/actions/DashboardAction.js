@@ -84,7 +84,7 @@ class DashboardAction extends React.Component{
         
         setTimeout(()=>{
             this.refreshData();
-        },100);
+        },1000);
     };
 
    
@@ -115,7 +115,8 @@ class DashboardAction extends React.Component{
                 survey : statistic.survey,
                 pelanggan : statistic.pelanggan,
                 batal : statistic.batal,
-
+                        
+                user_display_name : profile.nama_lengkap,
                 photoUrl :profile.photo_thumb_url,
                 user_email : profile.email == '' ? profile.nip_nik : profile.email
             });
@@ -138,6 +139,7 @@ class DashboardAction extends React.Component{
                     this.initStatistic(user_id);
                 }else{
                     this.setState({
+                        user_display_name : profile.nama_lengkap,
                         photoUrl :profile.photo_thumb_url,
                         user_email : profile.email == '' ? profile.nip_nik : profile.email
                     });
@@ -158,8 +160,17 @@ class DashboardAction extends React.Component{
             if(Config.DashboardPage.mustUpdateProfile){
                 this.initStatistic(user_id);
            }else{
-                            
-                       
+                Session.userData('profile',(profile)=>{
+              
+
+                if(profile !=  null){
+                 
+                    this.setState({
+                        user_display_name : profile.nama_lengkap,
+                        photoUrl :profile.photo_thumb_url,
+                        user_email : profile.email == '' ? profile.nip_nik : profile.email
+                    });            
+                } });      
                 let start_date = this.state.start_date_text;
                 let end_date = this.state.end_date_text;
                 this.setState({spinner:true});
