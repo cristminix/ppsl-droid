@@ -1,504 +1,70 @@
 import React from 'react';
 import { View,StyleSheet, Text, Image, TouchableHighlight, Button,TextInput, KeyboardAvoidingView,SafeAreaView,Dimensions ,ScrollView } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
-// import ImagePicker from 'react-native-image-picker';
-
-// import LoginPage from './LoginPage';
-// import LinearGradient from 'react-native-linear-gradient';
 import Spinner from 'react-native-loading-spinner-overlay';
-
-class RegisterPage extends React.Component {
-    goBack=()=>{
-        this.props.navigation.navigate('LoginPage');
-    };
-    state = {
-        _btRegisterDisabled:true,
-        image_ktp: null,
-        image_ktp_selfie:null,
-        // nik:'',
-        // email:'',
-        // password:'',
-        // no_hp:'',
-        // repeat_password:'',
-        // foto_ktp: '',
-        // foto_ktp_selfi:'',
-        nik:'080912123',
-        email:'ajalindain@gmail.com',
-        password:'1234',
-        no_hp:'0809789432',
-        repeat_password:'1234',
-        foto_ktp: '',
-        foto_ktp_selfi:'',
-
-        _default_lbl_style: {},
-        _gry_lbl_style: {color:'#8F8EA0'},
-        _nik_underlineColor : '#EFEFEF',
-        _nik_placeHolderText : 'NIK',
-        _nik_lbl_style : {display:'none'},
-
-        _no_hp_underlineColor : '#EFEFEF',
-        _no_hp_placeHolderText : 'Nomor HP',
-        _no_hp_lbl_style : {display:'none'},
-
-        _btLoginDisabled: true,
-        _form_HasError: false,
-        _form_errorMessage: 'form not complete',
-        _form_err_msg_style:{ height: 0, width: 0, opacity: 0},
-
-        _ie_Focused: false,
-        _ip_Focused: false,
-        _ip_Secured: true,
-        _irp_Focused: false,
-        _irp_Secured: true,
-
-
-        _ie_underlineColor  : '#EFEFEF',
-        _ie_placeHolderText : 'Email',
-        _ie_lbl_style: {display:'none'},
-        _ie_clr_btn_style: {height: 0, width: 0, opacity: 0},
-
-        _ip_underlineColor  : '#EFEFEF',
-        _ip_placeHolderText : 'Kata Sandi',
-        _ip_lbl_style: {display:'none'},
-        _ip_shp_o_btn_style: {},
-        _ip_shp_c_btn_style: {height: 0, width: 0, opacity: 0},
-
-        _irp_underlineColor  : '#EFEFEF',
-        _irp_placeHolderText : 'Ulangi Kata Sandi',
-        _irp_lbl_style: {display:'none'},
-        _irp_shp_o_btn_style: {},
-        _irp_shp_c_btn_style: {height: 0, width: 0, opacity: 0}
-        , spinner:false
-    }; 
-    _onInputEmailFocus = () => {
-        this.setState({ 
-            _ie_Focused: true,
-            _ie_underlineColor: '#009EEE',
-            _ie_placeHolderText: '',
-            _ie_lbl_style: {display:'flex',color:'#009EEE',marginTop:4},
-            _ie_clr_btn_style: {marginTop:30}
-        });
-    };
-    _onInputEmailBlur = () => {
-        this.setState({ 
-            _ie_Focused: false,
-            _ie_underlineColor: '#EFEFEF',
-            _ie_placeHolderText : 'Email',
-            _ie_lbl_style: {display:'none'},
-            _ie_clr_btn_style: {height: 0, width: 0, opacity: 0}
-        });
-        this._validateInput();
-    };
-
-    _onInputPasswordFocus = () => {
-       this.setState({ 
-            _ip_Focused: true,
-            _ip_underlineColor: '#009EEE',
-            _ip_placeHolderText: '',
-            _ip_lbl_style: {display:'flex',color:'#009EEE',marginTop:4}
-        });
-
-       if(this.state._ip_Secured){  // jika password hidden
-            this.setState({ 
-                _ip_shp_o_btn_style: {marginTop:30}, // show eye-open
-            });
-       }else{
-            this.setState({ 
-                _ip_shp_c_btn_style: {marginTop:30,padding:10,width:40,height:40}, // show eye-close
-            });
-       }
-    };
-    _onInputRPasswordFocus = () => {
-        this.setState({ 
-             _irp_Focused: true,
-             _irp_underlineColor: '#009EEE',
-             _irp_placeHolderText: '',
-             _irp_lbl_style: {display:'flex',color:'#009EEE',marginTop:4}
-         });
- 
-        if(this.state._irp_Secured){  // jika password hidden
-             this.setState({ 
-                 _irp_shp_o_btn_style: {marginTop:30}, // show eye-open
-             });
-        }else{
-             this.setState({ 
-                 _irp_shp_c_btn_style: {marginTop:30,padding:10,width:40,height:40}, // show eye-close
-             });
-        }
-     };
-    _onInputPasswordBlur = () => {
-       this.setState({ 
-            _ip_Focused: false,
-            _ip_underlineColor: '#EFEFEF',
-            _ip_placeHolderText : 'Password',
-            _ip_lbl_style: {display:'none'},
-            
-        });
-       if(this.state._ip_Secured){  // jika password hidden
-            this.setState({ 
-                _ip_shp_o_btn_style: {marginTop:0}, // show eye-open
-            });
-       }else{
-            this.setState({ 
-                _ip_shp_c_btn_style: {marginTop:0,padding:10,width:40,height:40}, // show eye-close
-            });
-       }
-       this._validateInput();
-
-    };
-    _onInputRPasswordBlur = () => {
-        this.setState({ 
-             _irp_Focused: false,
-             _irp_underlineColor: '#EFEFEF',
-             _irp_placeHolderText : 'Password',
-             _irp_lbl_style: {display:'none'},
-             
-         });
-        if(this.state._irp_Secured){  // jika password hidden
-             this.setState({ 
-                 _irp_shp_o_btn_style: {marginTop:0}, // show eye-open
-             });
-        }else{
-             this.setState({ 
-                 _irp_shp_c_btn_style: {marginTop:0,padding:10,width:40,height:40}, // show eye-close
-             });
-        }
-        this._validateInput();
- 
-     };
-    _ie_clear = () => {
-        this.setState({ email: '' });
-    };
-
-    _ip_viewPass = () => {
-        console.log('please view password');
-        this.setState({ 
-            _ip_Secured : false,
-            _ip_shp_o_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-open btn
-            _ip_shp_c_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 ,padding:10,width:40,height:40}, // show eye-close
-        });
-    };
-
-    _ip_hidePass = () => {
-        console.log('please hide password');
-
-        this.setState({ 
-            _ip_Secured : true ,
-            _ip_shp_c_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-close
-            _ip_shp_o_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 } // show eye-open
-
-
-        });
-    };
-    _irp_viewPass = () => {
-        console.log('please view password');
-        this.setState({ 
-            _irp_Secured : false,
-            _irp_shp_o_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-open btn
-            _irp_shp_c_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 ,padding:10,width:40,height:40}, // show eye-close
-        });
-    };
-
-    _irp_hidePass = () => {
-        console.log('please hide password');
-
-        this.setState({ 
-            _irp_Secured : true ,
-            _irp_shp_c_btn_style: {height: 0, width: 0, opacity: 0}, // hide eye-close
-            _irp_shp_o_btn_style: {marginTop: this.state._ip_Focused ? 30 : 0 } // show eye-open
-
-
-        });
-    };
-
-    _validateInput = ()=>{
-        if(this.state.email.length >= 4 && this.state.password.length>= 4){
-            this.setState({_btLoginDisabled:false});
-        }else{
-            this.setState({_btLoginDisabled:true});
-        }
-    };
-    _onSubmitForm = () => {
-        // console.log('Prosess Submit Form');
-        this._loginError(false);
-        // show spinner
-        this.setState({spinner:true});
-        // 
-        // X-API-KEY = 9c05c647d185d704fa3b5add357dd08777d05b99
-        // X-APP-ID. = ppsl-droid
-        // let config = {};
-        // axios.get(`http://192.168.1.45:8080/ppsl_api/loginService`,{headers: config})
-        //     .then(res => {
-        // const categories = res.data;
-        // console.log(categories);
-        // this.setState({ categories });
-
-        var formData = new FormData();
-        formData.append('email', this.state.email);
-        formData.append('password', this.state.password);
-        formData.append('nik', this.state.nik);
-        formData.append('nomor_hp', this.state.no_hp);
-        formData.append('repeat_password', this.state.repeat_password);
-
-        fetch('https://api-ppsl.perumdamtkr.com/registerService?cmd=default', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json',
-                'X-API-KEY' : '9c05c647d185d704fa3b5add357dd08777d05b99', 
-                'X-APP-ID' : 'ppsl-droid'
-            },
-            "proxy": "http://localhost:8866",
-            body: formData
-
-        })
-        .then(response => 
-            response.json().then((res) => {
-                // console.log(res);
-                if(res.success){
-                    console.log(res.data);
-                    this.goBack();
-                }else{
-                    this._registerError(true,res.msg);
-                }
-
-            this.setState({ spinner:false });
-
-            })
-        )
-        .catch((error) => {
-            console.log(error)
-            this.setState({ spinner:false });
-        })
-        .done();
-    };
-    _loginError = (state) => {
-        if(state){
-            // this.setState({_form_err_msg_style:{display:'flex'}});
-        }else{
-            // this.setState({_form_err_msg_style:{display:'none'}});
-
-        }
-    };
-    _registerError = (stt,msg) => {
-        // console.log(stt,msg)
-        let _state = {_form_err_msg_style:{height: 'auto', width: 'auto',flex:1, opacity: 1}};
-        if(!stt){
-            _state = {_form_err_msg_style:{height: 0, width: 0, opacity: 0}};
-        } 
-        _state._form_errorMessage = msg;
-        this.setState(_state,() => {
-          // put the things you wish to occur after you have set your state.
-          console.log(this.state._form_err_msg_style,this.state._form_errorMessage);
-          // I am guessing your searchFilterFunction requires the updated filter value in state 
-          // so put that here too
-        });
-    };
-
-    _onInputNikFocus = () => {
-        this.setState({ 
-            _nik_Focused: true,
-            _nik_underlineColor: '#009EEE',
-            _nik_placeHolderText: '',
-            _nik_lbl_style: {display:'flex',color:'#009EEE',marginTop:4},
-        });
-    };
-    _onInputNiklBlur = () => {
-        this.setState({ 
-            _nik_Focused: false,
-            _nik_underlineColor: '#EFEFEF',
-            _nik_placeHolderText : 'NIK',
-            _nik_lbl_style: {display:'none'},
-        });
-        this._validateInput();
-    }; 
-    _onInputNoHpFocus = () => {
-        this.setState({ 
-            _no_hp_Focused: true,
-            _no_hp_underlineColor: '#009EEE',
-            _no_hp_placeHolderText: '',
-            _no_hp_lbl_style: {display:'flex',color:'#009EEE',marginTop:4},
-        });
-    };
-    _onInputNoHplBlur = () => {
-        this.setState({ 
-            _no_hp_Focused: false,
-            _no_hp_underlineColor: '#EFEFEF',
-            _no_hp_placeHolderText : 'Nomor HP',
-            _no_hp_lbl_style: {display:'none'},
-        });
-        this._validateInput();
-    };  
-
-doUpload() {
-
-    const files = {
-            filepath: `data:image/png;base64,${this.state.imgBase64}`,
-        };
-    const opts = {
-        url: 'https://central.tipflip.co?apior=MYAPIKEY&tfReqID3031&tfUserID=1&tfImage=',
-        files,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    };
-
-    function upload(opts){
-        var formData = new FormData();
-        formData.append('username', this.state.email);
-        formData.append('password', this.state.password);
-
-        fetch('http://192.168.1.234:8080/ppsl_api/registerService', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json',
-                'X-API-KEY' : '9c05c647d185d704fa3b5add357dd08777d05b99', 
-                'X-APP-ID' : 'ppsl-droid'
-            },
-            body: formData
-        })
-        .then(response => 
-            response.json().then((res) => {
-                if(res.data !== null){
-                    // SAVE LOGIN INFO TO ASYNC STORAGE
-                    console.log(res.data.msg);
-                    // Redirect to home page
-                }else{
-                    // Disalay login error message
-                    this._loginError(true);
-                }
-
-            this.setState({ spinner:false });
-
-            })
-        )
-        .catch((error) => {
-            console.log(error)
-            this.setState({ spinner:false });
-        })
-        .done();
-    }
-    upload(opts, (err, response) => {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        const status = response.status;
-        const responseString = response.data;
-        const json = JSON.parse(responseString);
-        console.log('upload complete with status ' + status);
-    });
-}
-    componentDidMount() {
-    this.getPermissionAsync();
-    this._updateFormView();
-    // this._onSubmitForm();
-  }
-
-  getPermissionAsync = async () => {
-    if (Constants.platform.ios) {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
-      }
-    }
-  };
-
-  _pickImageKtp = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.cancelled) {
-        this.setState({ image_ktp: result.uri });
-      }
-
-      console.log(result);
-    } catch (E) {
-      console.log(E);
-    }
-  };
-_pickImageKtpSelfie = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.cancelled) {
-        this.setState({ image_ktp_selfie: result.uri });
-      }
-
-      console.log(result);
-    } catch (E) {
-      console.log(E);
-    }
-  };
-    _updateFormView = () => {
-        let ok = 0;
-        if(this.state.nik != '' ){
-            this.setState({ _nik_lbl_style: {display:'flex',color:'#8F8EA0'} });
-            ok += 1;
-        }
-        if(this.state.no_hp != '' ){
-            this.setState({ _no_hp_lbl_style: {display:'flex',color:'#8F8EA0'} });
-            ok += 1;
-
-        }
-
-        if(this.state.email != '' ){
-            this.setState({ _ie_lbl_style: {display:'flex',color:'#8F8EA0'} });
-            ok += 1;
-
-        }
-        if(this.state.password != '' ){
-            this.setState({ _ip_lbl_style: {display:'flex',color:'#8F8EA0'} });
-            ok += 1;
-
-        }
-        if(this.state.repeat_password != '' ){
-            this.setState({ _irp_lbl_style: {display:'flex',color:'#8F8EA0'} });
-            ok += 1;
-
-        }
-        if(ok >= 5){
-            this.setState({ _btRegisterDisabled: false });
-
-        }
-    };
+import RegisterAction from './actions/RegisterAction';
+import { NavigationEvents } from '@react-navigation/compat';
+import { LinearGradient } from 'expo-linear-gradient';
+class RegisterPage extends RegisterAction{
+    
 	render(){
+        let icons = {
+            back : require('../../assets/icon/chevron-left.png'),
+            close: require('../../assets/icon/close.png'),
+            eye_close: require('../../assets/icon/eye-close.png') ,
+            eye_open:  require('../../assets/icon/eye-open.png'),
+            check:  require('../../assets/icon/icon-check-green.png')
+
+        };
         let { image_ktp,image_ktp_selfie } = this.state;
 			return (
             <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
-				
-                <Spinner
-          visible={this.state.spinner}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        />
-					<View style={styles.header}>
-                        <View style={{paddingHorizontal:10,paddingVertical:20}}>
-                        <TouchableHighlight onPress={()=>{this.goBack()}} >
-                        <Image style={{width:22}} source={ require('../../assets/icon/chevron-left.png') }/>
-                            
-                        </TouchableHighlight>
+                <View >
+                    <NavigationEvents onWillFocus={payload => this.onRefresh()} />
+                </View>
+                <Spinner visible={this.state.spinner} textContent={''} textStyle={styles.spinnerTextStyle} /> 
+
+                <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} style={[{paddingVertical:20},styles.headerGradient]}>
+
+                    <View style={{paddingHorizontal:10,paddingVertical:0}}>
+                    <TouchableHighlight underlayColor='transparent' onPress={()=>{this.goBack()}} >
+                        <Image style={{width:22}} source={icons.back}/>
+                    </TouchableHighlight>
+                    </View>
+                    <View style={{flex:1,alignItems:'center',paddingVertical:0}}>
+                        <Text style={{color:'#ffffff',fontSize:14,marginLeft:-22,marginTop:-20}}>Registrasi</Text>
+                    </View>
+                </LinearGradient>
+                
+                <SafeAreaView style={styles.content}>
+                    <ScrollView style={{padding:0}}>
+                        <Text style={{fontWeight:'bold',fontSize:16,display:!this.state.registerSuccess?'none':'flex'}}>Registrasi PPSL PERUMDAM TKR</Text>
+                        <Text style={{marginVertical:10,display:!this.state.registerSuccess?'none':'flex'}}>Selamat registrasi berhasil, silahkan periksa email Anda.</Text>
+                        <View style={{ marginVertical:10,flexDirection:'column',display:!this.state.registerSuccess?'none':'flex'}}>
+                        <Text style={{lineHeight:16,marginVertical:10,display:!this.state.registerSuccess?'none':'flex'}}></Text>
                         </View>
-						<View style={{flex:1,textAlign:'left',paddingLeft:120,paddingVertical:20}}>
-                            <Text style={{color:'#ffffff',fontSize:14}}>Registrasi</Text>
-                        </View>
-					</View>
-                    <SafeAreaView style={styles.content}>
-                    <ScrollView style={{padding:20}}>
-					
-                        <Text style={{fontWeight:'bold',fontSize:16}}>Registrasi PPSL PERUMDAM TKR</Text>
-                        <Text style={{marginVertical:10}}>Silahkan isi data dengan benar</Text>
-                        <View style={styles.form}>
+                        
+                        <Text style={{fontWeight:'bold',fontSize:16,display:this.state.registerSuccess?'none':'flex'}}>Registrasi PPSL PERUMDAM TKR</Text>
+                        <Text style={{marginVertical:10,display:this.state.registerSuccess?'none':'flex'}}>Silahkan isi data dengan benar</Text>
+                        <View style={[styles.form,{display:this.state.registerSuccess?'none':'flex'}]}>
+                            <View style={styles.formGroup}>
+                                <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._in_lbl_style]}>Nama Lengkap</Text>
+
+                                <TextInput style={styles.textInput}
+                                editable={!this.state._inputNamaLengkapDisabled}
+                                value={this.state.nama_lengkap}
+                                onChangeText={( nama_lengkap ) => this.setState({ nama_lengkap })}
+                                onKeyPress={this._validateInput}
+                                placeholder={this.state._in_placeHolderText}
+                                onFocus={this._onInputNamaLengkapFocus}
+                                onBlur={this._onInputNamaLengkapBlur}
+                                placeholderTextColor="#8F8EA0"
+                                autoCapitalize = 'none'
+                                underlineColorAndroid={this.state._in_underlineColor} />
+                                <TouchableHighlight onPress={this._in_clear} style={[styles.formIconClose,this.state._in_clr_btn_style]}>
+                                    <Image  source={icons.close} />
+                                </TouchableHighlight>       
+                            </View>
                             <View style={styles.formGroup}>
                                 <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._nik_lbl_style]}>NIK</Text>
                                 <TextInput style={styles.textInput}
@@ -516,8 +82,8 @@ _pickImageKtpSelfie = async () => {
                             <View style={styles.formGroup}>
                                 <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._no_hp_lbl_style]}>Nomor HP</Text>
                                 <TextInput style={styles.textInput}
-                                value={this.state.no_hp}
-                                onChangeText={( no_hp ) => this.setState({ no_hp })}
+                                value={this.state.nomor_hp}
+                                onChangeText={( nomor_hp ) => this.setState({ nomor_hp })}
                                 onKeyPress={this._validateInput}
                                 placeholder={this.state._no_hp_placeHolderText}
                                 onFocus={this._onInputNoHpFocus}
@@ -539,20 +105,17 @@ _pickImageKtpSelfie = async () => {
                             onBlur={this._onInputEmailBlur}
                             placeholderTextColor="#8F8EA0"
                             autoCapitalize = 'none'
-                            underlineColorAndroid={this.state._ie_underlineColor}
-                                />
-                            <TouchableHighlight onPress={this._ie_clear} style={[styles.formIconClose,this.state._ie_clr_btn_style]}>
-                                <Image  source={ require('../../assets/icon/close.png') }
-                                    
-                                />
+                            underlineColorAndroid={this.state._ie_underlineColor} />
+                            <TouchableHighlight underlayColor='transparent'  onPress={this._ie_clear} style={[styles.formIconClose,this.state._ie_clr_btn_style]}>
+                                <Image  source={icons.close} />
                             </TouchableHighlight>       
                         </View>
                         <View style={styles.formGroup}>
                             <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._ip_lbl_style]}>Kata Sandi</Text>
 
                             <TextInput style={styles.textInput}
-                            value={this.state.password}
-                            onChangeText={( password ) => this.setState({ password })}
+                            value={this.state.passwd}
+                            onChangeText={( passwd ) => this.setState({ passwd })}
                             onFocus={this._onInputPasswordFocus}
                             onBlur={this._onInputPasswordBlur}
                             onKeyPress={this._validateInput}
@@ -561,20 +124,20 @@ _pickImageKtpSelfie = async () => {
                             underlineColorAndroid={this.state._ip_underlineColor}
                             secureTextEntry={this.state._ip_Secured}
                                 />
-                            <TouchableHighlight onPress={this._ip_viewPass} style={[styles.formIconViewPass,this.state._ip_shp_o_btn_style]}>
-                                <Image source={ require('../../assets/icon/eye-close.png') }/>
+                            <TouchableHighlight underlayColor='transparent'  onPress={this._ip_viewPass} style={[styles.formIconViewPass,this.state._ip_shp_o_btn_style]}>
+                                <Image source={icons.eye_close}/>
                             </TouchableHighlight>
 
-                            <TouchableHighlight onPress={this._ip_hidePass} style={[styles.formIconClose,this.state._ip_shp_c_btn_style]}>
-                                <Image  source={ require('../../assets/icon/eye-open.png') }/>
+                            <TouchableHighlight underlayColor='transparent'  onPress={this._ip_hidePass} style={[styles.formIconClose,this.state._ip_shp_c_btn_style]}>
+                                <Image  source={icons.eye_open}/>
                             </TouchableHighlight>
                         </View>
                         <View style={styles.formGroup}>
                             <Text style={[styles.defaultText,{paddingTop:5,paddingLeft:5},this.state._irp_lbl_style]}>Ulangi Kata Sandi</Text>
 
                             <TextInput style={styles.textInput}
-                            value={this.state.repeat_password}
-                            onChangeText={( repeat_password ) => this.setState({ repeat_password })}
+                            value={this.state.repeat_passwd}
+                            onChangeText={( repeat_passwd ) => this.setState({ repeat_passwd })}
                             onFocus={this._onInputRPasswordFocus}
                             onBlur={this._onInputRPasswordBlur}
                             onKeyPress={this._validateInput}
@@ -583,12 +146,12 @@ _pickImageKtpSelfie = async () => {
                             underlineColorAndroid={this.state._irp_underlineColor}
                             secureTextEntry={this.state._irp_Secured}
                                 />
-                            <TouchableHighlight onPress={this._irp_viewPass} style={[styles.formIconViewPass,this.state._irp_shp_o_btn_style]}>
-                                <Image source={ require('../../assets/icon/eye-close.png') }/>
+                            <TouchableHighlight underlayColor='transparent'  onPress={this._irp_viewPass} style={[styles.formIconViewPass,this.state._irp_shp_o_btn_style]}>
+                                <Image source={icons.eye_close}/>
                             </TouchableHighlight>
 
-                            <TouchableHighlight onPress={this._irp_hidePass} style={[styles.formIconClose,this.state._irp_shp_c_btn_style]}>
-                                <Image  source={ require('../../assets/icon/eye-open.png') }/>
+                            <TouchableHighlight underlayColor='transparent'  onPress={this._irp_hidePass} style={[styles.formIconClose,this.state._irp_shp_c_btn_style]}>
+                                <Image  source={icons.eye_open}/>
                             </TouchableHighlight>
                         </View>
                         <View style={styles.formGroup}>
@@ -596,7 +159,7 @@ _pickImageKtpSelfie = async () => {
                             <View style={styles.photoUploadWrp}>
                                 {image_ktp && <Image source={{ uri: image_ktp }} style={styles.imagePreview} />}
 
-                                <TouchableHighlight onPress={this._pickImageKtp} style={styles.btnUpload}>
+                                <TouchableHighlight underlayColor='transparent'  onPress={this._pickImageKtp} style={styles.btnUpload}>
                                 <Text style={styles.btnUploadText}>Upload KTP</Text>
                                 </TouchableHighlight>
 
@@ -607,7 +170,7 @@ _pickImageKtpSelfie = async () => {
                             <View style={styles.photoUploadWrp}>
                                 {image_ktp_selfie && <Image source={{ uri: image_ktp_selfie }} style={styles.imagePreview} />}
                                 
-                                <TouchableHighlight onPress={this._pickImageKtpSelfie} style={styles.btnUpload}>
+                                <TouchableHighlight underlayColor='transparent'  onPress={this._pickImageKtpSelfie} style={styles.btnUpload}>
                                 <Text style={styles.btnUploadText}>Upload selfie dengan KTP</Text>
                                 </TouchableHighlight>
 
@@ -619,7 +182,7 @@ _pickImageKtpSelfie = async () => {
                             </View>
                         </View>
                         <View  style={styles.formGroup}>
-                        <TouchableHighlight style={styles.btnRegister} onPress={this._onSubmitForm} disabled={this.state._btRegisterDisabled}>
+                        <TouchableHighlight underlayColor='transparent'  style={styles.btnRegister} onPress={this._onSubmitForm} disabled={false}>
                             <Text style={styles.btnRegisterText}> Registrasi </Text>
                         </TouchableHighlight>
                         </View>

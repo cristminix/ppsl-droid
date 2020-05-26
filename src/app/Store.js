@@ -17,6 +17,31 @@ Store = {
 			Proxy.post(url,data,cb,(error)=>{});
 		}
 	},
+	RegisterService:{
+		doRegister: (nama_lengkap, nik, nomor_hp, email, passwd, repeat_passwd, foto_ktp, foto_ktp_selfi, success, error) =>{
+			let url  = `${Config.api_endpoint}registerService`;
+			let data = {nama_lengkap:nama_lengkap,nik:nik,nomor_hp:nomor_hp,email:email,
+				passwd:passwd,repeat_passwd:repeat_passwd};
+			
+			let optArgs = {};
+			let uploads = [foto_ktp,foto_ktp_selfi];
+			let fields = ['foto_ktp','foto_ktp_selfi'];
+
+			uploads.forEach((field, i) => {
+				if(field != null){
+					let localUri = field;
+					let filename = localUri.split('/').pop();
+
+					let match = /\.(\w+)$/.exec(filename);
+					let type = match ? `image/${match[1]}` : `image`;
+					let fotoObj = { uri: localUri, name: filename, type };
+					optArgs[fields[i]] = fotoObj ;
+				}
+			}); 
+			
+			Proxy.post(url,data,success,error,optArgs); 
+		}
+	},
 	LoginService : {
 		getProfile : (id_user, success, error) => {
 			let url  = `${Config.api_endpoint}loginService/getProfile/${id_user}`;

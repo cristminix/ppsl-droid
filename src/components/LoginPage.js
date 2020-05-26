@@ -90,15 +90,15 @@ class LoginPage extends LoginAction{
                     </View>
                     <View style={styles.info}>
                         <Text style={{textAlign:'center'}}>Belum punya akun ? </Text> 
-                        <TouchableHighlight onPress={this._onRegister} underlayColor='transparent'>
+                        <TouchableHighlight underlayColor='transparent'  onPress={this._onRegister} underlayColor='transparent'>
                             <Text style={styles.anchorBold}>Registrasi</Text>
                         </TouchableHighlight>
                     </View>
                     <View style={styles.help}>
-                    <TouchableHighlight onPress={this._onHelp} underlayColor='transparent'>
+                    <TouchableHighlight underlayColor='transparent'  onPress={this._onHelp} underlayColor='transparent'>
                         <Text style={styles.anchorCenter}>Butuh Bantuan</Text>
                     </TouchableHighlight>
-                    <TouchableHighlight onPress={this._onHelp} underlayColor='transparent'>
+                    <TouchableHighlight underlayColor='transparent'  onPress={this._onHelp} underlayColor='transparent'>
                         <Image style={styles.inlineIcon} source={icons.help}/>
                     </TouchableHighlight>
                     </View>

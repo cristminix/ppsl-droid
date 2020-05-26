@@ -249,7 +249,7 @@ class ChangeProfilePage extends React.Component {
                     <View style={{flex:1,alignItems:'center',paddingVertical:0}}>
                         <Text style={{color:'#ffffff',fontSize:14,marginLeft:-22,marginTop:-20}}>Ubah Profile</Text>
                     </View>
-                    </LinearGradient>
+                </LinearGradient>
                
                 <View style={{alignItems:"center",backgroundColor:'#fff'}}>
                     <View style={{paddingHorizontal:10,paddingVertical:20}}>
