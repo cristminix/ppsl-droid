@@ -3,41 +3,92 @@ import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAv
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
 import BottomNavigation from './BottomNavigation';
-
+import { LinearGradient } from 'expo-linear-gradient';
+import Helper from '../app/Helper';
+import { NavigationEvents } from '@react-navigation/compat';
+import { Dropdown } from 'react-native-material-dropdown';
+ 
 class TransaksiPage extends React.Component {
     goBack=()=>{
         this.props.navigation.navigate('DashboardPage');
     };
     state = {
-        spinner:false
+        spinner:false,
+        ddlSelectedValue:'prospek'
     };
+    onRefresh = () =>{
+
+    }
+    addPelanggan = () =>{
+
+    }
+    setSelectedStateValue = (ddlValue) =>{
+        this.setState({
+            ddlSelectedValue:ddlValue
+        });
+        console.log('ddlValue: ' + ddlValue)
+    }
+    pickDropdown = ()=>{
+
+    }
     render(){
         const { navigation } = this.props;
+        let icons = {
+            back :  require('../../assets/icon/chevron-left.png') ,
+            plus :  require('../../assets/icon/icon-plus-white.png') ,
+            down  :require('../../assets/icon/icon-chevron-down-blue.png')
+        };
+        let statusPelanggan = [{
+            label: 'Prospek',
+            value: 'prospek'
+        }, {
+            label: 'Survey',
+            value: 'survey'
+        }, {
+            label: 'Pelanggan',
+            value: 'pelanggan'
+        },
+            {
+            label: 'Batal',
+            value: 'batal'
+        }];
 
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
-                
-                <Spinner
-          visible={this.state.spinner}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        />
-                    <View style={styles.header}>
-                        <View style={{paddingHorizontal:10,paddingVertical:20}}>
-                        <TouchableHighlight onPress={()=>{this.goBack()}} >
-                        <Image style={{width:22}} source={ require('../../assets/icon/chevron-left.png') }/>
-                            
+                <Spinner visible={this.state.spinner} textContent={''} textStyle={styles.spinnerTextStyle}/>
+                <NavigationEvents onWillFocus={payload => this.onRefresh()} />
+                <View>
+                <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} style={[{paddingVertical:20},styles.headerGradient]}>
+
+                    <View style={{paddingHorizontal:10,paddingVertical:0}}>
+                    <TouchableHighlight underlayColor='transparent' onPress={()=>{this.goBack()}} >
+                        <Image style={{width:22}} source={icons.back}/>
+                    </TouchableHighlight>
+                    </View>
+                    <View style={{flex:1,alignItems:'center',paddingVertical:0}}>
+                        <Text style={{color:'#ffffff',fontSize:14,marginLeft:-22,marginTop:-20}}>Daftar Pelanggan</Text>
+                    </View>
+                    <View style={{paddingHorizontal:10,paddingVertical:0, marginTop:20,position:'absolute',right:10}}>
+                    <TouchableHighlight underlayColor='transparent' onPress={()=>{this.addPelanggan()}} >
+                        <Image style={{width:22}} source={icons.plus}/>
+                    </TouchableHighlight>
+                    </View>
+                    </LinearGradient>
+                </View>
+                    <SafeAreaView style={styles.content}>
+                    <ScrollView style={{padding:10}}>
+                        <View style={{paddingHorizontal:10,paddingVertical:0, top:35,position:'absolute',right:10}}>
+                        <TouchableHighlight underlayColor='transparent' onPress={()=>{this.pickDropdown()}} >
+                            <Image style={{width:22}} source={icons.down}/>
                         </TouchableHighlight>
                         </View>
-                        <View style={{flex:1,textAlign:'left',paddingLeft:120,paddingVertical:20}}>
-                            <Text style={{color:'#ffffff',fontSize:14}}>Transaksi</Text>
-                        </View>
-                    </View>
-                    <SafeAreaView style={styles.content}>
-                    <ScrollView style={{padding:20}}>
-                    
-                        <Text style={{fontWeight:'bold',fontSize:16}}>Transaksi</Text>
-                        <Text style={{marginVertical:10}}>-</Text>
+                        <Dropdown data={statusPelanggan} value={this.state.ddlSelectedValue} style={{color:'#007EFF',fontWeight:'bold',zIndex:1000}}
+                                  fontSize={20} itemColor={'#007EFF'} useNativeDriver={true} 
+                                  containerStyle={{borderWidth:1,borderColor:'#007EFF',borderRadius:10, paddingHorizontal:20, height:70}}
+                                  baseColor={'transparent'}
+                                  itemTextStyle={{color:'red'}}
+                                  onChangeText={(value,index,data)=>this.setSelectedStateValue(value)} />
+                        
                         
                     </ScrollView>
                     </SafeAreaView>
@@ -48,6 +99,7 @@ class TransaksiPage extends React.Component {
     }
 }
 const styles = StyleSheet.create({
+    dd:{borderWidth:1,borderColor:'#007EFF',color:'#007EFF',borderRadius:5,fontSize:20,fontWeight:'bold',paddingLeft:10},
     imagePreview:{
         width:100,
         height:100,
