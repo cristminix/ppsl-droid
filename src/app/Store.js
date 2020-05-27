@@ -3,6 +3,13 @@ import Proxy from './Proxy';
 import Config from './Config';
 
 Store = {
+	Survey:{
+		getData : (id_user, bulan, tahun, cbSuccess,cbError) => {
+			let url  = `${Config.api_endpoint}survey`;
+			let data = {user_id:id_user, bulan: bulan, tahun: tahun};
+			Proxy.post(url,data,cbSuccess,cbError);
+		}
+	},
 	Pelanggan : {
 		getMinMaxDate : (id_user, cb) => {
 			let url  = `${Config.api_endpoint}pelanggan/getMinMaxDate/${id_user}`;

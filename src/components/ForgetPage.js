@@ -29,24 +29,21 @@ class ForgetPage extends React.Component {
         if(this.state.email.length == 0){
             return;
         }
-        let validEmail = Helper.validateEmail(this.state.email);
-        if(!validEmail){
-            this.setState({
-                _form_errorMessage : 'Email tidak valid.',
-                _form_err_msg_style:{ display:'flex'}
-            });
-            return;
-        }
+        this.setState({
+            _form_errorMessage : '',
+            _form_err_msg_style:{ display:'none'}
+        });
         this.setState({spinner:true});
         Store.LoginService.forgetPassword(this.state.email,(res) => {
-
-            if(res.data !== null){
-                console.log(res.data);
+            if(res.success == true){
                 this.setState({email_sent:true});
-
+            }else{
+                this.setState({
+                    _form_errorMessage : res.msg,
+                    _form_err_msg_style:{ display:'flex'}
+                });
             }
-            // console.log(res);
-
+            
             this.setState({spinner:false});
 
         },(error) => {
@@ -88,6 +85,10 @@ class ForgetPage extends React.Component {
     }
     onRefresh(){
         this.setState({email_sent:false});
+        this.setState({
+            _form_errorMessage : '',
+            _form_err_msg_style:{ display:'none'}
+        });
     }
 	render(){
         let icons = {
@@ -96,7 +97,7 @@ class ForgetPage extends React.Component {
         const email_sent = this.state.email_sent;
 		return (
 			<KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}> 
-                <Spinner visible={this.state.spinner} textContent={'Sedang mengirim email...'} textStyle={styles.spinnerTextStyle}/>
+                <Spinner visible={this.state.spinner} textContent={''} textStyle={styles.spinnerTextStyle}/>
                 <NavigationEvents onWillFocus={payload => this.onRefresh()} />
                 <View>
                 <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} style={[{paddingVertical:20},styles.headerGradient]}>

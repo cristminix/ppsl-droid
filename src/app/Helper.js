@@ -1,25 +1,18 @@
 Helper = {
-    validateEmail: function (mail) 
-    {
-        if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
-        {
-            return (true);
-        }
-          return (false);
-    },
+    getDateStr(mysqlDateTimeStr){
+		let dateStrArr = mysqlDateTimeStr.split(' ');
+		return dateStrArr[0];
+	},
     mysqlDate(jsDate){
-    	var year, month, day;
-	    year = String(jsDate.getFullYear());
-	    month = String(jsDate.getMonth() + 1);
-	    if (month.length == 1) {
-	        month = "0" + month;
-	    }
-	    day = String(jsDate.getDate());
-	    if (day.length == 1) {
-	        day = "0" + day;
-	    }
-	    return year + "-" + month + "-" + day;
-    }
+    	return jsDate.toJSON().slice(0, 10);
+	},
+	getCurrentDateStr(){
+		let __dt    = new Date();
+		let __bulan = __dt.getMonth()+1;
+		let __tahun = __dt.getFullYear();
+		let __hari  = __dt.getDay();
+		return `${__tahun}-${__bulan}-${__hari}`;
+	}
 };
 
 export default Helper;
