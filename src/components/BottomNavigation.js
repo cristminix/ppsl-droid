@@ -1,8 +1,12 @@
 import React from 'react';
 import { View,StyleSheet, Text, Image, TouchableHighlight } from 'react-native';
 // import Config from './Config';
+import * as Haptics from 'expo-haptics';
+
+
 
 class BottomNavigation extends React.Component{
+ 
     constructor(props) {
         super(props);
         this.state = {
@@ -32,6 +36,7 @@ class BottomNavigation extends React.Component{
     }
 
     setIcon = (menuName) => {
+        
         return this.props.activeMenu === menuName ? this.state[`icon${menuName}Active`] : this.state[`icon${menuName}`];
     } 
     setNavTextStyle = (menuName) => {
@@ -39,6 +44,7 @@ class BottomNavigation extends React.Component{
         return {color : styleColor};
     }
     navigate = (menuName) => {
+        Haptics.selectionAsync()
         if(this.props.activeMenu !== menuName){
             this.props.navigation.navigate(menuName);
         }
@@ -69,6 +75,26 @@ class BottomNavigation extends React.Component{
     
 }
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        paddingTop: 44,
+        padding: 8
+      },
+      header: {
+        fontSize: 18,
+        fontWeight: "bold",
+        textAlign: "center"
+      },
+      paragraph: {
+        margin: 24,
+        textAlign: "center"
+      },
+      separator: {
+        marginVertical: 8,
+        borderBottomColor: "#737373",
+        borderBottomWidth: StyleSheet.hairlineWidth
+      },
     boxItem:{
         // flex:1,
     },

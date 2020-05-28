@@ -22,6 +22,13 @@ Store = {
 			let data = {user_id:id_user,dt_start:start_date,dt_end:end_date};
 
 			Proxy.post(url,data,cb,(error)=>{});
+		},
+		getList(id_user,statusPel,page,searchQuery,cbSuccess,cbError){
+			let url  = `${Config.api_endpoint}pelanggan/getList/${id_user}`;
+			let data = {user_id:id_user,status_pelanggan:statusPel,search_query:searchQuery,page:page};
+			console.log(data);
+			Proxy.post(url,data,cbSuccess,cbError);
+
 		}
 	},
 	RegisterService:{

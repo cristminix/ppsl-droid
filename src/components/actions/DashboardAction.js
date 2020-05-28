@@ -107,6 +107,7 @@ class DashboardAction extends React.Component{
         this.setState({spinner:true});
 
         Store.LoginService.getProfile(user_id,(res)=>{
+            console.log(res)
             let statistic = res.data.statistic;
             let profile = res.data.profile;
 
@@ -144,12 +145,15 @@ class DashboardAction extends React.Component{
                         user_email : profile.email == '' ? profile.nip_nik : profile.email
                     });
                     Session.userData('statistic',(statistic)=>{
-                        this.setState({
-                            prospek : statistic.prospek,
-                            survey : statistic.survey,
-                            pelanggan : statistic.pelanggan,
-                            batal : statistic.batal,
-                        });   
+                        if(typeof statistic == 'object'){
+                            this.setState({
+                                prospek : statistic.prospek,
+                                survey : statistic.survey,
+                                pelanggan : statistic.pelanggan,
+                                batal : statistic.batal,
+                            });  
+                        }
+                         
                     },(error) => {});
                 }
             },(error) => {});
