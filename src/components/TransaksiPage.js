@@ -6,7 +6,7 @@ import BottomNavigation from './BottomNavigation';
 import { LinearGradient } from 'expo-linear-gradient';
 import Helper from '../app/Helper';
 import { NavigationEvents } from '@react-navigation/compat';
-import { Dropdown } from 'react-native-material-dropdown';
+import { Dropdown } from './my-react-native-material-dropdown';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import Store from '../app/Store';
 
@@ -26,48 +26,32 @@ class TransaksiPage extends React.Component {
             </View>), 
             (<View style={{flexDirection:'row'}}><Text style={{color:'#fff',fontWeight:'bold'}}>Status</Text>
                 <Image style={{width:16,height:16, marginTop:3,marginLeft:20}}  source={require('../../assets/icon/icon-sort-white.png') }/>
-            </View>), 
-            ''
+            </View>)
         ],
         tableData : [],
         page:1,
         statusPelanggan : [
-        {
-            label: 'Prospek',
-            value: 'prospek'
-        }, 
-        {
-            label: 'Survey',
-            value: 'survey'
-        }, 
-        {
-            label: 'Pelanggan',
-            value: 'pelanggan'
-        },
-          
-        {
-            label: 'Batal',
-            value: 'batal'
-        }
+            { label : 'Prospek', value: 'prospek' }, 
+            { label : 'Survey', value: 'survey' }, 
+            { label : 'Pelanggan', value: 'pelanggan' },           
+            { label : 'Batal', value: 'batal' }
+        ],
+        actionLabels : [
+            { label : 'Ubah', value: 'edit' },
+            { label : 'Batal', value: 'cancel' },
+            { label : 'Detail', value: 'detail' }
         ]
-        }
+    }
     createRowData = (row, index)=>{
         return [
             this.TDPelangganEL(row,index),
-            this.StatusPelangganEl(row,index),
-            this.GridActionEl(row,index)
+            this.StatusPelangganEl(row,index) 
         ];
     }
     onRefresh = () =>{
-        this.setState({
-            tableData : [
-                    [`Tidak Ada data`, '',''],
-                   
-                ]
-        });
+        const rowDataEmpty = [`Tidak Ada data`, '' ];
         Session.userData('profile',(profile)=>{
             if(profile !=  null){
-                console.log(profile)
                 Store.Pelanggan.getList(profile.user_id, this.state.selectedStatusPel,this.state.page, this.state.search_query,(res)=>{
                     
                     if(res.success){
@@ -75,6 +59,9 @@ class TransaksiPage extends React.Component {
                         res.data.records.forEach((row,index)=>{
                             tableData.push(this.createRowData(row,index));
                         });
+                        if(res.data.records.length == 0){
+                            tableData.push(rowDataEmpty)
+                        }
                         this.setState({tableData:tableData})
                     }
                 },(error)=>{
@@ -104,9 +91,7 @@ class TransaksiPage extends React.Component {
     _validateInput = () =>{
 
     }
-    _alertIndex(index) {
-        Alert.alert(`This is row ${index + 1}`);
-    }
+   
     TDPelangganEL = (pel,key) => {
         return (
             <View style={styles.tdPelanggan} key={key}>
@@ -119,15 +104,7 @@ class TransaksiPage extends React.Component {
     onRowAction = () => {
 
     }
-    GridActionEl = (pel,key) => {
-        return (
-            <View style={styles.gridAction} key={key}>
-                <TouchableHighlight  onPress={() => { this.onRowAction(pel) }} style={styles.gridBtn}>
-                    <Image style={{width:24,height:24}} source={require('../../assets/icon/icon-tri-dot-gray.png')}/>
-                </TouchableHighlight>
-            </View>
-        )
-    }
+    
     StatusPelangganEl = (pel,key) =>{
         const statusPel=pel.status_pelanggan;
         let statusTextList = {
@@ -139,8 +116,22 @@ class TransaksiPage extends React.Component {
         let containerStyle = `conStt${statusTextList[statusPel]}`;
         let statusTextStyle = `stt${statusTextList[statusPel]}`;
         return (
-            <View style={[styles.bdRadius5,styles.sttBox,styles[containerStyle]]} key={key}>
-                <Text style={[styles[statusTextStyle],styles.whiteText]}>{statusTextList[statusPel]}</Text>
+            <View key={key} style={{flexDirection:'row'}}>
+                <View style={[styles.bdRadius5,styles.sttBox,styles[containerStyle]]}>
+                    <Text style={[styles[statusTextStyle],styles.whiteText]}>{statusTextList[statusPel]}</Text>
+                </View>
+                <View style={styles.gridAction}>
+                    
+                    <Dropdown data={this.state.actionLabels} value={''} 
+                    style={{color:'#007EFF',fontWeight:'bold',zIndex:1000, padding:40}}
+                    fontSize={14} itemColor={'#007EFF'} useNativeDriver={true} 
+                    containerStyle={{ paddingHorizontal:20,height:50}}
+                    baseColor={'#007EFF'} rippleMarginTop={-10} rippleMarginLeft={0} rippleWidth={40} 
+                    inputContainerStyle={{ borderBottomColor: 'transparent' }} 
+                    onChangeText={(value,index,data)=>{ console.log(value,index,data)} } 
+                    triangleImage={require('../../assets/icon/icon-tri-dot-gray.png')}
+                    />
+                </View>
             </View>
         )
     }   
@@ -153,26 +144,7 @@ class TransaksiPage extends React.Component {
             search : require('../../assets/icon/icon-search-white.png'),
             
         };
-        
-        // let tableHead= ['Nama', 'Status', ''];
-        // let tableData= [
-        //     [`Eka Rahamat Hidayat\n3671090304760001\n3671090304760001`, (<Text style={{color:'green'}}>Prospek</Text>), (<Image style={{width:24,height:24}} source={icons.tri_dot}/>)],
-        //     [`Hari Nugraha\nNIK Belum di isi\nKK Belum di isi`, 'Batal', '..'],
-           
-        // ];
-        
-        
-
-
-
-        const element = (data, index) => (
-            <TouchableOpacity onPress={() => this._alertIndex(index)}>
-              <View style={styles.btn}>
-                <Text style={styles.btnText}>button</Text>
-              </View>
-            </TouchableOpacity>
-          );
-        const widthArr=[180];  
+       
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
                 <Spinner visible={this.state.spinner} textContent={''} textStyle={styles.spinnerTextStyle}/>
@@ -194,21 +166,15 @@ class TransaksiPage extends React.Component {
                         </TouchableHighlight>
                     </View>
                     </LinearGradient>
-                </View>
-                    <SafeAreaView style={styles.content}>
-                    <ScrollView style={{padding:0}}>
-                        
-                        <View style={{backgroundColor:'white',padding:20,marginBottom:10}}>
+
+                    <View style={{backgroundColor:'white',padding:20,marginBottom:10}}>
                              
                             <Dropdown data={this.state.statusPelanggan} value={this.state.selectedStatusPel} 
                             style={{color:'#007EFF',fontWeight:'bold',zIndex:1000, padding:40}}
                                     fontSize={14} itemColor={'#007EFF'} useNativeDriver={true} 
                                     containerStyle={{borderWidth:1,borderColor:'#007EFF',borderRadius:10, paddingHorizontal:20,height:50}}
-                                    baseColor={'#007EFF'}
+                                    baseColor={'#007EFF'} rippleMarginTop={-15} rippleMarginLeft={-20} 
                                     inputContainerStyle={{ borderBottomColor: 'transparent' }} 
-                                    // itemTextStyle={{color:'red'}}
-                                    // overlayStyle={{marginTop:10+Constants.statusBarHeight}}
-                                    // dropdownMargins={{min:16,max:Constants.statusBarHeight}}
                                     onChangeText={(value,index,data)=>this.setSelectedStateValue(value)} />
                         </View>
                         
@@ -227,24 +193,27 @@ class TransaksiPage extends React.Component {
                             autoCapitalize = 'none'/>
                                   
                         </View>
-                        <View style={styles.container}>
-                        <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} style={[{marginBottom:-60,height:50,borderTopLeftRadius:10,borderTopRightRadius:10},styles.headerGradient]}/>   
-                        <Table borderStyle={{borderColor: 'transparent'}} >
-                        <Row data={this.state.tableHead} style={styles.head} textStyle={styles.headerText} widthArr={[180,100]}/>
-                        {
-                            this.state.tableData.map((rowData, index) => (
-                            <TableWrapper key={index} style={styles.row} >
-                                {
-                                rowData.map((cellData, cellIndex) => (
-                                    <Cell width={widthArr[cellIndex]} key={cellIndex} data={cellData} textStyle={styles.td}/>
-                                ))
-                                }
-                            </TableWrapper>
-                            ))
-                        }
-                        </Table>
-                        </View>
+                </View>
+                    <SafeAreaView style={styles.content}>
+                    <View style={styles.container}>
+                    <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} style={[{marginBottom:-60,height:50,borderTopLeftRadius:10,borderTopRightRadius:10},styles.headerGradient]}/>   
+                    <Table borderStyle={{borderColor: 'transparent'}} style={{marginBottom:20}}>
+                    <Row data={this.state.tableHead} style={styles.head} textStyle={styles.headerText}/>
+                    </Table>
+                        
+                    <ScrollView style={{padding:0}}>
+                    <Table borderStyle={{borderColor: 'transparent'}}>
+                    {
+                        this.state.tableData.map((rowData, index) => {
+                            return (
+                            <Row data={rowData} style={styles.body} textStyle={styles.bodyText} key={index}/>
+                            )
+                        })
+                    }
+                     </Table>   
                     </ScrollView>
+                    
+                    </View>
                     </SafeAreaView>
                  <BottomNavigation activeMenu="TransaksiPage" navigation={navigation}/>
 
@@ -254,8 +223,8 @@ class TransaksiPage extends React.Component {
 }
 const styles = StyleSheet.create({
     gridBtn:{padding:4,justifyContent:'center',marginLeft:30},
-    sttBox:{padding:4,justifyContent:'center',alignItems:'center'},
-    tdPelanggan:{marginVertical:5},
+    sttBox:{paddingVertical:10,paddingHorizontal:15,justifyContent:'center',alignItems:'center'},
+    tdPelanggan:{marginVertical:10,paddingHorizontal:15},
     btn:{padding:2},
     bdRadius5:{borderRadius:5},
     whiteText:{color:'white',textAlign:'center'},
@@ -268,9 +237,9 @@ const styles = StyleSheet.create({
     conSttSurvey:{backgroundColor:'#FEAA7C'},
     conSttPelanggan:{backgroundColor:'#87E6CD'},
     conSttBatal:{backgroundColor:'#FF7070'},
-    namaPel:{color:'#009EEE',fontWeight:'bold',lineHeight:16},
-    nikPel:{lineHeight:16},
-    kkPel:{lineHeight:16},
+    namaPel:{color:'#009EEE',fontWeight:'bold',lineHeight:16,marginBottom:5},
+    nikPel:{lineHeight:16,marginBottom:5},
+    kkPel:{lineHeight:16,marginBottom:5},
   headerText:{color:'#fff',fontWeight:'bold' },  
    container: { flex: 1, padding: 16, paddingTop: 5, backgroundColor: '#fff' },
   head: { height: 60,paddingHorizontal:15,paddingTop:10},
@@ -286,14 +255,14 @@ const styles = StyleSheet.create({
         height:16,
         position:'absolute',
         marginLeft:40,
-        marginTop:33,
+        marginTop:28,
         zIndex:1
     },
     textInputSearch:{
-        borderRadius:25,
+        borderRadius:20,
         backgroundColor:'#F8F7FC',
         marginVertical:10,
-        padding: 15,
+        padding: 10,
         paddingLeft: 50},
     dd:{borderWidth:1,borderColor:'#007EFF',color:'#007EFF',borderRadius:5,fontSize:20,fontWeight:'bold',paddingLeft:10},
     imagePreview:{
