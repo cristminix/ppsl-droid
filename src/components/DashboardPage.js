@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator,RefreshControl,AsyncStorage,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView,Button} from 'react-native';
+import { ActivityIndicator,RefreshControl,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView,Button} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -8,7 +8,7 @@ import { NavigationEvents } from '@react-navigation/compat';
 import DashboardAction from './actions/DashboardAction';
 import BottomNavigation from './BottomNavigation';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-
+import { Notifications } from 'expo';
 class DashboardPage extends DashboardAction{
     
     render(){

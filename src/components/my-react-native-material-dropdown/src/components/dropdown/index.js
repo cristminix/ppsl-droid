@@ -193,11 +193,11 @@ export default class Dropdown extends PureComponent {
     };
   }
 
-  // componentWillReceiveProps({ value }) {
-  //   if (value !== this.props.value) {
-  //     this.setState({ value });
-  //   }
-  // }
+  UNSAFE_componentWillReceiveProps({ value }) {
+    if (value !== this.props.value) {
+      this.setState({ value });
+    }
+  }
 
   componentDidMount() {
     this.mounted = true;
@@ -575,7 +575,6 @@ export default class Dropdown extends PureComponent {
     if(typeof triangleImage  == 'undefined'){
       triangleImage = require('../../assets/icon/icon-chevron-down-blue.png');
     } 
-    console.log(triangleImage);
     return (
       <View style={styles.accessory}>
         <View style={styles.triangleContainer}>

@@ -1,7 +1,8 @@
 import React from 'react';
-import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView,Button} from 'react-native';
+import { View,StyleSheet} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Notifications } from 'expo';
 import LoginPage from './LoginPage';
 import HelpPage from './HelpPage';
 import ForgetPage from './ForgetPage';

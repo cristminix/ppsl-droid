@@ -12,7 +12,17 @@ Helper = {
 		let __tahun = __dt.getFullYear();
 		let __hari  = __dt.getDay();
 		return `${__tahun}-${__bulan}-${__hari}`;
-	}
+	},
+	delay:function(callback, ms) {
+		var timer = 0;
+		return function() {
+		  var context = this, args = arguments;
+		  clearTimeout(timer);
+		  timer = setTimeout(function () {
+			callback.apply(context, args);
+		  }, ms || 0);
+		};
+	  }
 };
 
 export default Helper;

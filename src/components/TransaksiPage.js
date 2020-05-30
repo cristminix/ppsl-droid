@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView, TouchableOpacity} from 'react-native';
+import { ActivityIndicator,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView, TouchableOpacity} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
 import BottomNavigation from './BottomNavigation';
@@ -15,10 +15,15 @@ class TransaksiPage extends React.Component {
         this.props.navigation.navigate('DashboardPage');
     };
     state = {
-        spinner:false,
+        user_id: null,
+        pager:null,
+        isLoading:false,
+        loadedPage:[],
         selectedStatusPel:'prospek',
         search_query:'',
-        
+        search_typing: false,
+        search_typingTimeout: 0,
+        isLoading: false,
         tableHead :[
             (<View style={{flexDirection:'row'}}>
                 <Text style={{color:'#fff',fontWeight:'bold'}}>Nama</Text>
@@ -38,8 +43,8 @@ class TransaksiPage extends React.Component {
         ],
         actionLabels : [
             { label : 'Ubah', value: 'edit' },
-            { label : 'Batal', value: 'cancel' },
-            { label : 'Detail', value: 'detail' }
+            { label : 'Detail', value: 'detail' },
+            { label : 'Batal', value: 'cancel' }
         ]
     }
     createRowData = (row, index)=>{
@@ -48,25 +53,54 @@ class TransaksiPage extends React.Component {
             this.StatusPelangganEl(row,index) 
         ];
     }
-    onRefresh = () =>{
+    loadGridData = () => {
+        if(this.state.loadedPage.indexOf(this.state.page) !== -1){
+            console.log('dont load page '+ this.state.page);
+            return;
+        }
+        const isLoading = this.state.isLoading;
+        if(isLoading){
+            // dont fetch if there is another fetch
+            console.log('we still load the page ');
+
+            return;
+        }
         const rowDataEmpty = [`Tidak Ada data`, '' ];
+        this.setState({isLoading:true});
+        
+        Store.Pelanggan.getList(this.state.user_id, this.state.selectedStatusPel,this.state.page, this.state.search_query,(res)=>{
+            // console.log(res);
+            if(res.success){
+                
+                const tableData = [...this.state.tableData];
+                const loadedPage = [...this.state.loadedPage];
+
+                res.data.records.forEach((row,index)=>{
+                    tableData.push(this.createRowData(row,index));
+                });
+                if(res.data.records.length == 0){
+                    tableData.push(rowDataEmpty);
+                }
+                loadedPage.push(res.data.pager.page);
+                this.setState({
+                    tableData:tableData,
+                    pager: res.data.pager,
+                    loadedPage: loadedPage
+                });
+            }
+            this.setState({isLoading:false});
+
+        },(error)=>{
+            this.setState({isLoading:false});
+
+        }); 
+    }
+    onRefresh = () =>{
+        
         Session.userData('profile',(profile)=>{
             if(profile !=  null){
-                Store.Pelanggan.getList(profile.user_id, this.state.selectedStatusPel,this.state.page, this.state.search_query,(res)=>{
-                    
-                    if(res.success){
-                        const tableData = [];
-                        res.data.records.forEach((row,index)=>{
-                            tableData.push(this.createRowData(row,index));
-                        });
-                        if(res.data.records.length == 0){
-                            tableData.push(rowDataEmpty)
-                        }
-                        this.setState({tableData:tableData})
-                    }
-                },(error)=>{
-
-                });           
+                this.setState({user_id:profile.user_id});   
+                this.loadGridData();     
             }
         });   
         
@@ -79,14 +113,44 @@ class TransaksiPage extends React.Component {
             selectedStatusPel:ddlValue
         });
         setTimeout(()=>{
+            // reset pager
+            this.setState({
+                page: 1,
+                tableData:[],
+                pager: null,
+                loadedPage:[]
+            });
             this.onRefresh();
         },200)
     }
-    pickDropdown = ()=>{
-
-    }
-    onSearchQuery = () =>{
-
+    onTypingSearchQuery = (e) => {
+    
+        if (this.state.search_typingTimeout) {
+           clearTimeout(this.state.search_typingTimeout);
+        }
+        console.log(e.nativeEvent.key);
+        this.setState({
+           search_typing: false,
+           search_typingTimeout: setTimeout( () => {
+               this.onSearchQuery(true);
+           }, 5000)
+        });
+    } 
+    onSearchQuery = (isClear) =>{
+        if(typeof isClear == 'undefined'){
+            isClear = false;
+        }
+        if(this.state.search_query != '' || isClear === true){
+            this.setState({
+                page: 1,
+                tableData:[],
+                pager: null,
+                loadedPage:[]
+            });
+            setTimeout(()=>{
+                this.loadGridData();
+            },100);
+        }
     }
     _validateInput = () =>{
 
@@ -126,7 +190,7 @@ class TransaksiPage extends React.Component {
                     style={{color:'#007EFF',fontWeight:'bold',zIndex:1000, padding:40}}
                     fontSize={14} itemColor={'#007EFF'} useNativeDriver={true} 
                     containerStyle={{ paddingHorizontal:20,height:50}}
-                    baseColor={'#007EFF'} rippleMarginTop={-10} rippleMarginLeft={0} rippleWidth={40} 
+                    baseColor={'#007EFF'} rippleMarginTop={-10} rippleMarginLeft={0} rippleWidth={40} rippleHeight={40}
                     inputContainerStyle={{ borderBottomColor: 'transparent' }} 
                     onChangeText={(value,index,data)=>{ console.log(value,index,data)} } 
                     triangleImage={require('../../assets/icon/icon-tri-dot-gray.png')}
@@ -134,7 +198,28 @@ class TransaksiPage extends React.Component {
                 </View>
             </View>
         )
-    }   
+    }
+    _onMomentumScrollEnd = (e) => { 
+        const scrollPosition = e.nativeEvent.contentOffset.y;
+        const scrolViewHeight = e.nativeEvent.layoutMeasurement.height;
+        const contentHeight = e.nativeEvent.contentSize.height;
+        const isScrolledToBottom = scrolViewHeight + scrollPosition;
+        // check if scrollView is scrolled to bottom and limit itemToRender to data length
+        // && this.state.itemToRender <= this.state.data.length
+        if (isScrolledToBottom >= (contentHeight-50)  ) {
+            // this.setState({ itemToRender: this.state.itemToRender + 20 })
+            // console.log('load data')
+            const pager = this.state.pager;
+            let page  = this.state.page;
+            if(pager != null){
+                page = pager.nextPage;
+                this.setState({page:page});
+                setTimeout(()=>{
+                    this.loadGridData();
+                },100);
+            }
+        }
+     }  
     render(){
         const { navigation } = this.props;
         let icons = {
@@ -144,7 +229,23 @@ class TransaksiPage extends React.Component {
             search : require('../../assets/icon/icon-search-white.png'),
             
         };
-       
+        let refreshIndicator = (<View/>);
+        let topRefreshIndicator = (<View/>);
+        let bottomRefreshIndicator = (<View/>);
+        if (this.state.isLoading) {
+            refreshIndicator = (
+                
+                <View style={{marginBottom:20 }}>
+                <ActivityIndicator size={'large'}/>
+                </View>
+            );
+        }
+        if(this.state.page == 1){
+            topRefreshIndicator = refreshIndicator;
+        }
+        if(this.state.page > 1){
+            bottomRefreshIndicator = refreshIndicator;
+        }
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
                 <Spinner visible={this.state.spinner} textContent={''} textStyle={styles.spinnerTextStyle}/>
@@ -185,7 +286,7 @@ class TransaksiPage extends React.Component {
                             <TextInput style={styles.textInputSearch}
                             value={this.state.search_query}
                             onChangeText={( search_query ) => this.setState({ search_query })}
-                            onKeyPress={this._validateInput}
+                            onKeyPress={this.onTypingSearchQuery}
                             placeholder={this.state._isearcg_placeHolderText}
                             onFocus={this._onInputSeacrchFocus}
                             onBlur={this._onInputSearchBlur}
@@ -196,12 +297,15 @@ class TransaksiPage extends React.Component {
                 </View>
                     <SafeAreaView style={styles.content}>
                     <View style={styles.container}>
+
                     <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} style={[{marginBottom:-60,height:50,borderTopLeftRadius:10,borderTopRightRadius:10},styles.headerGradient]}/>   
                     <Table borderStyle={{borderColor: 'transparent'}} style={{marginBottom:20}}>
                     <Row data={this.state.tableHead} style={styles.head} textStyle={styles.headerText}/>
                     </Table>
-                        
-                    <ScrollView style={{padding:0}}>
+                    {topRefreshIndicator}    
+                    <ScrollView style={{padding:0}} 
+                    pagingEnabled={true}
+                    onMomentumScrollEnd={this._onMomentumScrollEnd}>
                     <Table borderStyle={{borderColor: 'transparent'}}>
                     {
                         this.state.tableData.map((rowData, index) => {
@@ -211,13 +315,13 @@ class TransaksiPage extends React.Component {
                         })
                     }
                      </Table>   
+                     
                     </ScrollView>
-                    
+                    {bottomRefreshIndicator}    
                     </View>
                     </SafeAreaView>
                  <BottomNavigation activeMenu="TransaksiPage" navigation={navigation}/>
-
-                    </KeyboardAvoidingView>    
+            </KeyboardAvoidingView>    
         );
     }
 }
