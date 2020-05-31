@@ -1,28 +1,29 @@
 import React from 'react';
-import { AsyncStorage,View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
+import {  View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { NavigationEvents } from '@react-navigation/compat';
 import BottomNavigation from './BottomNavigation';
 import Session from '../app/Session';
+import Config from '../app/Config';
 
 class ProfilePage extends React.Component {
     goto=(nav)=>{
         this.props.navigation.navigate(nav,{sourcePage:'ProfilePage'});
     };
     state = {
-        spinner:false,
-        photoUrl:'https://ppsl.perumdamtkr.com/themes/metronic/assets/pages/media/profile/profile_user.png',
-        nomorHP:'',
-        email:'',
-        displayName:''
+        spinner : false,
+        photoUrl : Config.defaultPhotoUrl,
+        nomorHP : '',
+        email : '',
+        displayName :''
     };
 
     refreshData = ()=>{
         
         Session.userData('profile',(profile)=>{
             this.setState({
-                photoUrl : profile.photo_thumb_url,
+                photoUrl : profile.photo_64,
                 displayName: profile.nama_lengkap,
                 email: profile.email,
                 nomorHP: profile.nomor_hp

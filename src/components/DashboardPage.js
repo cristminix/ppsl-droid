@@ -45,7 +45,7 @@ class DashboardPage extends DashboardAction{
                     <Text style={styles.welcomeText}>{'Selamat Datang,'}</Text>
 
                     <TouchableHighlight underlayColor='transparent' style={styles.ppContainer} >
-                        <Image onError={(e) => console.log(e,'image') } style={styles.photoProfile} source={ {uri:this.state.photoUrl }}/>
+                        <Image  style={styles.photoProfile} source={ {uri:this.state.photoUrl }}/>
                     </TouchableHighlight>
 
                     <Text style={styles.displayName}>{this.state.user_display_name}</Text>

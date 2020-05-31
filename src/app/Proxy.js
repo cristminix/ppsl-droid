@@ -1,7 +1,7 @@
 import Config from './Config';
 import axios from 'axios';
 Proxy={
-	post : (url,postData,cbSuccess,cbErro,optArgs) => {
+	post : (url,postData,cbSuccess,cbError,optArgs) => {
 		var formData = new FormData();
 
 		for(let key in postData){
@@ -36,6 +36,7 @@ Proxy={
             cbSuccess(response.data);
         })
         .catch((error) => {
+            cbError(error);
             console.log(error)
             alert(error)
         });

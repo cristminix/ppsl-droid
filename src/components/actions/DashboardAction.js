@@ -1,16 +1,10 @@
 import React from 'react';
-
-import {  AsyncStorage } from 'react-native';
 import Config from '../../app/Config';
 import Store from '../../app/Store';
 import Session from '../../app/Session';
 import Helper from '../../app/Helper';
 
-
 class DashboardAction extends React.Component{
-
-
- 
    state = {
             spinner : false,
 
@@ -31,7 +25,7 @@ class DashboardAction extends React.Component{
             pelanggan : 0,
             batal : 0,
             
-            photoUrl : 'https://ppsl.perumdamtkr.com/themes/metronic/assets/pages/media/profile/profile_user.png',
+            photoUrl : Config.defaultPhotoUrl,
             refreshing : false,
             
             // Select Date
@@ -103,28 +97,51 @@ class DashboardAction extends React.Component{
         this.refreshData();
         console.log('refreshing')
     }
+     updateStatisticDisplay = (statistic) => {
+        this.setState({
+            prospek : statistic.prospek,
+            survey : statistic.survey,
+            pelanggan : statistic.pelanggan,
+            batal : statistic.batal
+        });
+    }
+    initProfileDisplay = (account) => {
+        this.setState({
+            user_email : account.email == '0' ? '' : account.email,
+            user_display_name : account.nama_lengkap
+        });
+    }
+    updateFilterDateRange = (start_date, end_date) => {
+        this.setState({
+            start_date_text : start_date,
+            end_date_text : end_date
+        });
+    }
+    updateProfileDisplay = (profile) => {
+        console.log(profile);
+
+        const email_or_nip_nik = profile.email == '' ? profile.nip_nik : profile.email;
+        this.setState({ 
+            user_display_name : profile.nama_lengkap,
+            photoUrl :profile.photo_64,
+            user_email : email_or_nip_nik
+        });
+    }
     initStatistic = (user_id) =>{
         this.setState({spinner:true});
 
         Store.LoginService.getProfile(user_id,(res)=>{
-            console.log(res)
-            let statistic = res.data.statistic;
-            let profile = res.data.profile;
+            const statistic = res.data.statistic;
+            const profile = res.data.profile;
 
-            this.setState({
-                prospek : statistic.prospek,
-                survey : statistic.survey,
-                pelanggan : statistic.pelanggan,
-                batal : statistic.batal,
-                        
-                user_display_name : profile.nama_lengkap,
-                photoUrl :profile.photo_thumb_url,
-                user_email : profile.email == '' ? profile.nip_nik : profile.email
-            });
-
+            this.updateStatisticDisplay(statistic);
+            this.updateProfileDisplay(profile);
+             
             Session.setUserData('profile',profile);
             Session.setUserData('statistic',statistic);
+
             Config.DashboardPage.mustUpdateProfile = false;
+            
             this.setState({ spinner:false });
         },(error)=>{
             this.setState({ spinner:false });       
@@ -134,24 +151,14 @@ class DashboardAction extends React.Component{
 
         if(!statisticOnly){
             Session.userData('profile',(profile)=>{
-              
-
                 if(profile == null){
                     this.initStatistic(user_id);
                 }else{
-                    this.setState({
-                        user_display_name : profile.nama_lengkap,
-                        photoUrl :profile.photo_thumb_url,
-                        user_email : profile.email == '' ? profile.nip_nik : profile.email
-                    });
+                    this.updateProfileDisplay(profile);
+
                     Session.userData('statistic',(statistic)=>{
                         if(typeof statistic == 'object'){
-                            this.setState({
-                                prospek : statistic.prospek,
-                                survey : statistic.survey,
-                                pelanggan : statistic.pelanggan,
-                                batal : statistic.batal,
-                            });  
+                            this.updateStatisticDisplay(statistic); 
                         }
                          
                     },(error) => {});
@@ -163,29 +170,20 @@ class DashboardAction extends React.Component{
         }else{
             if(Config.DashboardPage.mustUpdateProfile){
                 this.initStatistic(user_id);
-           }else{
+            }else{
                 Session.userData('profile',(profile)=>{
-              
-
                 if(profile !=  null){
-                 
-                    this.setState({
-                        user_display_name : profile.nama_lengkap,
-                        photoUrl :profile.photo_thumb_url,
-                        user_email : profile.email == '' ? profile.nip_nik : profile.email
-                    });            
-                } });      
-                let start_date = this.state.start_date_text;
-                let end_date = this.state.end_date_text;
+                    this.updateProfileDisplay(profile);                               
+                } 
+            });      
+                const start_date = this.state.start_date_text;
+                const end_date = this.state.end_date_text;
+                
                 this.setState({spinner:true});
+
                 Store.Pelanggan.getStatisticData(user_id, start_date, end_date,(res)=>{
-                    let statistic = res.data.statistic;
-                    this.setState({
-                        prospek : statistic.prospek,
-                        survey : statistic.survey,
-                        pelanggan : statistic.pelanggan,
-                        batal : statistic.batal,
-                    });
+                    const statistic = res.data.statistic;
+                    this.updateStatisticDisplay(statistic);
                      
                     this.setState({ spinner:false });
                 },(error)=>{
@@ -193,39 +191,30 @@ class DashboardAction extends React.Component{
                 });
             }
         }
-        
-
-
     }
     refreshData = () =>{
         this.setState({datepicker_shown:false});
         Session.getAccount((account)=>{
-            this.setState({
-                user_email : account.email == '0' ? '' : account.email,
-                user_display_name : account.nama_lengkap
-            });
+            this.initProfileDisplay(account);
+
             if(this.state.start_date_text != '' && this.state.end_date_text != ''){
                 this.getStatisticData(account.user_id,true);
             }else{
                 Store.Pelanggan.getMinMaxDate(account.user_id,(res)=>{
                     if(res.data != null){
-                        console.log(res.data);
-                        this.setState({
-                            start_date_text : res.data.min_date,
-                            end_date_text : res.data.max_date,
-                        });
+                        const min_date = res.data.min_date;
+                        const max_date = res.data.max_date;
+
+                        this.updateFilterDateRange(min_date, max_date);
+                        
                         if(Config.DashboardPage.mustUpdateProfile){
                             this.initStatistic(account.user_id);
                         }else{
                             this.getStatisticData(account.user_id, false);
                         }
-                        
                     }
                 });
             }
-            
-            
-
 
         },(error)=>{}); 
     }

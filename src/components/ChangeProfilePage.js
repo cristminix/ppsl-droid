@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage, View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
+import {  View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
@@ -19,7 +19,7 @@ class ChangeProfilePage extends React.Component {
     };
     state = {
         spinner:false,
-        photoUrl:'https://ppsl.perumdamtkr.com/themes/metronic/assets/pages/media/profile/profile_user.png',
+        photoUrl: Config.defaultPhotoUrl,
         nama_lengkap: '',
         nomor_hp:'',
         email:'',
@@ -62,7 +62,7 @@ class ChangeProfilePage extends React.Component {
             console.log(profile);
             this.setState({
                 foto: null,
-                photoUrl : profile.photo_thumb_url,
+                photoUrl : profile.photo_64,
                 nama_lengkap: profile.nama_lengkap,
                 email: profile.email,
                 nomor_hp: profile.nomor_hp,
@@ -200,7 +200,7 @@ class ChangeProfilePage extends React.Component {
                             profile.email = updated_profil.email;
                             profile.nomor_hp = updated_profil.nomor_hp;
                             profile.email = updated_profil.email;
-                            profile.photo_thumb_url = updated_profil.photo_thumb_url;
+                            profile.photo_64 = updated_profil.photo_64;
                             profile.nama_lengkap = updated_profil.nama_lengkap;
                             Session.setUserData('profile',profile);
                             setTimeout(()=>{
