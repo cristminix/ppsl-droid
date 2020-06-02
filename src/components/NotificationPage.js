@@ -2,39 +2,64 @@ import React from 'react';
 import { View,StyleSheet, Text, Image, TouchableHighlight, TextInput, KeyboardAvoidingView ,SafeAreaView, ScrollView} from 'react-native';
 import Constants from 'expo-constants';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Session from '../app/Session';
+import Store from '../app/Store';
 
 class NotificationPage extends React.Component {
     goBack=()=>{
         this.props.navigation.navigate('DashboardPage');
     };
     state = {
-        spinner:false
+        spinner:false,
+        user_id: null,
+        page: 1,
+        pager: null
     };
+
+    updateListData(data)=>{
+
+    }
+    loadNotification = () =>{
+        Store.Notification.getList(this.state.user_id, this.page, (res)=>{
+            // const data = res.data;
+            console.log(res)
+        },(err)=>{
+            console.log(err)
+        })
+    }
+    onRefresh = ()=>{
+        Session.get('profile',(profile)=>{
+            if(profile != null){
+                this.setState({user_id:profile.user_id});
+
+                setTimeout(()=>{
+                    this.loadNotification(;)
+                },100);
+            }
+        })
+    }
     render(){
         return (
             <KeyboardAvoidingView style={styles.wrapper} behavior={Platform.OS === "ios" ? "padding" : null}>
                 
-                <Spinner
-          visible={this.state.spinner}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        />
-                    <View style={styles.header}>
-                        <View style={{paddingHorizontal:10,paddingVertical:20}}>
-                        <TouchableHighlight onPress={()=>{this.goBack()}} >
-                        <Image style={{width:22}} source={ require('../../assets/icon/chevron-left.png') }/>
-                            
-                        </TouchableHighlight>
-                        </View>
-                        <View style={{flex:1,textAlign:'left',paddingLeft:120,paddingVertical:20}}>
-                            <Text style={{color:'#ffffff',fontSize:14}}>Notification</Text>
-                        </View>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle}/>
+                <NavigationEvents onWillFocus={payload => this.onRefresh()} />
+                <View>
+                <LinearGradient colors={['#009EEE', '#00A4F6']} start={[0.0, 0.101]} style={[{paddingVertical:20},styles.headerGradient]}>
+
+                    <View style={{paddingHorizontal:10,paddingVertical:0}}>
+                    <TouchableHighlight underlayColor='transparent' onPress={()=>{this.goBack()}} >
+                        <Image style={{width:22}} source={icons.back}/>
+                    </TouchableHighlight>
                     </View>
+                    <View style={{flex:1,alignItems:'center',paddingVertical:0}}>
+                        <Text style={{color:'#ffffff',fontSize:14,marginLeft:-22,marginTop:-20}}>Notifikasi</Text>
+                    </View>
+                    </LinearGradient>
+                </View>
                     <SafeAreaView style={styles.content}>
-                    <ScrollView style={{padding:20}}>
+                    <ScrollView style={{padding:0}}>
                     
-                        <Text style={{fontWeight:'bold',fontSize:16}}>Butuh Bantuan ?</Text>
-                        <Text style={{marginVertical:10}}>Silahkan chat kami</Text>
                         
                     </ScrollView>
                     </SafeAreaView>
@@ -44,11 +69,7 @@ class NotificationPage extends React.Component {
     }
 }
 const styles = StyleSheet.create({
-    imagePreview:{
-        width:100,
-        height:100,
-        marginBottom:5
-    },
+    
     wrapper:{
         paddingTop:Constants.statusBarHeight,
         flex:1,
@@ -65,168 +86,9 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         borderTopLeftRadius:25,
         borderTopRightRadius: 25,
-        padding:20
-    },
-    photoUploadWrp:{
-        backgroundColor:'white',
-        borderRadius:5,
-        borderColor:'#EFEFEF',
-        borderWidth:1,
-        padding:20,
-        marginTop:20,
-        marginBottom:10,
-        justifyContent:'center',
-        alignItems:'center',
-        flex:1
-    },
-    headerTitle:{
-        flex:1,
-        color:'#36227C',
-        fontWeight:'bold',
-        fontSize:20
-    },
-    logo:{
-        flex:2,
-        resizeMode:'contain',
-        marginTop:10
-    },
-    content:{
-        flex:2,
-        backgroundColor:'white',
-        borderTopLeftRadius:25,
-        borderTopRightRadius: 25,
         padding:20,
         paddingBottom:0
-    },
-    defaultText:{
-        // fontSize:12,
-        // letterSpacing:-0.02
-    },
-    anchor:{
-        color:'#009EEE',
-        textDecorationLine:'underline'
-    },
-    anchorRight:{
-        color:'#009EEE',
-        textDecorationLine:'underline',
-        textAlign:'right'
-    },
-    anchorCenter:{
-        color:'#009EEE',
-        textDecorationLine:'underline',
-        textAlign:'center'
-    },
-    anchorBold:{
-        color:'#009EEE',
-        fontWeight:'bold'
-    },
-    welcomeText:{
-        color:'#3A3E4A',
-        fontWeight:'bold',
-        fontSize:16,
-    },  
-    info:{
-        paddingVertical:20,
-        flexDirection:'row',
-        justifyContent:'center'
-    },
-    help:{
-        // paddingVertical:8,
-        flexDirection:'row',
-        justifyContent:'center'
-    },
-    formGroup:{
-        paddingVertical:2
-    },
-    btnLogin:{
-        backgroundColor:'#CACACC',
-        borderRadius:50,
-        padding:12,
-        marginTop:10
-    },
-    btnLoginText:{
-        color:'#fff',
-        fontSize:14,
-        fontWeight:'bold',
-        textAlign:'center'
-    },
-    btnRegister:{
-        backgroundColor:'#CACACC',
-        borderRadius:50,
-        padding:12,
-        marginTop:10,
-        marginBottom:40
-    },
-    btnRegisterText:{
-        color:'#fff',
-        fontSize:14,
-        fontWeight:'bold',
-        textAlign:'center'
-    },
-    btnUpload:{
-        borderColor:'#009EEE',
-        borderWidth:1,
-        borderRadius:5,
-        padding:12,
-        marginTop:10
-
-    },
-    btnUploadText:{
-        color:'#009EEE',
-        fontSize:14,
-        fontWeight:'bold',
-        textAlign:'center'
-    },
-    textInput:{
-        paddingVertical:10,
-        paddingHorizontal:5,
-        fontSize:14
-    },
-    inlineIcon:{
-        position:'relative',
-        margin:4
-    },
-    formIcon:{
-        position:'absolute',
-        marginTop:20,
-        right:0
-    },
-    formIconClose:{
-        position:'absolute',
-        marginTop:0,
-        right:0,
-        
-        width:40,
-        height:40,
-        padding:10
-
-    },
-    formIconViewPass:{
-        position:'absolute',
-        marginTop:0,
-        right:0,
-        
-        width:40,
-        height:40,
-        padding:10
-    },
-    formIconHidePass:{
-        position:'absolute',
-        marginTop:0,
-        right:0,
-     
-        width:40,
-        height:40,
-        padding:10
-
-    },
-    errorMessage:{
-        backgroundColor:'#e22134',
-        marginVertical:15,
-        alignItems:'center',
-        padding:10,
-        borderRadius:5,
-        marginBottom:10
+    }
     }    
 });
 

@@ -89,7 +89,7 @@ class DashboardAction extends React.Component{
     }
     
     gotoNotif=()=>{
-      
+      this.props.navigation.navigate('NotificationPage');
     }
     
     onRefresh = ()=>{

@@ -3,6 +3,13 @@ import Proxy from './Proxy';
 import Config from './Config';
 
 Store = {
+	Notifikasi: {
+		getList:(user_id, page, cbSuccess,cbError) => {
+			let url  = `${Config.api_endpoint}pushServer/getList`;
+			let data = {user_id:id_user, page:page};
+			Proxy.post(url,data,cbSuccess,cbError);
+		}
+	},
 	Survey:{
 		getData : (id_user, bulan, tahun, cbSuccess,cbError) => {
 			let url  = `${Config.api_endpoint}survey`;
