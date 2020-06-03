@@ -4,9 +4,7 @@
     "slug": "ppsl-perumdam-tkr",
     "privacy": "public",
     "platforms": [
-      "ios",
       "android",
-      "web"
     ],
     "version": "1.0.0",
     "orientation": "portrait",

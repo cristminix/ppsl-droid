@@ -1,12 +1,25 @@
 // Client Map To Server Api
 import Proxy from './Proxy';
 import Config from './Config';
-
+Cache ={
+	photoProfile:{}
+}
 Store = {
+	GetPhotoProfileUrl: (user_id, cbSuccess, cbError)=>{
+		//if(typeof Cache.photoProfile[`photo_${user_id}`] == "undefined"){
+			console.log('Here')
+			let url  = `${Config.api_endpoint}loginService/getPhotoProfile64/${user_id}`;
+			let data = {user_id:user_id};
+			Proxy.post(url,data,cbSuccess,cbError);
+		//}else{
+			//cbSuccess(Cache.photoProfile[`photo_${user_id}`]);
+		//}
+		
+	},
 	Notifikasi: {
 		getList:(user_id, page, cbSuccess,cbError) => {
-			let url  = `${Config.api_endpoint}pushServer/getList`;
-			let data = {user_id:id_user, page:page};
+			let url  = `${Config.api_endpoint}pushService/getList`;
+			let data = {user_id:user_id, page:page};
 			Proxy.post(url,data,cbSuccess,cbError);
 		}
 	},
@@ -64,6 +77,12 @@ Store = {
 		}
 	},
 	LoginService : {
+		getPhotoProfile64:(user_id,cbSuccess,cbError)=>{
+			let url  = `${Config.api_endpoint}loginService/getPhotoProfile64${id_user}`;
+			let data = {user_id:user_id};
+
+			Proxy.post(url,data,success,error);
+		},
 		getProfile : (id_user, success, error) => {
 			let url  = `${Config.api_endpoint}loginService/getProfile/${id_user}`;
 			let data = {user_id:id_user};

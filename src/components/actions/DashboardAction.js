@@ -95,7 +95,7 @@ class DashboardAction extends React.Component{
     onRefresh = ()=>{
         // this.setState({refreshing:true})
         this.refreshData();
-        console.log('refreshing')
+        // console.log('refreshing')
     }
      updateStatisticDisplay = (statistic) => {
         this.setState({
@@ -118,7 +118,7 @@ class DashboardAction extends React.Component{
         });
     }
     updateProfileDisplay = (profile) => {
-        console.log(profile);
+        // console.log(profile);
 
         const email_or_nip_nik = profile.email == '' ? profile.nip_nik : profile.email;
         this.setState({ 

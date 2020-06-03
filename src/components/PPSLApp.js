@@ -17,6 +17,7 @@ import EntryPoint from './EntryPoint';
 import ChangeProfilePage from './ChangeProfilePage';
 import ChangePasswdPage from './ChangePasswdPage';
 import SurveyPage from './SurveyPage';
+import NotificationPage from './NotificationPage';
 
 class PPSLApp extends React.Component{
 	render(){
@@ -34,6 +35,7 @@ class PPSLApp extends React.Component{
         	        <Stack.Screen name="ChangeProfilePage" component={ChangeProfilePage} />
         	        <Stack.Screen name="ChangePasswdPage" component={ChangePasswdPage} />
         	        <Stack.Screen name="SurveyPage" component={SurveyPage} />
+        	        <Stack.Screen name="NotificationPage" component={NotificationPage} />
         	      </Stack.Navigator>
         	    </NavigationContainer>)
     }
